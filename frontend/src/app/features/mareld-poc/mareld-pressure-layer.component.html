@@ -1,0 +1,19 @@
+@if (matchesSearch) {
+  <section class="pressure-footprint" aria-labelledby="mareld-windpark-title">
+    <div class="layer-heading">
+      <span class="swatch" aria-hidden="true"></span>
+      <h3 id="mareld-windpark-title">{{ pressure.feature.properties.name }}</h3>
+      <button
+        type="button"
+        [attr.aria-pressed]="pressure.visible()"
+        aria-label="Show MARELD wind park on map"
+        (click)="pressure.setVisible(!pressure.visible())"
+      >
+        {{ pressure.visible() ? 'Visible' : 'Show on map' }}
+      </button>
+    </div>
+    <p class="metrics">Wind-farm footprint · {{ pressure.areaKm2 | number: '1.1-1' }} km²</p>
+    <p>Shown automatically for the MARELD POC review area. You can toggle it here.</p>
+    <p class="note">Boundary only; pressure intensity has not been assigned.</p>
+  </section>
+}

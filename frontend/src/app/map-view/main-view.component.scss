@@ -17,6 +17,10 @@ hav-accordion-panel {
   app-slide-view {
     grid-area: sidebar-left;
     z-index: 99999;
+
+    &:has(app-mareld-panel) {
+      --slide-view-controls-position: absolute;
+    }
   }
 
   app-map {

@@ -1,0 +1,255 @@
+<ng-template #chartContent>
+  <header class="chart-header">
+    <div>
+      <h4>Biomass over time</h4>
+      <p>Sum across the study area's water cells · live model</p>
+    </div>
+    @if (expanded()) {
+      <button
+        #closeButton
+        type="button"
+        (click)="closeExpanded()"
+        aria-label="Close expanded graph"
+      >
+        Close ✕
+      </button>
+    } @else {
+      <button
+        #expandButton
+        type="button"
+        (click)="openExpanded()"
+        aria-label="Expand population graph"
+      >
+        Expand ↗
+      </button>
+    }
+  </header>
+
+  <div class="chart-toolbar" role="group" aria-label="Graph units">
+    <button
+      type="button"
+      [attr.aria-pressed]="display() === 'absolute'"
+      (click)="display.set('absolute')"
+    >
+      Tonnes
+    </button>
+    <button
+      type="button"
+      [attr.aria-pressed]="display() === 'relative'"
+      (click)="display.set('relative')"
+    >
+      % of initial
+    </button>
+  </div>
+  <div class="axis-caption">{{ unit() }}</div>
+  @if (lines().length) {
+    <svg
+      class="biomass-chart"
+      [attr.viewBox]="'0 0 ' + layout().width + ' ' + layout().height"
+      role="slider"
+      tabindex="0"
+      aria-label="Population graph timeline"
+      aria-orientation="horizontal"
+      aria-valuemin="0"
+      [attr.aria-valuemax]="result().steps.length - 1"
+      [attr.aria-valuenow]="currentFrame()"
+      [attr.aria-valuetext]="'Day ' + stepsToDays(result().steps[currentFrame()])"
+      (pointermove)="hover($event)"
+      (pointerleave)="hoverFrame.set(null)"
+      (click)="selectFrame($event)"
+      (keydown)="keydown($event)"
+    >
+      <title>Species biomass over time. Click or use arrow keys to change the map time.</title>
+      @for (value of yTicks(); track $index) {
+        <g>
+          <line
+            class="grid-line"
+            [attr.x1]="layout().left"
+            [attr.x2]="layout().left + layout().innerWidth"
+            [attr.y1]="yFor(value)"
+            [attr.y2]="yFor(value)"
+          />
+          <text
+            class="axis-label"
+            [attr.x]="layout().left - 7"
+            [attr.y]="yFor(value) + 4"
+            text-anchor="end"
+          >
+            {{ compact(value) }}
+          </text>
+        </g>
+      }
+      @for (step of xTicks(); track $index) {
+        <text
+          class="axis-label"
+          [attr.x]="xFor(step)"
+          [attr.y]="layout().height - 25"
+          [attr.text-anchor]="$first ? 'start' : $last ? 'end' : 'middle'"
+        >
+          {{ stepsToDays(step) | number: '1.0-1' }}
+        </text>
+      }
+      <text
+        class="axis-label"
+        [attr.x]="layout().left + layout().innerWidth / 2"
+        [attr.y]="layout().height - 5"
+        text-anchor="middle"
+      >
+        Simulation day
+      </text>
+      @if (display() === 'relative' && yMax() >= 100) {
+        <line
+          class="initial-line"
+          [attr.x1]="layout().left"
+          [attr.x2]="layout().left + layout().innerWidth"
+          [attr.y1]="yFor(100)"
+          [attr.y2]="yFor(100)"
+        />
+      }
+      @for (line of paths(); track line.id) {
+        <path
+          class="species-line"
+          [attr.data-series]="line.id"
+          [attr.d]="line.path"
+          [attr.stroke]="line.color"
+          [attr.stroke-width]="line.id === '__total' ? 2.4 : 1.8"
+        />
+      }
+      <line
+        class="current-marker"
+        [attr.x1]="xFor(result().steps[currentFrame()])"
+        [attr.x2]="xFor(result().steps[currentFrame()])"
+        [attr.y1]="layout().top"
+        [attr.y2]="layout().top + layout().innerHeight"
+      />
+      @if (hoverFrame() !== null) {
+        <g class="chart-tooltip" aria-hidden="true">
+          <line
+            class="hover-marker"
+            [attr.x1]="xFor(activeStep())"
+            [attr.x2]="xFor(activeStep())"
+            [attr.y1]="layout().top"
+            [attr.y2]="layout().top + layout().innerHeight"
+          />
+          @for (line of lines(); track line.id) {
+            @if (line.values[activeFrame()] !== null) {
+              <circle
+                [attr.cx]="xFor(activeStep())"
+                [attr.cy]="yFor(line.values[activeFrame()]!)"
+                r="3"
+                fill="white"
+                [attr.stroke]="line.color"
+                stroke-width="1.5"
+              />
+            }
+          }
+          <g [attr.transform]="'translate(' + tooltipX() + ' 23)'">
+            <rect
+              width="212"
+              [attr.height]="30 + lines().length * 17"
+              rx="6"
+              fill="#17252e"
+              opacity="0.96"
+            />
+            <text x="10" y="18" fill="white" font-size="11" font-weight="600">
+              Day {{ stepsToDays(activeStep()) | number: '1.0-2' }}
+            </text>
+            @for (line of lines(); track line.id) {
+              <circle cx="12" [attr.cy]="40 + $index * 17" r="3" [attr.fill]="line.color" />
+              <text x="21" [attr.y]="43 + $index * 17" fill="#e1e8ec" font-size="10">
+                {{ line.name }}
+              </text>
+              <text
+                x="202"
+                [attr.y]="43 + $index * 17"
+                text-anchor="end"
+                fill="white"
+                font-size="10"
+              >
+                {{ line.values[activeFrame()] === null ? '—' : compact(line.values[activeFrame()]!)
+                }}{{ display() === 'relative' && line.values[activeFrame()] !== null ? '%' : '' }}
+              </text>
+            }
+          </g>
+        </g>
+      }
+    </svg>
+    <p class="interaction-hint">Hover for values. Click or use arrow keys to set the map time.</p>
+  } @else {
+    <p class="empty-chart" role="status">
+      Select at least one species to display its population trend.
+    </p>
+  }
+
+  <div class="chart-legend" role="group" aria-label="Visible graph series">
+    <button
+      type="button"
+      [attr.aria-pressed]="showTotal()"
+      (click)="showTotal.set(!showTotal())"
+      aria-label="Toggle total biomass"
+    >
+      <span class="swatch" style="background: #0f172a"></span>Total
+    </button>
+    @for (line of totals(); track line.id) {
+      <button
+        type="button"
+        [attr.aria-pressed]="!hidden().includes(line.id)"
+        (click)="toggleSpecies(line.id)"
+        [attr.aria-label]="'Toggle ' + line.name"
+      >
+        <span class="swatch" [style.background]="line.color"></span>{{ line.name }}
+      </button>
+    }
+  </div>
+  <p class="chart-note">
+    Total includes the selected species. Biomass is measured in tonnes, not individual counts.
+  </p>
+  @if (noInitialBiomass()) {
+    <p class="chart-note">
+      A species with zero initial biomass has no relative curve. Use Tonnes to see its values.
+    </p>
+  }
+  @if (lines().length) {
+    <details class="chart-values">
+      <summary>
+        Values at day {{ stepsToDays(activeStep()) | number: '1.0-2' }} · step {{ activeStep() }}
+      </summary>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Species</th>
+            <th scope="col">{{ display() === 'relative' ? '% of initial' : 'Tonnes' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (line of lines(); track line.id) {
+            <tr>
+              <th scope="row">{{ line.name }}</th>
+              <td>
+                {{
+                  line.values[activeFrame()] === null
+                    ? '—'
+                    : (line.values[activeFrame()] | number: '1.0-2')
+                }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </details>
+  }
+</ng-template>
+
+@if (!expanded()) {
+  <div class="chart-card"><ng-container *ngTemplateOutlet="chartContent" /></div>
+}
+<dialog
+  #expandedDialog
+  class="expanded-chart"
+  aria-label="Population trends"
+  (close)="onDialogClose()"
+>
+  @if (expanded()) {
+    <div class="expanded-content"><ng-container *ngTemplateOutlet="chartContent" /></div>
+  }
+</dialog>

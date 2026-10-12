@@ -33,6 +33,14 @@ with special emphasis on the building and comparison of different scenarios. Thi
 - Compare two scenario analyses result side-by-side, including relative differences in graphical and tabular form 
 - Ability to make use of user-drawn custom polygons, or upload a polygon definition created in another GIS tool
 
+## Local MARELD proof of concept
+
+The optional **MARELD** sidebar captures Symphony map areas and displays ecosystem biomass
+frames on the existing map. All simulations use the live Eco-evo API at
+`http://localhost:8000` by default. It is enabled in development
+and disabled in production.
+See the [review and startup guide](docs/MARELD-POC.md) for usage, verification, limitations and removal.
+
 ## Architectural overview
 
 The system has been conceived according to SWaM development standards. In concrete terms this implies a web 
@@ -142,6 +150,10 @@ See [this section](https://docs.wildfly.org/39/WildFly_Elytron_Security.html#con
 In order for the system to work the database need to be populated with data. Separate instructions for this 
 procedure is provided in [DataImportREADME](database/DataImportREADME.md).
 
+For the public Swedish 2019 data, see the [local HaV data bundle](data/hav-symphony-2019/README.md)
+for downloads and provenance, and the [working regional import](data/hav-symphony-2019/LOCAL-IMPORT.md)
+for the three populated local baselines, startup instructions, validation and scientific limitations.
+
 #### 3. (Optional) Override the application runtime configuration properties
 
 The file `/app/config/symphony/symphony-global.properties` (`C:\app\config\symphony\symphony-global.properties` on 
@@ -156,6 +168,15 @@ It is a very good idea to give the system ample heap space to work with, at leas
 The system assumes that all strings related to area polygons are in UTF encoding. Current JVMs typically defaults to 
 the default native platform encoding. Notably, on Windows that is not UTF and so if running on Windows specifying
 `-Dfile.encoding=UTF-8` may be necessary (that setting is used also when reading data from the datbase).
+
+### 5. Configure summary models
+
+Summary models define a step-based pipeline that transforms multiple source raster bands (ecosystem or pressure) 
+into a single output heatmap. This is done by aggregating bands using operations like `MEAN`, `MAX`, or `SUM`, 
+and optionally applying normalization.
+
+For detailed information on how to create and maintain these configuration files, see the 
+[Summary Model Configuration Guide](docs/SUMMARY_MODELS.md).
 
 ### Frontend
 

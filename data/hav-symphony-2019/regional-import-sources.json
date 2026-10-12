@@ -1,0 +1,20 @@
+{
+  "retrieved_on": "2026-09-29",
+  "source_page": "https://www.havochvatten.se/vagledning-foreskrifter-och-lagar/vagledningar/havsplaner/havsplanering---geografiska-data.html",
+  "attribution": "Havs- och vattenmyndigheten, HaV",
+  "license_note": "Landing page states CC BY; enclosed documentation states CC0. Attribution retained.",
+  "downloads": [
+    {
+      "url": "https://geodata.havochvatten.se/download/havsplaner-2022/2022-02-10/havsplaner-2022-02-10-gpkg.zip",
+      "path": "reference/boundaries/havsplaner-2022-02-10-gpkg.zip",
+      "bytes": 1506042,
+      "sha256": "6a7b10443b90519a6a709169b4db19fbbfda3020fdceac34e599e64e61e9196d"
+    },
+    {
+      "url": "https://geodata.havochvatten.se/download/havsplaner-2022/2022-02-10/Datadokumentation_Havsplaner_2022.pdf",
+      "path": "reference/boundaries/Datadokumentation_Havsplaner_2022.pdf",
+      "bytes": 328665,
+      "sha256": "a29a2ba938de8979d22bec8c3820550a92b240bdf6be0c63fb1a30df742f5e66"
+    }
+  ]
+}

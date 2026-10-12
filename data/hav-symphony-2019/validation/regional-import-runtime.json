@@ -1,0 +1,185 @@
+[
+  {
+    "baseline": "HAV_2019_NORTH_LOCAL",
+    "baseline_id": 2,
+    "metadata_counts": {
+      "ecoComponent": 31,
+      "pressureComponent": 41
+    },
+    "Ecosystem_image": {
+      "bytes": 10139,
+      "dimensions": [
+        1024,
+        2494
+      ]
+    },
+    "Pressure_image": {
+      "bytes": 23007,
+      "dimensions": [
+        1024,
+        2494
+      ]
+    },
+    "scenario_id": 3,
+    "scenario_name": "HaV 2019 example – B122 – Sydostbrotten",
+    "area_km2": 117.87278927017095,
+    "calculation": {
+      "id": 3,
+      "name": "HaV 2019 example – B122 – Sydostbrotten",
+      "timestamp": 1790690427127,
+      "owner": "hav-local",
+      "isPurged": false,
+      "hasChanges": false
+    },
+    "seconds": 0.41,
+    "result_image": {
+      "bytes": 2140,
+      "dimensions": [
+        61,
+        58
+      ]
+    },
+    "summary_models": {
+      "ecosystem": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 162390
+      },
+      "pressure": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 133017
+      }
+    }
+  },
+  {
+    "baseline": "HAV_2019_EAST_LOCAL",
+    "baseline_id": 3,
+    "metadata_counts": {
+      "ecoComponent": 32,
+      "pressureComponent": 39
+    },
+    "Ecosystem_image": {
+      "bytes": 95508,
+      "dimensions": [
+        1831,
+        2476
+      ]
+    },
+    "Pressure_image": {
+      "bytes": 49081,
+      "dimensions": [
+        1831,
+        2476
+      ]
+    },
+    "scenario_id": 4,
+    "scenario_name": "HaV 2019 example – Ö265 – Kiviksbredan",
+    "area_km2": 126.18282183656913,
+    "calculation": {
+      "id": 4,
+      "name": "HaV 2019 example – Ö265 – Kiviksbredan",
+      "timestamp": 1790690431343,
+      "owner": "hav-local",
+      "isPurged": false,
+      "hasChanges": false
+    },
+    "seconds": 0.3,
+    "result_image": {
+      "bytes": 1771,
+      "dimensions": [
+        40,
+        65
+      ]
+    },
+    "summary_models": {
+      "ecosystem": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 305942
+      },
+      "pressure": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 239431
+      }
+    }
+  },
+  {
+    "baseline": "HAV_2019_WEST_LOCAL",
+    "baseline_id": 4,
+    "metadata_counts": {
+      "ecoComponent": 32,
+      "pressureComponent": 37
+    },
+    "Ecosystem_image": {
+      "bytes": 8441,
+      "dimensions": [
+        651,
+        1245
+      ]
+    },
+    "Pressure_image": {
+      "bytes": 16065,
+      "dimensions": [
+        651,
+        1245
+      ]
+    },
+    "scenario_id": 5,
+    "scenario_name": "HaV 2019 example – V347 – Sydväst Måseskär",
+    "area_km2": 117.9756889579132,
+    "calculation": {
+      "id": 5,
+      "name": "HaV 2019 example – V347 – Sydväst Måseskär",
+      "timestamp": 1790690433560,
+      "owner": "hav-local",
+      "isPurged": false,
+      "hasChanges": false
+    },
+    "seconds": 0.68,
+    "result_image": {
+      "bytes": 2197,
+      "dimensions": [
+        44,
+        87
+      ]
+    },
+    "summary_models": {
+      "ecosystem": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 52811
+      },
+      "pressure": {
+        "models": [
+          {
+            "key": "local-mean",
+            "name": "Unweighted mean (2019; excludes 2050 climate)"
+          }
+        ],
+        "image_bytes": 34624
+      }
+    }
+  }
+]

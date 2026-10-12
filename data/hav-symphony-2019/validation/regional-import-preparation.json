@@ -1,0 +1,4138 @@
+[
+  {
+    "baseline": "HAV_2019_NORTH_LOCAL",
+    "region": "Bottniska viken",
+    "width": 1024,
+    "height": 2494,
+    "crs": "EPSG:3035",
+    "pixel_size_m": 250,
+    "bounds": [
+      4718250,
+      4162500,
+      4974250,
+      4786000
+    ],
+    "inside_pixels": 612986,
+    "bands": [
+      {
+        "category": "Ecosystem",
+        "number": 1,
+        "title": "Porpoise baltic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/01Porpoise_Baltic.tif",
+        "source_sha256": "a67b021cc68dfed33d133f508fb1c41f3d2988c96db96fb4794c826dfa33cff7",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          29
+        ],
+        "nonzero_domain_pixels": 1230,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 2,
+        "title": "Grey seal",
+        "source": "regional/bottniska-viken/National_eco_N_2018/02Grey_Seals.tif",
+        "source_sha256": "7952f19fa7d68caa87db8033613533a10cdcfcd4be15970c3e05d9b2909ad363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          67
+        ],
+        "nonzero_domain_pixels": 357536,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 3,
+        "title": "Ringed seal",
+        "source": "regional/bottniska-viken/National_eco_N_2018/03Ringed_Seals.tif",
+        "source_sha256": "72ec4b0652567e1f39cb219d9882e880836a44cc1919c6d097864fea2cc1ecb5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 195173,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 4,
+        "title": "Mussel reef",
+        "source": "regional/bottniska-viken/National_eco_N_2018/04Mussel_Reefs_Total.tif",
+        "source_sha256": "a38ea26e2077f95998054a5909deff161c37e0467729170a0d5c886b3ac72ddf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 15507,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 5,
+        "title": "Deep reef",
+        "source": "regional/bottniska-viken/National_eco_N_2018/05Deep_Reef.tif",
+        "source_sha256": "49e7fba695d52b2da2bc424447742a4cc70452b78e7decb36b9d78a1193065ca",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 38,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 6,
+        "title": "Artificial reef",
+        "source": "regional/bottniska-viken/National_eco_N_2018/06Artificial_Reefs_Total.tif",
+        "source_sha256": "1edfe756c36a48b83f640d2255b4032d2075903b40e4e5616ecfc7ed0a61fdfb",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 55,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 7,
+        "title": "Plankton pelagic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/07Plankton_Community.tif",
+        "source_sha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 612986,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 8,
+        "title": "Hard bottom photic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/08Hardbottom_Photic.tif",
+        "source_sha256": "6ad90dabd8bb8decbc82021778bad21dca9044941515bd13693ab8268328f6eb",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          83
+        ],
+        "nonzero_domain_pixels": 2052,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 9,
+        "title": "Hard bottom aphotic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/09Hardbottom_Aphotic.tif",
+        "source_sha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          91
+        ],
+        "nonzero_domain_pixels": 376993,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 10,
+        "title": "Hard bottom deep",
+        "source": "regional/bottniska-viken/National_eco_N_2018/10Hardbottom_Deep.tif",
+        "source_sha256": "8d587fc1e3ef3effe0bcb327f9000e94a29b3c9a9c475a06c7601e16c9dd878c",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          91
+        ],
+        "nonzero_domain_pixels": 222932,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 11,
+        "title": "Transport bottom photic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/11Transportbottom_Photic.tif",
+        "source_sha256": "1bb4e554bba34749fb9d7c6bb22e6a218cecba9f77536c94668c8639ba3163da",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          79
+        ],
+        "nonzero_domain_pixels": 2052,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 12,
+        "title": "Transport bottom aphotic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/12Transportbottom_Aphotic.tif",
+        "source_sha256": "ba58ad276d88943e162d68de49d1bc7451512beff04b9e1caa8884c5b2bba293",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          82
+        ],
+        "nonzero_domain_pixels": 222963,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 13,
+        "title": "Transport bottom deep",
+        "source": "regional/bottniska-viken/National_eco_N_2018/13Transportbottom_Deep.tif",
+        "source_sha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f",
+        "source_range": [
+          0.0,
+          0.8199999928474426
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          79
+        ],
+        "nonzero_domain_pixels": 387971,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 14,
+        "title": "Soft bottom photic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/14Softbottom_Photic.tif",
+        "source_sha256": "d61e909e54d011b7c1fefc0f8b5f41aaa36a831ebb62f6d77e902c8c02c9420e",
+        "source_range": [
+          0.0,
+          0.9599999785423279
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          54
+        ],
+        "nonzero_domain_pixels": 2052,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 15,
+        "title": "Soft bottom aphotic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/15Softbottom_Aphotic.tif",
+        "source_sha256": "e65b395ede83c79b0ead74bc5cd129f450ceeed17b76c7c8d4abc17cba940d4a",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 222509,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 16,
+        "title": "Soft bottom deep",
+        "source": "regional/bottniska-viken/National_eco_N_2018/16Softbottom_Deep.tif",
+        "source_sha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 387948,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 17,
+        "title": "Shoreline",
+        "source": "regional/bottniska-viken/National_eco_N_2018/17Shoreline_Complexity.tif",
+        "source_sha256": "47d38e98b3f97bc6eaefd6001066f48e09fb824ae26de77062e22060ef5b80f8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          24
+        ],
+        "nonzero_domain_pixels": 2,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 18,
+        "title": "Angiosperms",
+        "source": "regional/bottniska-viken/National_eco_N_2018/18Angiosperms.tif",
+        "source_sha256": "7da90de8f2448459212077b50350fe38822fa8215c1a771275b367ac434f4956",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          43
+        ],
+        "nonzero_domain_pixels": 31,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 19,
+        "title": "Cod",
+        "source": "regional/bottniska-viken/National_eco_N_2018/19torsk_lognorm_v2.tif",
+        "source_sha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          78
+        ],
+        "nonzero_domain_pixels": 247233,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 20,
+        "title": "Herring",
+        "source": "regional/bottniska-viken/National_eco_N_2018/20sill_lognorm_v2.tif",
+        "source_sha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 612986,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 21,
+        "title": "Sprat",
+        "source": "regional/bottniska-viken/National_eco_N_2018/21skarpsill_lognorm_v2.tif",
+        "source_sha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          68
+        ],
+        "nonzero_domain_pixels": 416857,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 22,
+        "title": "Vendace",
+        "source": "regional/bottniska-viken/National_eco_N_2018/22Vendace.tif",
+        "source_sha256": "e006a97edcc71ef55999e83b16f6924ac63d8fc106a6f01bbca0237e08f58454",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          16
+        ],
+        "nonzero_domain_pixels": 9956,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 23,
+        "title": "Fish spawning",
+        "source": "regional/bottniska-viken/National_eco_N_2018/23Spawning_Areas_Commercial_Fish.tif",
+        "source_sha256": "842bcced4da13474d0928ba239a144168ee435f30e5cb8a37c2f76409702d24e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 84173,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 24,
+        "title": "Rivermouth fish",
+        "source": "regional/bottniska-viken/National_eco_N_2018/24Rivermouth_Fish.tif",
+        "source_sha256": "45678ef9f10f6defcf2a81c1f64d340665525650770ad450e34bb59a02643507",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 25,
+        "title": "Eel migration",
+        "source": "regional/bottniska-viken/National_eco_N_2018/25Eel_Migration.tif",
+        "source_sha256": "a63913d5716fcc2927be6ecf8e4cc7e1cf5d5e163ecfdb8de6f1b79c97f24d44",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          2
+        ],
+        "nonzero_domain_pixels": 27431,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 26,
+        "title": "Coastal birds",
+        "source": "regional/bottniska-viken/National_eco_N_2018/26Birds_Coastal.tif",
+        "source_sha256": "b154cd1b75557c8a9aa8d03655c3b94e6f97551bf8449eedb3ff479252e593ac",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          75
+        ],
+        "nonzero_domain_pixels": 4512,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 27,
+        "title": "Seabird coastal wintering",
+        "source": "regional/bottniska-viken/National_eco_N_2018/27Seabird_Winter_Coastal.tif",
+        "source_sha256": "fa6db17a48251a91f927764ba70f0c2ba772968d0100984130768be61d47acdc",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 28,
+        "title": "Seabird offshore wintering",
+        "source": "regional/bottniska-viken/National_eco_N_2018/28Seabird_Winter_Offshore.tif",
+        "source_sha256": "98e09b2b4a05834374d7f45e2b37bd140f8428fb295a979837b5e9d9ecbfebe8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          43
+        ],
+        "nonzero_domain_pixels": 40492,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 29,
+        "title": "Rough bottom photic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/29Komplexitet_Fotisk_v2_250m-normhårdbotten.tif",
+        "source_sha256": "c57974e3a225606acf48fd07a716bf275919ae1c3f3cef8211130307fb6544bf",
+        "source_range": [
+          0.0,
+          0.9569202065467834
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          58
+        ],
+        "nonzero_domain_pixels": 296,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 30,
+        "title": "Rough bottom aphotic",
+        "source": "regional/bottniska-viken/National_eco_N_2018/30Komplexitet_AfotiskMixad_v2_250m-normhårdbotten.tif",
+        "source_sha256": "1b70a2b0f0eaab0b65d9afeff5f6b70c99d00a9b1b57e28c4e84309383cf4e3a",
+        "source_range": [
+          0.0,
+          0.9265214800834656
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          89
+        ],
+        "nonzero_domain_pixels": 71615,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 31,
+        "title": "Rough bottom deep",
+        "source": "regional/bottniska-viken/National_eco_N_2018/31Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+        "source_sha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c",
+        "source_range": [
+          0.0,
+          0.99920254945755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          98
+        ],
+        "nonzero_domain_pixels": 128287,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 1,
+        "title": "Bird hunt",
+        "source": "regional/bottniska-viken/National_press_N_2018/01Birdhunt.tif",
+        "source_sha256": "e67b9730a95ebde1ee1215fb0bd75933e89a850c5997926c0b189d953a0d2935",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          18
+        ],
+        "nonzero_domain_pixels": 244698,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 2,
+        "title": "Catch gillnet",
+        "source": "regional/bottniska-viken/National_press_N_2018/02Catch_Gillnet.tif",
+        "source_sha256": "14a8fbee5077fbb1659cb498f9d92b2ca170cf1d6f2f885b28ad431a43330363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          44
+        ],
+        "nonzero_domain_pixels": 3783,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 3,
+        "title": "Catch pelagic trawl",
+        "source": "regional/bottniska-viken/National_press_N_2018/03Catch_Pelagic_trawl.tif",
+        "source_sha256": "ba2255914b6f7ac6a2272432981367125383e899d7c7a46f9be2910e7146ae9c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 83355,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 4,
+        "title": "Catch bottom trawl",
+        "source": "regional/bottniska-viken/National_press_N_2018/04Catch_Bottom_trawlCopy.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          14
+        ],
+        "nonzero_domain_pixels": 12500,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 5,
+        "title": "Turbidity bottom trawl",
+        "source": "regional/bottniska-viken/National_press_N_2018/05Catch_Bottom_trawl.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          14
+        ],
+        "nonzero_domain_pixels": 12500,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 6,
+        "title": "Turbidity shipping",
+        "source": "regional/bottniska-viken/National_press_N_2018/06Turbidity_Shipping.tif",
+        "source_sha256": "389093746d5b949173b8c79dfc31c611143890c72cb785425c94773dcc7074e5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          5
+        ],
+        "nonzero_domain_pixels": 770,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 7,
+        "title": "Turbidity sand extraction",
+        "source": "regional/bottniska-viken/National_press_N_2018/07Turbidity_Mining.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 8,
+        "title": "Abrasion bottom trawl",
+        "source": "regional/bottniska-viken/National_press_N_2018/08Abrasion_Bottomtrawl.tif",
+        "source_sha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          34
+        ],
+        "nonzero_domain_pixels": 19958,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 9,
+        "title": "Habitat loss dumping",
+        "source": "regional/bottniska-viken/National_press_N_2018/09Habitatloss_Dumping.tif",
+        "source_sha256": "8b39d8bbc6ce122639125ac55b364c945becc04b54787af2c9f8986dff9169ab",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 10,
+        "title": "Habitat loss fish farm",
+        "source": "regional/bottniska-viken/National_press_N_2018/10Habitatloss_Fishfarm.tif",
+        "source_sha256": "75847df1bf9a73e5742be62823ad08985b30c305097acfa1f8132b7b6ec59065",
+        "source_range": [
+          0.0,
+          0.8949999809265137
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 11,
+        "title": "Habitat loss mussel farm",
+        "source": "regional/bottniska-viken/National_press_N_2018/11Habitatloss_Musselfarming.tif",
+        "source_sha256": "91ab9c383379bee534cef97b0c6a56d265c8380ff96486c5fae6ed95badfe050",
+        "source_range": [
+          0.0,
+          0.46799999475479126
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 12,
+        "title": "Habitat loss coastal exploitation",
+        "source": "regional/bottniska-viken/National_press_N_2018/12Habitatloss_Coastal_Exploitation.tif",
+        "source_sha256": "e461d08ebe59d8a52ed490d7a14b4cbc2a0de7fa5e87a25ad36f3c72dbaae82a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 13,
+        "title": "Habitat loss infrastructure",
+        "source": "regional/bottniska-viken/National_press_N_2018/13Infrastructure.tif",
+        "source_sha256": "df8428c6d0bdc40d67f22a27813e780331265d02ab953f4858d060a5c50924c9",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 4,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 14,
+        "title": "Habitat loss sand extraction",
+        "source": "regional/bottniska-viken/National_press_N_2018/14Turbidity_MiningCopy.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 15,
+        "title": "Noise 125Hz shipping",
+        "source": "regional/bottniska-viken/National_press_N_2018/15Noise_125Hz_Shipping_20181122.tif",
+        "source_sha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+        "source_range": [
+          0.0,
+          0.7936156988143921
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          67
+        ],
+        "nonzero_domain_pixels": 319924,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 16,
+        "title": "Noise 125Hz wind power",
+        "source": "regional/bottniska-viken/National_press_N_2018/16Noise_125Hz_Windpower.tif",
+        "source_sha256": "a4eba6372ed3989e64d8badb403a3b7dab366061e6b8ed559132301e4166dcad",
+        "source_range": [
+          0.0,
+          0.28999999165534973
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 17,
+        "title": "Noise 2000Hz shipping",
+        "source": "regional/bottniska-viken/National_press_N_2018/17Noise_2000Hz_Shipping_20181122.tif",
+        "source_sha256": "99e6ea0fd4d57d90727aa4b18049348cba24b7eda965a78155f32b778fc8f223",
+        "source_range": [
+          0.0,
+          0.27932605147361755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          15
+        ],
+        "nonzero_domain_pixels": 797,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 18,
+        "title": "Noise boating",
+        "source": "regional/bottniska-viken/National_press_N_2018/18Boating.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 19,
+        "title": "Explosions peak",
+        "source": "regional/bottniska-viken/National_press_N_2018/19Explosions_PM.tif",
+        "source_sha256": "667b0ac1aa4a0d15718fad4db4c2984ac2f92568009013239b4f30fc18b4f8ec",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 20,
+        "title": "Explosions SEL",
+        "source": "regional/bottniska-viken/National_press_N_2018/20Explosions_SPL.tif",
+        "source_sha256": "6dde963590205fda0baf6022dc844b0c3cd679ef07d24c257ea6a187bb758664",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 21,
+        "title": "Oilspill shipping",
+        "source": "regional/bottniska-viken/National_press_N_2018/21Oilspill_2knots_Shipping.tif",
+        "source_sha256": "c7a86fee7559c60e3c874560f1fc614061144cf811e7c1d8c5a3cb047be486ea",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 612986,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 22,
+        "title": "Oilspill wreck",
+        "source": "regional/bottniska-viken/National_press_N_2018/22Oilspill_2knots_Wreck.tif",
+        "source_sha256": "c7c518e35194387c076f10adc7ef6795a37c723a3ed0d7b8cf21eba5d90ed97d",
+        "source_range": [
+          0.0,
+          0.5400000214576721
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          1
+        ],
+        "nonzero_domain_pixels": 828,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 23,
+        "title": "Heavy metals background",
+        "source": "regional/bottniska-viken/National_press_N_2018/23Tox_Metal_Background.tif",
+        "source_sha256": "c4662df8250e7ba7791de9c2acef5b31cc0d56b12d4b19e7dcc03dc20e6834e7",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          91
+        ],
+        "nonzero_domain_pixels": 610970,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 24,
+        "title": "Heavy metals fiber bank",
+        "source": "regional/bottniska-viken/National_press_N_2018/24Tox_Metal_Fiberbanks.tif",
+        "source_sha256": "bf5d65a50460c140ae4f8a16ce902e4ac6e3d24396912c402d2cf0ea3b0a2746",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 322,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 25,
+        "title": "Heavy metals mercury dump",
+        "source": "regional/bottniska-viken/National_press_N_2018/25Tox_Metal_Mercurydump.tif",
+        "source_sha256": "934b2b4d24196130611f9ad6286577fbdfbe150cc979088fc92eb6be7b9c19ee",
+        "source_range": [
+          0.0,
+          0.4000000059604645
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          40
+        ],
+        "nonzero_domain_pixels": 409,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 26,
+        "title": "Heavy metals military area",
+        "source": "regional/bottniska-viken/National_press_N_2018/26Tox_Metal_Military.tif",
+        "source_sha256": "41d0ef286d0f51a403552f645e24d84f453517a9d139d0500e32307f57c809ee",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          20
+        ],
+        "nonzero_domain_pixels": 74528,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 27,
+        "title": "Heavy metals mine dump",
+        "source": "regional/bottniska-viken/National_press_N_2018/27Tox_Mine_Risk.tif",
+        "source_sha256": "be3920e2679aefca15a390d0733217f02b3f464320293f8e136711f2e2670123",
+        "source_range": [
+          0.0,
+          0.10000000149011612
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          10
+        ],
+        "nonzero_domain_pixels": 1876,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 28,
+        "title": "Toxic munition dump",
+        "source": "regional/bottniska-viken/National_press_N_2018/28Tox_Munition.tif",
+        "source_sha256": "6be368b23471fa1e8d8a6f058cf606ba1cf707b0705b8e2d7b74be7b311781b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 29,
+        "title": "Synthetic toxins background",
+        "source": "regional/bottniska-viken/National_press_N_2018/29Tox_Synthetic_Background.tif",
+        "source_sha256": "ded78651f29147032eaa1f9c43ca8affa886cd9e98e04777b0272a8e0f21e268",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          29
+        ],
+        "nonzero_domain_pixels": 557996,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 30,
+        "title": "Synthetic toxins harbor",
+        "source": "regional/bottniska-viken/National_press_N_2018/30Tox_Synthetic_Harbor.tif",
+        "source_sha256": "2f3ea06608ff9ce38ed6d39d1d5b73a063f3874d681d7c49f09c8418be049978",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 31,
+        "title": "Synthetic toxins industry",
+        "source": "regional/bottniska-viken/National_press_N_2018/31Tox_Synthetic_Industry.tif",
+        "source_sha256": "884f82b022a19c1842af03c195006d44ded204e232d73f7982c653e5f29fb36e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 32,
+        "title": "Synthetic toxins treatment plant",
+        "source": "regional/bottniska-viken/National_press_N_2018/32Tox_Synthetic_Treatmentplants.tif",
+        "source_sha256": "0c789f071647521925ea32acb5f208e7adf365174855aa8ec6fe59ded9cd00b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 33,
+        "title": "Pollution boating",
+        "source": "regional/bottniska-viken/National_press_N_2018/33BoatingCopy.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 34,
+        "title": "Nitrogen background",
+        "source": "regional/bottniska-viken/National_press_N_2018/34Nitrogen_Background.tif",
+        "source_sha256": "1e4a3eab5ad059c019b444a1cb891023bf993d22788489c213eef650238caa35",
+        "source_range": [
+          0.0,
+          0.9603232145309448
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          9
+        ],
+        "nonzero_domain_pixels": 581877,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 35,
+        "title": "Nutrients fish farm",
+        "source": "regional/bottniska-viken/National_press_N_2018/35Nitrogen_Fishfarming.tif",
+        "source_sha256": "a6509331fb20b585c1ec179837d9a7fade1401596079c8947071e4531867b8ac",
+        "source_range": [
+          0.0,
+          0.17900000512599945
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 36,
+        "title": "Phosphorous background",
+        "source": "regional/bottniska-viken/National_press_N_2018/36Phosphorous_Background.tif",
+        "source_sha256": "62f0e15f6e9d36955dfb167263c165e12131cea25ab3d881538efdf133ed29f6",
+        "source_range": [
+          0.0,
+          0.7535371780395508
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          28
+        ],
+        "nonzero_domain_pixels": 388423,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 37,
+        "title": "Anoxia background",
+        "source": "regional/bottniska-viken/National_press_N_2018/37Anoxia_Background.tif",
+        "source_sha256": "2c6d2df5014ed1dda8841bd1e191ee206bf64bdac5ec75acc1fc4d0b8deb47e8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          38
+        ],
+        "nonzero_domain_pixels": 218906,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 38,
+        "title": "Electromagnetic field",
+        "source": "regional/bottniska-viken/National_press_N_2018/38EMF.tif",
+        "source_sha256": "a329ce2062b1bb59321583c28ce7ebcc019443bb1bae6eee7fb63725885c3a78",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 523,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 39,
+        "title": "Climate change temperature",
+        "source": "regional/bottniska-viken/National_press_N_2018/39TempIncrease_Summer_2050.tif",
+        "source_sha256": "2e5bb9f0a2b56f7b26b8c7bf1197a113d66a429ab968d9f24a8ceb78b75609b5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          98
+        ],
+        "nonzero_domain_pixels": 612986,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 40,
+        "title": "Climate change acidification",
+        "source": "regional/bottniska-viken/National_press_N_2018/40OA_2050.tif",
+        "source_sha256": "fdee06fee1848adecae92c02e481305a30b7a395927d3a7b780993680723ea05",
+        "source_range": [
+          0.0,
+          0.8100000023841858
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          81
+        ],
+        "nonzero_domain_pixels": 612986,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 41,
+        "title": "Disturbance wind power",
+        "source": "regional/bottniska-viken/National_press_N_2018/41Avoidance_Windpower.tif",
+        "source_sha256": "32d3938bc0b5bec192572d6e1ba47750847104b8eddbb5751bac1468995d061a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      }
+    ],
+    "outputs": [
+      {
+        "path": "derived/bottniska-viken/ecosystems.tif",
+        "bytes": 1526493,
+        "sha256": "a21056347f0ff90740af65be56e934251b65445741212f9d162056031f824a35"
+      },
+      {
+        "path": "derived/bottniska-viken/pressures.tif",
+        "bytes": 1330049,
+        "sha256": "07899f9cc7dad7dc52bc35b96fc227b3ad61573a0b6ae1702779b0af49eba148"
+      }
+    ],
+    "local_calibration": {
+      "method": "Maximum cumulative impact over rasterized 2022 planning area, default bands; sum of per-pair truncated E*P*K. Local calibration, not official HaV calibration.",
+      "maximum": 21048,
+      "percentile95": 8641.0,
+      "mean": 4363.316504781512,
+      "positive_pixels": 612986
+    }
+  },
+  {
+    "baseline": "HAV_2019_EAST_LOCAL",
+    "region": "Östersjön",
+    "width": 1831,
+    "height": 2476,
+    "crs": "EPSG:3035",
+    "pixel_size_m": 250,
+    "bounds": [
+      4479000,
+      3546750,
+      4936750,
+      4165750
+    ],
+    "inside_pixels": 1197346,
+    "bands": [
+      {
+        "category": "Ecosystem",
+        "number": 1,
+        "title": "Porpoise baltic",
+        "source": "regional/ostersjon/National_eco_E_2018/01Porpoise_Baltic.tif",
+        "source_sha256": "a67b021cc68dfed33d133f508fb1c41f3d2988c96db96fb4794c826dfa33cff7",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 580849,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 2,
+        "title": "Porpoise belt sea",
+        "source": "regional/ostersjon/National_eco_E_2018/02Porpoise_Beltsea.tif",
+        "source_sha256": "39df7c8410227ddb3ffdf3d5bf82703cad6d8b7aced66917549b06ca364f97c1",
+        "source_range": [
+          0.0,
+          0.6899999976158142
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          64
+        ],
+        "nonzero_domain_pixels": 85004,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 3,
+        "title": "Grey seal",
+        "source": "regional/ostersjon/National_eco_E_2018/03Grey_Seals.tif",
+        "source_sha256": "7952f19fa7d68caa87db8033613533a10cdcfcd4be15970c3e05d9b2909ad363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          97
+        ],
+        "nonzero_domain_pixels": 639985,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 4,
+        "title": "Harbour seal",
+        "source": "regional/ostersjon/National_eco_E_2018/04Harbour_Seals.tif",
+        "source_sha256": "8cc2e6caa0313bac86671890c13c0beb2ff4c1c45aaee0961098d3f72a5d321a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          60
+        ],
+        "nonzero_domain_pixels": 107118,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 5,
+        "title": "Mussel reef",
+        "source": "regional/ostersjon/National_eco_E_2018/05Blue_Mussel_Habitat.tif",
+        "source_sha256": "d466250ce8d6cb2b10213deeac82b3bd3a5add43c9f664fba3a2f28dc78db000",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 1859,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 6,
+        "title": "Deep reef",
+        "source": "regional/ostersjon/National_eco_E_2018/06Deep_Reef.tif",
+        "source_sha256": "49e7fba695d52b2da2bc424447742a4cc70452b78e7decb36b9d78a1193065ca",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 35,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 7,
+        "title": "Haploops reef",
+        "source": "regional/ostersjon/National_eco_E_2018/07Haploops_Reef.tif",
+        "source_sha256": "d871ea742e6d14d10262389c381efa028f481c470e1379efed8aecbeb3fc8e23",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 19,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 8,
+        "title": "Artificial reef",
+        "source": "regional/ostersjon/National_eco_E_2018/08Artificial_Reefs_Total.tif",
+        "source_sha256": "1edfe756c36a48b83f640d2255b4032d2075903b40e4e5616ecfc7ed0a61fdfb",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 4514,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 9,
+        "title": "Plankton pelagic",
+        "source": "regional/ostersjon/National_eco_E_2018/09Plankton_Community.tif",
+        "source_sha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 10,
+        "title": "Hard bottom photic",
+        "source": "regional/ostersjon/National_eco_E_2018/10Hardbottom_Photic.tif",
+        "source_sha256": "6ad90dabd8bb8decbc82021778bad21dca9044941515bd13693ab8268328f6eb",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          81
+        ],
+        "nonzero_domain_pixels": 86470,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 11,
+        "title": "Hard bottom aphotic",
+        "source": "regional/ostersjon/National_eco_E_2018/11Hardbottom_Aphotic.tif",
+        "source_sha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          81
+        ],
+        "nonzero_domain_pixels": 469600,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 12,
+        "title": "Hard bottom deep",
+        "source": "regional/ostersjon/National_eco_E_2018/12Hardbottom_Deep.tif",
+        "source_sha256": "8d587fc1e3ef3effe0bcb327f9000e94a29b3c9a9c475a06c7601e16c9dd878c",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          81
+        ],
+        "nonzero_domain_pixels": 370378,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 13,
+        "title": "Transport bottom photic",
+        "source": "regional/ostersjon/National_eco_E_2018/13Transportbottom_Photic.tif",
+        "source_sha256": "1bb4e554bba34749fb9d7c6bb22e6a218cecba9f77536c94668c8639ba3163da",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          83
+        ],
+        "nonzero_domain_pixels": 86470,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 14,
+        "title": "Transport bottom aphotic",
+        "source": "regional/ostersjon/National_eco_E_2018/14Transportbottom_Aphotic.tif",
+        "source_sha256": "ba58ad276d88943e162d68de49d1bc7451512beff04b9e1caa8884c5b2bba293",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          83
+        ],
+        "nonzero_domain_pixels": 405052,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 15,
+        "title": "Transport bottom deep",
+        "source": "regional/ostersjon/National_eco_E_2018/15Transportbottom_Deep.tif",
+        "source_sha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f",
+        "source_range": [
+          0.0,
+          0.8199999928474426
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          82
+        ],
+        "nonzero_domain_pixels": 705824,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 16,
+        "title": "Soft bottom photic",
+        "source": "regional/ostersjon/National_eco_E_2018/16Softbottom_Photic.tif",
+        "source_sha256": "d61e909e54d011b7c1fefc0f8b5f41aaa36a831ebb62f6d77e902c8c02c9420e",
+        "source_range": [
+          0.0,
+          0.9599999785423279
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          96
+        ],
+        "nonzero_domain_pixels": 84565,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 17,
+        "title": "Soft bottom aphotic",
+        "source": "regional/ostersjon/National_eco_E_2018/17Softbottom_Aphotic.tif",
+        "source_sha256": "e65b395ede83c79b0ead74bc5cd129f450ceeed17b76c7c8d4abc17cba940d4a",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          98
+        ],
+        "nonzero_domain_pixels": 404453,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 18,
+        "title": "Soft bottom deep",
+        "source": "regional/ostersjon/National_eco_E_2018/18Softbottom_Deep.tif",
+        "source_sha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          98
+        ],
+        "nonzero_domain_pixels": 705344,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 19,
+        "title": "Shoreline",
+        "source": "regional/ostersjon/National_eco_E_2018/19Shoreline_Complexity.tif",
+        "source_sha256": "47d38e98b3f97bc6eaefd6001066f48e09fb824ae26de77062e22060ef5b80f8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 20,
+        "title": "Angiosperms",
+        "source": "regional/ostersjon/National_eco_E_2018/20Angiosperms.tif",
+        "source_sha256": "7da90de8f2448459212077b50350fe38822fa8215c1a771275b367ac434f4956",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 665,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 21,
+        "title": "Cod",
+        "source": "regional/ostersjon/National_eco_E_2018/21Cod_lognorm_v2.tif",
+        "source_sha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 1054454,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 22,
+        "title": "Herring",
+        "source": "regional/ostersjon/National_eco_E_2018/22Herring_lognorm_v2.tif",
+        "source_sha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          93
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 23,
+        "title": "Sprat",
+        "source": "regional/ostersjon/National_eco_E_2018/23Sprat_lognorm_v2.tif",
+        "source_sha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          92
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 24,
+        "title": "Fish spawning",
+        "source": "regional/ostersjon/National_eco_E_2018/24Spawning_Areas_Commercial_Fish.tif",
+        "source_sha256": "842bcced4da13474d0928ba239a144168ee435f30e5cb8a37c2f76409702d24e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 1182003,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 25,
+        "title": "Rivermouth fish",
+        "source": "regional/ostersjon/National_eco_E_2018/25Rivermouth_Fish.tif",
+        "source_sha256": "45678ef9f10f6defcf2a81c1f64d340665525650770ad450e34bb59a02643507",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          4
+        ],
+        "nonzero_domain_pixels": 3,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 26,
+        "title": "Eel migration",
+        "source": "regional/ostersjon/National_eco_E_2018/26Eel_Migration.tif",
+        "source_sha256": "a63913d5716fcc2927be6ecf8e4cc7e1cf5d5e163ecfdb8de6f1b79c97f24d44",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          70
+        ],
+        "nonzero_domain_pixels": 134112,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 27,
+        "title": "Coastal birds",
+        "source": "regional/ostersjon/National_eco_E_2018/27Birds_Coastal.tif",
+        "source_sha256": "b154cd1b75557c8a9aa8d03655c3b94e6f97551bf8449eedb3ff479252e593ac",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 23902,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 28,
+        "title": "Seabird coastal wintering",
+        "source": "regional/ostersjon/National_eco_E_2018/28Seabird_Winter_Coastal.tif",
+        "source_sha256": "fa6db17a48251a91f927764ba70f0c2ba772968d0100984130768be61d47acdc",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          68
+        ],
+        "nonzero_domain_pixels": 16238,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 29,
+        "title": "Seabird offshore wintering",
+        "source": "regional/ostersjon/National_eco_E_2018/29Seabird_Winter_Offshore.tif",
+        "source_sha256": "98e09b2b4a05834374d7f45e2b37bd140f8428fb295a979837b5e9d9ecbfebe8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 624489,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 30,
+        "title": "Rough bottom photic",
+        "source": "regional/ostersjon/National_eco_E_2018/30Komplexitet_Fotisk_v2_250m-normhårdbotten.tif",
+        "source_sha256": "c57974e3a225606acf48fd07a716bf275919ae1c3f3cef8211130307fb6544bf",
+        "source_range": [
+          0.0,
+          0.9569202065467834
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          66
+        ],
+        "nonzero_domain_pixels": 4216,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 31,
+        "title": "Rough bottom aphotic",
+        "source": "regional/ostersjon/National_eco_E_2018/31Komplexitet_AfotiskMixad_v2_250m-normhårdbotten.tif",
+        "source_sha256": "1b70a2b0f0eaab0b65d9afeff5f6b70c99d00a9b1b57e28c4e84309383cf4e3a",
+        "source_range": [
+          0.0,
+          0.9265214800834656
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          89
+        ],
+        "nonzero_domain_pixels": 57575,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 32,
+        "title": "Rough bottom deep",
+        "source": "regional/ostersjon/National_eco_E_2018/32Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+        "source_sha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c",
+        "source_range": [
+          0.0,
+          0.99920254945755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 254844,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 1,
+        "title": "Bird hunt",
+        "source": "regional/ostersjon/National_press_E_2018/01Birdhunt.tif",
+        "source_sha256": "e67b9730a95ebde1ee1215fb0bd75933e89a850c5997926c0b189d953a0d2935",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          65
+        ],
+        "nonzero_domain_pixels": 276943,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 2,
+        "title": "Catch gillnet",
+        "source": "regional/ostersjon/National_press_E_2018/02Catch_Gillnet.tif",
+        "source_sha256": "14a8fbee5077fbb1659cb498f9d92b2ca170cf1d6f2f885b28ad431a43330363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 75798,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 3,
+        "title": "Catch pelagic trawl",
+        "source": "regional/ostersjon/National_press_E_2018/03Catch_Pelagic_trawl.tif",
+        "source_sha256": "ba2255914b6f7ac6a2272432981367125383e899d7c7a46f9be2910e7146ae9c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          34
+        ],
+        "nonzero_domain_pixels": 193157,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 4,
+        "title": "Catch bottom trawl",
+        "source": "regional/ostersjon/National_press_E_2018/04Catch_Bottom_trawl.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          30
+        ],
+        "nonzero_domain_pixels": 153843,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 5,
+        "title": "Turbidity bottom trawl",
+        "source": "regional/ostersjon/National_press_E_2018/05Catch_Bottom_trawlCopy.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          30
+        ],
+        "nonzero_domain_pixels": 153843,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 6,
+        "title": "Turbidity shipping",
+        "source": "regional/ostersjon/National_press_E_2018/06Turbidity_Shipping.tif",
+        "source_sha256": "389093746d5b949173b8c79dfc31c611143890c72cb785425c94773dcc7074e5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          71
+        ],
+        "nonzero_domain_pixels": 24838,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 7,
+        "title": "Turbidity sand extraction",
+        "source": "regional/ostersjon/National_press_E_2018/07Turbidity_Mining.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 216,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 8,
+        "title": "Abrasion bottom trawl",
+        "source": "regional/ostersjon/National_press_E_2018/08Abrasion_Bottomtrawl.tif",
+        "source_sha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          56
+        ],
+        "nonzero_domain_pixels": 224827,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 9,
+        "title": "Habitat loss dumping",
+        "source": "regional/ostersjon/National_press_E_2018/09Habitatloss_Dumping.tif",
+        "source_sha256": "8b39d8bbc6ce122639125ac55b364c945becc04b54787af2c9f8986dff9169ab",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 24,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 10,
+        "title": "Habitat loss fish farm",
+        "source": "regional/ostersjon/National_press_E_2018/10Habitatloss_Fishfarm.tif",
+        "source_sha256": "75847df1bf9a73e5742be62823ad08985b30c305097acfa1f8132b7b6ec59065",
+        "source_range": [
+          0.0,
+          0.8949999809265137
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 11,
+        "title": "Habitat loss mussel farm",
+        "source": "regional/ostersjon/National_press_E_2018/11Habitatloss_Musselfarming.tif",
+        "source_sha256": "91ab9c383379bee534cef97b0c6a56d265c8380ff96486c5fae6ed95badfe050",
+        "source_range": [
+          0.0,
+          0.46799999475479126
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 12,
+        "title": "Habitat loss coastal exploitation",
+        "source": "regional/ostersjon/National_press_E_2018/12Habitatloss_Coastal_Exploitation.tif",
+        "source_sha256": "e461d08ebe59d8a52ed490d7a14b4cbc2a0de7fa5e87a25ad36f3c72dbaae82a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 13,
+        "title": "Habitat loss infrastructure",
+        "source": "regional/ostersjon/National_press_E_2018/13Infrastructure.tif",
+        "source_sha256": "df8428c6d0bdc40d67f22a27813e780331265d02ab953f4858d060a5c50924c9",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 4127,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 14,
+        "title": "Habitat loss sand extraction",
+        "source": "regional/ostersjon/National_press_E_2018/14Turbidity_MiningCopy.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 216,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 15,
+        "title": "Noise 125Hz shipping",
+        "source": "regional/ostersjon/National_press_E_2018/15Noise_125Hz_Shipping_20181122.tif",
+        "source_sha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+        "source_range": [
+          0.0,
+          0.7936156988143921
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          75
+        ],
+        "nonzero_domain_pixels": 1111256,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 16,
+        "title": "Noise 125Hz wind power",
+        "source": "regional/ostersjon/National_press_E_2018/16Noise_125Hz_Windpower.tif",
+        "source_sha256": "a4eba6372ed3989e64d8badb403a3b7dab366061e6b8ed559132301e4166dcad",
+        "source_range": [
+          0.0,
+          0.28999999165534973
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          29
+        ],
+        "nonzero_domain_pixels": 993,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 17,
+        "title": "Noise 2000Hz shipping",
+        "source": "regional/ostersjon/National_press_E_2018/17Noise_2000Hz_Shipping_20181122.tif",
+        "source_sha256": "99e6ea0fd4d57d90727aa4b18049348cba24b7eda965a78155f32b778fc8f223",
+        "source_range": [
+          0.0,
+          0.27932605147361755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          24
+        ],
+        "nonzero_domain_pixels": 20336,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 18,
+        "title": "Noise boating",
+        "source": "regional/ostersjon/National_press_E_2018/18Boating.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 3726,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 19,
+        "title": "Explosions peak",
+        "source": "regional/ostersjon/National_press_E_2018/19Explosions_PM.tif",
+        "source_sha256": "667b0ac1aa4a0d15718fad4db4c2984ac2f92568009013239b4f30fc18b4f8ec",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 21554,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 20,
+        "title": "Explosions SEL",
+        "source": "regional/ostersjon/National_press_E_2018/20Explosions_SPL.tif",
+        "source_sha256": "6dde963590205fda0baf6022dc844b0c3cd679ef07d24c257ea6a187bb758664",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          11
+        ],
+        "nonzero_domain_pixels": 124448,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 21,
+        "title": "Oilspill shipping",
+        "source": "regional/ostersjon/National_press_E_2018/21Oilspill_2knots_Shipping.tif",
+        "source_sha256": "c7a86fee7559c60e3c874560f1fc614061144cf811e7c1d8c5a3cb047be486ea",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 22,
+        "title": "Oilspill wreck",
+        "source": "regional/ostersjon/National_press_E_2018/22Oilspill_2knots_Wreck.tif",
+        "source_sha256": "c7c518e35194387c076f10adc7ef6795a37c723a3ed0d7b8cf21eba5d90ed97d",
+        "source_range": [
+          0.0,
+          0.5400000214576721
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          1
+        ],
+        "nonzero_domain_pixels": 6822,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 23,
+        "title": "Heavy metals background",
+        "source": "regional/ostersjon/National_press_E_2018/23Tox_Metal_Background.tif",
+        "source_sha256": "c4662df8250e7ba7791de9c2acef5b31cc0d56b12d4b19e7dcc03dc20e6834e7",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          70
+        ],
+        "nonzero_domain_pixels": 1081563,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 24,
+        "title": "Heavy metals military area",
+        "source": "regional/ostersjon/National_press_E_2018/24Tox_Metal_Military.tif",
+        "source_sha256": "41d0ef286d0f51a403552f645e24d84f453517a9d139d0500e32307f57c809ee",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          20
+        ],
+        "nonzero_domain_pixels": 71175,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 25,
+        "title": "Heavy metals mine dump",
+        "source": "regional/ostersjon/National_press_E_2018/25Tox_Mine_Risk.tif",
+        "source_sha256": "be3920e2679aefca15a390d0733217f02b3f464320293f8e136711f2e2670123",
+        "source_range": [
+          0.0,
+          0.10000000149011612
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          10
+        ],
+        "nonzero_domain_pixels": 163573,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 26,
+        "title": "Toxic munition dump",
+        "source": "regional/ostersjon/National_press_E_2018/26Tox_Munition.tif",
+        "source_sha256": "6be368b23471fa1e8d8a6f058cf606ba1cf707b0705b8e2d7b74be7b311781b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 80124,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 27,
+        "title": "Synthetic toxins background",
+        "source": "regional/ostersjon/National_press_E_2018/27Tox_Synthetic_Background.tif",
+        "source_sha256": "ded78651f29147032eaa1f9c43ca8affa886cd9e98e04777b0272a8e0f21e268",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          58
+        ],
+        "nonzero_domain_pixels": 1195422,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 28,
+        "title": "Synthetic toxins harbor",
+        "source": "regional/ostersjon/National_press_E_2018/28Tox_Synthetic_Harbor.tif",
+        "source_sha256": "2f3ea06608ff9ce38ed6d39d1d5b73a063f3874d681d7c49f09c8418be049978",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 29,
+        "title": "Synthetic toxins industry",
+        "source": "regional/ostersjon/National_press_E_2018/29Tox_Synthetic_Industry.tif",
+        "source_sha256": "884f82b022a19c1842af03c195006d44ded204e232d73f7982c653e5f29fb36e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 30,
+        "title": "Synthetic toxins treatment plant",
+        "source": "regional/ostersjon/National_press_E_2018/30Tox_Synthetic_Treatmentplants.tif",
+        "source_sha256": "0c789f071647521925ea32acb5f208e7adf365174855aa8ec6fe59ded9cd00b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 31,
+        "title": "Pollution boating",
+        "source": "regional/ostersjon/National_press_E_2018/31BoatingCopy.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 3726,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 32,
+        "title": "Nitrogen background",
+        "source": "regional/ostersjon/National_press_E_2018/32Nitrogen_Background.tif",
+        "source_sha256": "1e4a3eab5ad059c019b444a1cb891023bf993d22788489c213eef650238caa35",
+        "source_range": [
+          0.0,
+          0.9603232145309448
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          40
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 33,
+        "title": "Nutrients fish farm",
+        "source": "regional/ostersjon/National_press_E_2018/33Nitrogen_Fishfarming.tif",
+        "source_sha256": "a6509331fb20b585c1ec179837d9a7fade1401596079c8947071e4531867b8ac",
+        "source_range": [
+          0.0,
+          0.17900000512599945
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 34,
+        "title": "Phosphorous background",
+        "source": "regional/ostersjon/National_press_E_2018/34Phosphorous_Background.tif",
+        "source_sha256": "62f0e15f6e9d36955dfb167263c165e12131cea25ab3d881538efdf133ed29f6",
+        "source_range": [
+          0.0,
+          0.7535371780395508
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          64
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 35,
+        "title": "Anoxia background",
+        "source": "regional/ostersjon/National_press_E_2018/35Anoxia_Background.tif",
+        "source_sha256": "2c6d2df5014ed1dda8841bd1e191ee206bf64bdac5ec75acc1fc4d0b8deb47e8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 36,
+        "title": "Electromagnetic field",
+        "source": "regional/ostersjon/National_press_E_2018/36EMF.tif",
+        "source_sha256": "a329ce2062b1bb59321583c28ce7ebcc019443bb1bae6eee7fb63725885c3a78",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 2632,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 37,
+        "title": "Climate change temperature",
+        "source": "regional/ostersjon/National_press_E_2018/37TempIncrease_Summer_2050.tif",
+        "source_sha256": "2e5bb9f0a2b56f7b26b8c7bf1197a113d66a429ab968d9f24a8ceb78b75609b5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          94
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 38,
+        "title": "Climate change acidification",
+        "source": "regional/ostersjon/National_press_E_2018/38OA_2050.tif",
+        "source_sha256": "fdee06fee1848adecae92c02e481305a30b7a395927d3a7b780993680723ea05",
+        "source_range": [
+          0.0,
+          0.8100000023841858
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          76
+        ],
+        "nonzero_domain_pixels": 1197346,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 39,
+        "title": "Disturbance wind power",
+        "source": "regional/ostersjon/National_press_E_2018/39Avoidance_Windpower.tif",
+        "source_sha256": "32d3938bc0b5bec192572d6e1ba47750847104b8eddbb5751bac1468995d061a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 2001,
+        "default_selected": true
+      }
+    ],
+    "outputs": [
+      {
+        "path": "derived/ostersjon/ecosystems.tif",
+        "bytes": 3200557,
+        "sha256": "a6a96d7c2615c08a0615f994847e98864f6d8b0bf6109c47ab9ddf6961d8857c"
+      },
+      {
+        "path": "derived/ostersjon/pressures.tif",
+        "bytes": 3105850,
+        "sha256": "6225583c954bfc9a8b3961954ff41316ed01c6614dc231de02b0498ecca3a02d"
+      }
+    ],
+    "local_calibration": {
+      "method": "Maximum cumulative impact over rasterized 2022 planning area, default bands; sum of per-pair truncated E*P*K. Local calibration, not official HaV calibration.",
+      "maximum": 70904,
+      "percentile95": 31441.0,
+      "mean": 20787.595074439636,
+      "positive_pixels": 1197346
+    }
+  },
+  {
+    "baseline": "HAV_2019_WEST_LOCAL",
+    "region": "Västerhavet",
+    "width": 651,
+    "height": 1245,
+    "crs": "EPSG:3035",
+    "pixel_size_m": 250,
+    "bounds": [
+      4322500,
+      3670750,
+      4485250,
+      3982000
+    ],
+    "inside_pixels": 153027,
+    "bands": [
+      {
+        "category": "Ecosystem",
+        "number": 1,
+        "title": "Porpoise belt sea",
+        "source": "regional/vasterhavet/National_eco_W_2018/01Porpoise_Beltsea.tif",
+        "source_sha256": "39df7c8410227ddb3ffdf3d5bf82703cad6d8b7aced66917549b06ca364f97c1",
+        "source_range": [
+          0.0,
+          0.6899999976158142
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          69
+        ],
+        "nonzero_domain_pixels": 42060,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 2,
+        "title": "Porpoise north sea",
+        "source": "regional/vasterhavet/National_eco_W_2018/02Porpoise_Northsea.tif",
+        "source_sha256": "288456e7aefd4663b5fa89aaf32c26abbad8f27b99b811d4df649fc9dfd2c00b",
+        "source_range": [
+          0.0,
+          0.9599999785423279
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          96
+        ],
+        "nonzero_domain_pixels": 119776,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 3,
+        "title": "Grey seal",
+        "source": "regional/vasterhavet/National_eco_W_2018/03Grey_Seals.tif",
+        "source_sha256": "7952f19fa7d68caa87db8033613533a10cdcfcd4be15970c3e05d9b2909ad363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 4,
+        "title": "Harbour seal",
+        "source": "regional/vasterhavet/National_eco_W_2018/04Harbour_Seals.tif",
+        "source_sha256": "8cc2e6caa0313bac86671890c13c0beb2ff4c1c45aaee0961098d3f72a5d321a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          89
+        ],
+        "nonzero_domain_pixels": 135943,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 5,
+        "title": "Mussel reef",
+        "source": "regional/vasterhavet/National_eco_W_2018/05Mussel_Reefs_Total.tif",
+        "source_sha256": "a38ea26e2077f95998054a5909deff161c37e0467729170a0d5c886b3ac72ddf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 286,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 6,
+        "title": "Deep reef",
+        "source": "regional/vasterhavet/National_eco_W_2018/06Deep_Reef.tif",
+        "source_sha256": "49e7fba695d52b2da2bc424447742a4cc70452b78e7decb36b9d78a1193065ca",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 477,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 7,
+        "title": "Haploops reef",
+        "source": "regional/vasterhavet/National_eco_W_2018/07Haploops_Reef.tif",
+        "source_sha256": "d871ea742e6d14d10262389c381efa028f481c470e1379efed8aecbeb3fc8e23",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 4,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 8,
+        "title": "Artificial reef",
+        "source": "regional/vasterhavet/National_eco_W_2018/08Artificial_Reefs_Total.tif",
+        "source_sha256": "1edfe756c36a48b83f640d2255b4032d2075903b40e4e5616ecfc7ed0a61fdfb",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 267,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 9,
+        "title": "Plankton pelagic",
+        "source": "regional/vasterhavet/National_eco_W_2018/09Plankton_Community.tif",
+        "source_sha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          97
+        ],
+        "nonzero_domain_pixels": 153027,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 10,
+        "title": "Hard bottom photic",
+        "source": "regional/vasterhavet/National_eco_W_2018/10Hardbottom_Photic.tif",
+        "source_sha256": "6ad90dabd8bb8decbc82021778bad21dca9044941515bd13693ab8268328f6eb",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          83
+        ],
+        "nonzero_domain_pixels": 20749,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 11,
+        "title": "Hard bottom aphotic",
+        "source": "regional/vasterhavet/National_eco_W_2018/11Hardbottom_Aphotic.tif",
+        "source_sha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          71
+        ],
+        "nonzero_domain_pixels": 9723,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 12,
+        "title": "Hard bottom deep",
+        "source": "regional/vasterhavet/National_eco_W_2018/12Hardbottom_Deep.tif",
+        "source_sha256": "8d587fc1e3ef3effe0bcb327f9000e94a29b3c9a9c475a06c7601e16c9dd878c",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          75
+        ],
+        "nonzero_domain_pixels": 19016,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 13,
+        "title": "Transport bottom photic",
+        "source": "regional/vasterhavet/National_eco_W_2018/13Transportbottom_Photic.tif",
+        "source_sha256": "1bb4e554bba34749fb9d7c6bb22e6a218cecba9f77536c94668c8639ba3163da",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          79
+        ],
+        "nonzero_domain_pixels": 20957,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 14,
+        "title": "Transport bottom aphotic",
+        "source": "regional/vasterhavet/National_eco_W_2018/14Transportbottom_Aphotic.tif",
+        "source_sha256": "ba58ad276d88943e162d68de49d1bc7451512beff04b9e1caa8884c5b2bba293",
+        "source_range": [
+          0.0,
+          0.8299999833106995
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          79
+        ],
+        "nonzero_domain_pixels": 51656,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 15,
+        "title": "Transport bottom deep",
+        "source": "regional/vasterhavet/National_eco_W_2018/15Transportbottom_Deep.tif",
+        "source_sha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f",
+        "source_range": [
+          0.0,
+          0.8199999928474426
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          69
+        ],
+        "nonzero_domain_pixels": 80414,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 16,
+        "title": "Soft bottom photic",
+        "source": "regional/vasterhavet/National_eco_W_2018/16Softbottom_Photic.tif",
+        "source_sha256": "d61e909e54d011b7c1fefc0f8b5f41aaa36a831ebb62f6d77e902c8c02c9420e",
+        "source_range": [
+          0.0,
+          0.9599999785423279
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          95
+        ],
+        "nonzero_domain_pixels": 20957,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 17,
+        "title": "Soft bottom aphotic",
+        "source": "regional/vasterhavet/National_eco_W_2018/17Softbottom_Aphotic.tif",
+        "source_sha256": "e65b395ede83c79b0ead74bc5cd129f450ceeed17b76c7c8d4abc17cba940d4a",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 51656,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 18,
+        "title": "Soft bottom deep",
+        "source": "regional/vasterhavet/National_eco_W_2018/18Softbottom_Deep.tif",
+        "source_sha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c",
+        "source_range": [
+          0.0,
+          0.9900000095367432
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          99
+        ],
+        "nonzero_domain_pixels": 80414,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 19,
+        "title": "Shoreline",
+        "source": "regional/vasterhavet/National_eco_W_2018/19Shoreline_Complexity.tif",
+        "source_sha256": "47d38e98b3f97bc6eaefd6001066f48e09fb824ae26de77062e22060ef5b80f8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 20,
+        "title": "Angiosperms",
+        "source": "regional/vasterhavet/National_eco_W_2018/20Angiosperms.tif",
+        "source_sha256": "7da90de8f2448459212077b50350fe38822fa8215c1a771275b367ac434f4956",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 21,
+        "title": "Cod",
+        "source": "regional/vasterhavet/National_eco_W_2018/21torsk_lognorm_v2.tif",
+        "source_sha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          96
+        ],
+        "nonzero_domain_pixels": 153012,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 22,
+        "title": "Herring",
+        "source": "regional/vasterhavet/National_eco_W_2018/22sill_lognorm_v2.tif",
+        "source_sha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 153027,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 23,
+        "title": "Sprat",
+        "source": "regional/vasterhavet/National_eco_W_2018/23skarpsill_lognorm_v2.tif",
+        "source_sha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 131462,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 24,
+        "title": "Fish spawning",
+        "source": "regional/vasterhavet/National_eco_W_2018/24Spawning_Areas_Commercial_Fish.tif",
+        "source_sha256": "842bcced4da13474d0928ba239a144168ee435f30e5cb8a37c2f76409702d24e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 152084,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 25,
+        "title": "Rivermouth fish",
+        "source": "regional/vasterhavet/National_eco_W_2018/25Rivermouth_Fish.tif",
+        "source_sha256": "45678ef9f10f6defcf2a81c1f64d340665525650770ad450e34bb59a02643507",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 26,
+        "title": "Eel migration",
+        "source": "regional/vasterhavet/National_eco_W_2018/26Eel_Migration.tif",
+        "source_sha256": "a63913d5716fcc2927be6ecf8e4cc7e1cf5d5e163ecfdb8de6f1b79c97f24d44",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          75
+        ],
+        "nonzero_domain_pixels": 79484,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 27,
+        "title": "Coastal birds",
+        "source": "regional/vasterhavet/National_eco_W_2018/27Birds_Coastal.tif",
+        "source_sha256": "b154cd1b75557c8a9aa8d03655c3b94e6f97551bf8449eedb3ff479252e593ac",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          71
+        ],
+        "nonzero_domain_pixels": 4295,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 28,
+        "title": "Seabird coastal wintering",
+        "source": "regional/vasterhavet/National_eco_W_2018/28Seabird_Winter_Coastal.tif",
+        "source_sha256": "fa6db17a48251a91f927764ba70f0c2ba772968d0100984130768be61d47acdc",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          97
+        ],
+        "nonzero_domain_pixels": 832,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 29,
+        "title": "Seabird offshore wintering",
+        "source": "regional/vasterhavet/National_eco_W_2018/29Seabird_Winter_Offshore.tif",
+        "source_sha256": "98e09b2b4a05834374d7f45e2b37bd140f8428fb295a979837b5e9d9ecbfebe8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          61
+        ],
+        "nonzero_domain_pixels": 43190,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 30,
+        "title": "Rough bottom photic",
+        "source": "regional/vasterhavet/National_eco_W_2018/30Komplexitet_Fotisk_v2_250m-normhårdbotten.tif",
+        "source_sha256": "c57974e3a225606acf48fd07a716bf275919ae1c3f3cef8211130307fb6544bf",
+        "source_range": [
+          0.0,
+          0.9569202065467834
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          61
+        ],
+        "nonzero_domain_pixels": 2840,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 31,
+        "title": "Rough bottom aphotic",
+        "source": "regional/vasterhavet/National_eco_W_2018/31Komplexitet_AfotiskMixad_v2_250m-normhårdbotten.tif",
+        "source_sha256": "1b70a2b0f0eaab0b65d9afeff5f6b70c99d00a9b1b57e28c4e84309383cf4e3a",
+        "source_range": [
+          0.0,
+          0.9265214800834656
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          67
+        ],
+        "nonzero_domain_pixels": 8028,
+        "default_selected": true
+      },
+      {
+        "category": "Ecosystem",
+        "number": 32,
+        "title": "Rough bottom deep",
+        "source": "regional/vasterhavet/National_eco_W_2018/32Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+        "source_sha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c",
+        "source_range": [
+          0.0,
+          0.99920254945755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          96
+        ],
+        "nonzero_domain_pixels": 29945,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 1,
+        "title": "Bird hunt",
+        "source": "regional/vasterhavet/National_press_W_2018/01Birdhunt.tif",
+        "source_sha256": "e67b9730a95ebde1ee1215fb0bd75933e89a850c5997926c0b189d953a0d2935",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 92109,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 2,
+        "title": "Catch gillnet",
+        "source": "regional/vasterhavet/National_press_W_2018/02Catch_Gillnet.tif",
+        "source_sha256": "14a8fbee5077fbb1659cb498f9d92b2ca170cf1d6f2f885b28ad431a43330363",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          8
+        ],
+        "nonzero_domain_pixels": 32041,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 3,
+        "title": "Catch pelagic trawl",
+        "source": "regional/vasterhavet/National_press_W_2018/03Catch_Pelagic_trawl.tif",
+        "source_sha256": "ba2255914b6f7ac6a2272432981367125383e899d7c7a46f9be2910e7146ae9c",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          25
+        ],
+        "nonzero_domain_pixels": 14236,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 4,
+        "title": "Catch bottom trawl",
+        "source": "regional/vasterhavet/National_press_W_2018/04Catch_Bottom_trawl.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          74
+        ],
+        "nonzero_domain_pixels": 136332,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 5,
+        "title": "Turbidity bottom trawl",
+        "source": "regional/vasterhavet/National_press_W_2018/05Catch_Bottom_trawlCopy.tif",
+        "source_sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          74
+        ],
+        "nonzero_domain_pixels": 136332,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 6,
+        "title": "Turbidity shipping",
+        "source": "regional/vasterhavet/National_press_W_2018/06Turbidity_Shipping.tif",
+        "source_sha256": "389093746d5b949173b8c79dfc31c611143890c72cb785425c94773dcc7074e5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          10
+        ],
+        "nonzero_domain_pixels": 3352,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 7,
+        "title": "Turbidity sand extraction",
+        "source": "regional/vasterhavet/National_press_W_2018/07Turbidity_Mining.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 8,
+        "title": "Abrasion bottom trawl",
+        "source": "regional/vasterhavet/National_press_W_2018/08Abrasion_Bottomtrawl.tif",
+        "source_sha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          88
+        ],
+        "nonzero_domain_pixels": 141780,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 9,
+        "title": "Habitat loss dumping",
+        "source": "regional/vasterhavet/National_press_W_2018/09Habitatloss_Dumping.tif",
+        "source_sha256": "8b39d8bbc6ce122639125ac55b364c945becc04b54787af2c9f8986dff9169ab",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 28,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 10,
+        "title": "Habitat loss mussel farm",
+        "source": "regional/vasterhavet/National_press_W_2018/10Habitatloss_Musselfarming.tif",
+        "source_sha256": "91ab9c383379bee534cef97b0c6a56d265c8380ff96486c5fae6ed95badfe050",
+        "source_range": [
+          0.0,
+          0.46799999475479126
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 11,
+        "title": "Habitat loss coastal exploitation",
+        "source": "regional/vasterhavet/National_press_W_2018/11Habitatloss_Coastal_Exploitation.tif",
+        "source_sha256": "e461d08ebe59d8a52ed490d7a14b4cbc2a0de7fa5e87a25ad36f3c72dbaae82a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 12,
+        "title": "Habitat loss infrastructure",
+        "source": "regional/vasterhavet/National_press_W_2018/12Infrastructure.tif",
+        "source_sha256": "df8428c6d0bdc40d67f22a27813e780331265d02ab953f4858d060a5c50924c9",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 1,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 13,
+        "title": "Habitat loss sand extraction",
+        "source": "regional/vasterhavet/National_press_W_2018/13Turbidity_MiningCopy.tif",
+        "source_sha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 14,
+        "title": "Noise 125Hz shipping",
+        "source": "regional/vasterhavet/National_press_W_2018/14Noise_125Hz_Shipping_20181122.tif",
+        "source_sha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+        "source_range": [
+          0.0,
+          0.7936156988143921
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          70
+        ],
+        "nonzero_domain_pixels": 150249,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 15,
+        "title": "Noise 125Hz wind power",
+        "source": "regional/vasterhavet/National_press_W_2018/15Noise_125Hz_Windpower.tif",
+        "source_sha256": "a4eba6372ed3989e64d8badb403a3b7dab366061e6b8ed559132301e4166dcad",
+        "source_range": [
+          0.0,
+          0.28999999165534973
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 16,
+        "title": "Noise 2000Hz shipping",
+        "source": "regional/vasterhavet/National_press_W_2018/16Noise_2000Hz_Shipping_20181122.tif",
+        "source_sha256": "99e6ea0fd4d57d90727aa4b18049348cba24b7eda965a78155f32b778fc8f223",
+        "source_range": [
+          0.0,
+          0.27932605147361755
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          19
+        ],
+        "nonzero_domain_pixels": 2842,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 17,
+        "title": "Noise boating",
+        "source": "regional/vasterhavet/National_press_W_2018/17Boating.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 765,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 18,
+        "title": "Explosions peak",
+        "source": "regional/vasterhavet/National_press_W_2018/18Explosions_PM.tif",
+        "source_sha256": "667b0ac1aa4a0d15718fad4db4c2984ac2f92568009013239b4f30fc18b4f8ec",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 84,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 19,
+        "title": "Explosions SEL",
+        "source": "regional/vasterhavet/National_press_W_2018/19Explosions_SPL.tif",
+        "source_sha256": "6dde963590205fda0baf6022dc844b0c3cd679ef07d24c257ea6a187bb758664",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 12878,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 20,
+        "title": "Oilspill shipping",
+        "source": "regional/vasterhavet/National_press_W_2018/20Oilspill_2knots_Shipping.tif",
+        "source_sha256": "c7a86fee7559c60e3c874560f1fc614061144cf811e7c1d8c5a3cb047be486ea",
+        "source_range": [
+          0.0,
+          0.05999999865889549
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          6
+        ],
+        "nonzero_domain_pixels": 153027,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 21,
+        "title": "Oilspill wreck",
+        "source": "regional/vasterhavet/National_press_W_2018/21Oilspill_2knots_Wreck.tif",
+        "source_sha256": "c7c518e35194387c076f10adc7ef6795a37c723a3ed0d7b8cf21eba5d90ed97d",
+        "source_range": [
+          0.0,
+          0.5400000214576721
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          54
+        ],
+        "nonzero_domain_pixels": 7180,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 22,
+        "title": "Heavy metals background",
+        "source": "regional/vasterhavet/National_press_W_2018/22Tox_Metal_Background.tif",
+        "source_sha256": "c4662df8250e7ba7791de9c2acef5b31cc0d56b12d4b19e7dcc03dc20e6834e7",
+        "source_range": [
+          0.0,
+          0.9100000262260437
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          22
+        ],
+        "nonzero_domain_pixels": 87959,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 23,
+        "title": "Heavy metals military area",
+        "source": "regional/vasterhavet/National_press_W_2018/23Tox_Metal_Military.tif",
+        "source_sha256": "41d0ef286d0f51a403552f645e24d84f453517a9d139d0500e32307f57c809ee",
+        "source_range": [
+          0.0,
+          0.20000000298023224
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          11
+        ],
+        "nonzero_domain_pixels": 1789,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 24,
+        "title": "Heavy metals mine dump",
+        "source": "regional/vasterhavet/National_press_W_2018/24Tox_Mine_Risk.tif",
+        "source_sha256": "be3920e2679aefca15a390d0733217f02b3f464320293f8e136711f2e2670123",
+        "source_range": [
+          0.0,
+          0.10000000149011612
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          8
+        ],
+        "nonzero_domain_pixels": 15094,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 25,
+        "title": "Toxic munition dump",
+        "source": "regional/vasterhavet/National_press_W_2018/25Tox_Munition.tif",
+        "source_sha256": "6be368b23471fa1e8d8a6f058cf606ba1cf707b0705b8e2d7b74be7b311781b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 14646,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 26,
+        "title": "Synthetic toxins background",
+        "source": "regional/vasterhavet/National_press_W_2018/26Tox_Synthetic_Background.tif",
+        "source_sha256": "ded78651f29147032eaa1f9c43ca8affa886cd9e98e04777b0272a8e0f21e268",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          26
+        ],
+        "nonzero_domain_pixels": 153012,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 27,
+        "title": "Synthetic toxins harbor",
+        "source": "regional/vasterhavet/National_press_W_2018/27Tox_Synthetic_Harbor.tif",
+        "source_sha256": "2f3ea06608ff9ce38ed6d39d1d5b73a063f3874d681d7c49f09c8418be049978",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 28,
+        "title": "Synthetic toxins industry",
+        "source": "regional/vasterhavet/National_press_W_2018/28Tox_Synthetic_Industry.tif",
+        "source_sha256": "884f82b022a19c1842af03c195006d44ded204e232d73f7982c653e5f29fb36e",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 29,
+        "title": "Synthetic toxins treatment plant",
+        "source": "regional/vasterhavet/National_press_W_2018/29Tox_Synthetic_Treatmentplants.tif",
+        "source_sha256": "0c789f071647521925ea32acb5f208e7adf365174855aa8ec6fe59ded9cd00b3",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 30,
+        "title": "Pollution boating",
+        "source": "regional/vasterhavet/National_press_W_2018/30BoatingCopy.tif",
+        "source_sha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+        "source_range": [
+          -0.009999999776482582,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 10666353,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 765,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 31,
+        "title": "Nitrogen background",
+        "source": "regional/vasterhavet/National_press_W_2018/31Nitrogen_Background.tif",
+        "source_sha256": "1e4a3eab5ad059c019b444a1cb891023bf993d22788489c213eef650238caa35",
+        "source_range": [
+          0.0,
+          0.9603232145309448
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          25
+        ],
+        "nonzero_domain_pixels": 130589,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 32,
+        "title": "Phosphorous background",
+        "source": "regional/vasterhavet/National_press_W_2018/32Phosphorous_Background.tif",
+        "source_sha256": "62f0e15f6e9d36955dfb167263c165e12131cea25ab3d881538efdf133ed29f6",
+        "source_range": [
+          0.0,
+          0.7535371780395508
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          33
+        ],
+        "nonzero_domain_pixels": 111206,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 33,
+        "title": "Anoxia background",
+        "source": "regional/vasterhavet/National_press_W_2018/33Anoxia_Background.tif",
+        "source_sha256": "2c6d2df5014ed1dda8841bd1e191ee206bf64bdac5ec75acc1fc4d0b8deb47e8",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          38
+        ],
+        "nonzero_domain_pixels": 89789,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 34,
+        "title": "Electromagnetic field",
+        "source": "regional/vasterhavet/National_press_W_2018/34EMF.tif",
+        "source_sha256": "a329ce2062b1bb59321583c28ce7ebcc019443bb1bae6eee7fb63725885c3a78",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          100
+        ],
+        "nonzero_domain_pixels": 210,
+        "default_selected": true
+      },
+      {
+        "category": "Pressure",
+        "number": 35,
+        "title": "Climate change temperature",
+        "source": "regional/vasterhavet/National_press_W_2018/35TempIncrease_Summer_2050.tif",
+        "source_sha256": "2e5bb9f0a2b56f7b26b8c7bf1197a113d66a429ab968d9f24a8ceb78b75609b5",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          49
+        ],
+        "nonzero_domain_pixels": 153027,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 36,
+        "title": "Climate change acidification",
+        "source": "regional/vasterhavet/National_press_W_2018/36OA_2050.tif",
+        "source_sha256": "fdee06fee1848adecae92c02e481305a30b7a395927d3a7b780993680723ea05",
+        "source_range": [
+          0.0,
+          0.8100000023841858
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          76
+        ],
+        "nonzero_domain_pixels": 153027,
+        "default_selected": false
+      },
+      {
+        "category": "Pressure",
+        "number": 37,
+        "title": "Disturbance wind power",
+        "source": "regional/vasterhavet/National_press_W_2018/37Avoidance_Windpower.tif",
+        "source_sha256": "32d3938bc0b5bec192572d6e1ba47750847104b8eddbb5751bac1468995d061a",
+        "source_range": [
+          0.0,
+          1.0
+        ],
+        "source_nodata_pixels": 0,
+        "negative_source_pixels_mapped_to_zero": 0,
+        "output_range": [
+          0,
+          0
+        ],
+        "nonzero_domain_pixels": 0,
+        "default_selected": true
+      }
+    ],
+    "outputs": [
+      {
+        "path": "derived/vasterhavet/ecosystems.tif",
+        "bytes": 504185,
+        "sha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c"
+      },
+      {
+        "path": "derived/vasterhavet/pressures.tif",
+        "bytes": 338717,
+        "sha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff"
+      }
+    ],
+    "local_calibration": {
+      "method": "Maximum cumulative impact over rasterized 2022 planning area, default bands; sum of per-pair truncated E*P*K. Local calibration, not official HaV calibration.",
+      "maximum": 55148,
+      "percentile95": 33135.0,
+      "mean": 21254.26409065067,
+      "positive_pixels": 153027
+    }
+  }
+]

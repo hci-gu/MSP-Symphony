@@ -1,0 +1,23 @@
+{
+  "reader": "GeoTools 29.6 from symphony-ws/target/symphony-ws-1.26.0-SNAPSHOT/WEB-INF/lib",
+  "java": "OpenJDK 27",
+  "checked_on": "2026-09-29",
+  "method": "GeoTiffReader.read(null), coverage dimensions, sample read at pixel (1000,2500)",
+  "rasters": [
+    {
+      "file": "rasters/Ekokomponenter-cm-prod.tif",
+      "width": 2606,
+      "height": 5057,
+      "bands": 35,
+      "sample_bands": 35
+    },
+    {
+      "file": "rasters/Belastningar-cm-prod.tif",
+      "width": 2606,
+      "height": 5057,
+      "bands": 69,
+      "sample_bands": 69
+    }
+  ],
+  "database_or_http_test": false
+}

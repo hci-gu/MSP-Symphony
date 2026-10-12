@@ -1,0 +1,56 @@
+[
+  {
+    "path": "data/hav-symphony-2019/regional/ostersjon/National_press_E_2018/31BoatingCopy.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  },
+  {
+    "path": "data/hav-symphony-2019/regional/ostersjon/National_press_E_2018/18Boating.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  },
+  {
+    "path": "data/hav-symphony-2019/regional/bottniska-viken/National_press_N_2018/18Boating.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  },
+  {
+    "path": "data/hav-symphony-2019/regional/bottniska-viken/National_press_N_2018/33BoatingCopy.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  },
+  {
+    "path": "data/hav-symphony-2019/regional/vasterhavet/National_press_W_2018/30BoatingCopy.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  },
+  {
+    "path": "data/hav-symphony-2019/regional/vasterhavet/National_press_W_2018/17Boating.tif",
+    "values": [
+      -0.009999999776482582
+    ],
+    "counts": [
+      10666353
+    ]
+  }
+]

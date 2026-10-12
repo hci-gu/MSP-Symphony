@@ -1,0 +1,1408 @@
+{
+  "version": 1,
+  "title": "MARELD area data",
+  "reviewAreaName": "MARELD POC review area",
+  "grid": {
+    "crs": "EPSG:3035",
+    "extent": [
+      4326000,
+      3873000,
+      4365000,
+      3912000
+    ],
+    "width": 156,
+    "height": 156,
+    "cellMetres": 250
+  },
+  "reviewGeometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          10.084334309772439,
+          57.95864888203256
+        ],
+        [
+          10.742116158922745,
+          57.956620319444305
+        ],
+        [
+          10.749317162134929,
+          58.30729365390577
+        ],
+        [
+          10.085152708264403,
+          58.30934455930239
+        ],
+        [
+          10.084334309772439,
+          57.95864888203256
+        ]
+      ]
+    ]
+  },
+  "windparkGeometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          10.73807,
+          58.01671
+        ],
+        [
+          10.54526,
+          58.13823
+        ],
+        [
+          10.09537,
+          58.25139
+        ],
+        [
+          10.67884,
+          58.25276
+        ],
+        [
+          10.72402,
+          58.20089
+        ],
+        [
+          10.73807,
+          58.01671
+        ]
+      ]
+    ]
+  },
+  "windparkMask": "windpark-mask.bin",
+  "defaultLayer": "porpoise-north-sea",
+  "attribution": "Havs- och vattenmyndigheten / original providers, CC BY 4.0. HaV 2019 package; source years vary.",
+  "sourceUrl": "https://www.havochvatten.se/data-kartor-och-rapporter/rapporter-och-andra-publikationer/publikationer/2018-04-10-symphony---integrerat-planeringsstod-for-statlig-havsplanering-utifran-en-ekosystemansats.html",
+  "binaryFormat": "Row-major north to south: width*height little-endian Float32 normalized 0–100 values, then width*height UInt8 provenance codes. Unknown values are NaN.",
+  "provenance": {
+    "0": "Unknown source support",
+    "1": "Source within imported boundary",
+    "2": "Recovered source beyond imported boundary",
+    "3": "Inferred POC extension"
+  },
+  "supportPolicy": "Source support is conservatively estimated from four continuous regional rasters with identical positive footprints. Original fish and shipping-noise fields retain their full valid extent. Other layers retain zeros within regional support and any positive values outside it; ambiguous zeros beyond it remain unknown. Source means published model/index, not direct observation.",
+  "layers": [
+    {
+      "id": "porpoise-north-sea",
+      "title": "Porpoise north sea",
+      "category": "ECOSYSTEM",
+      "theme": "Marine Mammals",
+      "future": false,
+      "note": "Historical relative distribution. Extension assumes comparable offshore habitat; habitat suitability and abundance are not validated.",
+      "source": "regional/vasterhavet/National_eco_W_2018/02Porpoise_Northsea.tif",
+      "sourceSha256": "288456e7aefd4663b5fa89aaf32c26abbad8f27b99b811d4df649fc9dfd2c00b",
+      "metadataPdfPage": 108,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": {
+        "method": "Nearest source cell across unknown offshore support; source values remain unchanged.",
+        "sensitivity": "Only inferred cells vary: lower/upper use source p10/p90 widened by held-out p90 absolute error, enclosing the nearest-cell estimate. These are illustrative sensitivity bounds, not confidence intervals.",
+        "distanceFile": "porpoise-north-sea-distance-km.bin",
+        "maxDistanceKm": 27.504545211791992,
+        "beyondValidationPercent": 53.42774380431285,
+        "validation": {
+          "method": "Leave one 8 km spatial block out; >=100 source cells per held-out block.",
+          "blocks": 14,
+          "held_out_cells": 11749,
+          "nearest_mae": 0.8640736407732008,
+          "nearest_rmse": 1.4035813041813152,
+          "regional_median_mae": 3.4007992843068178,
+          "absolute_error_p90": 2.0000038146972656,
+          "max_tested_distance_km": 8.0,
+          "limitation": "Internal spatial holdouts do not establish validity beyond the source footprint or across different habitats.",
+          "block_results": [
+            {
+              "row": 0,
+              "column": 0,
+              "cells": 1024,
+              "mae": 1.3730473518371582
+            },
+            {
+              "row": 0,
+              "column": 32,
+              "cells": 1024,
+              "mae": 0.17480485141277313
+            },
+            {
+              "row": 0,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.3505859971046448
+            },
+            {
+              "row": 0,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.8515644073486328
+            },
+            {
+              "row": 0,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.945311963558197
+            },
+            {
+              "row": 32,
+              "column": 0,
+              "cells": 272,
+              "mae": 0.41544079780578613
+            },
+            {
+              "row": 32,
+              "column": 32,
+              "cells": 784,
+              "mae": 0.6874992251396179
+            },
+            {
+              "row": 32,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.5839842557907104
+            },
+            {
+              "row": 32,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.6953127384185791
+            },
+            {
+              "row": 32,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.6819199323654175
+            },
+            {
+              "row": 64,
+              "column": 64,
+              "cells": 272,
+              "mae": 0.14338235557079315
+            },
+            {
+              "row": 64,
+              "column": 96,
+              "cells": 842,
+              "mae": 0.8764838576316833
+            },
+            {
+              "row": 64,
+              "column": 128,
+              "cells": 896,
+              "mae": 1.2578126192092896
+            },
+            {
+              "row": 96,
+              "column": 128,
+              "cells": 747,
+              "mae": 2.6934401988983154
+            }
+          ]
+        }
+      },
+      "variants": {
+        "source": {
+          "file": "porpoise-north-sea-source.bin",
+          "geotiff": "porpoise-north-sea-source.tif",
+          "sha256": "bb6e42a9d095d08c304e9bf77bd5d43cb919d054211e79a9f7bf2f251bfddff5",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "extended": {
+          "file": "porpoise-north-sea-extended.bin",
+          "geotiff": "porpoise-north-sea-extended.tif",
+          "sha256": "fa5410ebf99146e95b017d13850f62be79138cad2f8ba35325805d98bd580a23",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "lower": {
+          "file": "porpoise-north-sea-lower.bin",
+          "geotiff": "porpoise-north-sea-lower.tif",
+          "sha256": "4927a47e54089c546e8d92309b3a3005996228e80facb3d47e7551c1a243f64a",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "upper": {
+          "file": "porpoise-north-sea-upper.bin",
+          "geotiff": "porpoise-north-sea-upper.tif",
+          "sha256": "76ea29ff2844d05673e035e701e5daf2c113d49ea9ab5c91164dd825f0ffce26",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "harbour-seal",
+      "title": "Harbour seal",
+      "category": "ECOSYSTEM",
+      "theme": "Marine Mammals",
+      "future": false,
+      "note": "Modelled distribution already uses a 40 km home range. Localized extent retained.",
+      "source": "regional/vasterhavet/National_eco_W_2018/04Harbour_Seals.tif",
+      "sourceSha256": "8cc2e6caa0313bac86671890c13c0beb2ff4c1c45aaee0961098d3f72a5d321a",
+      "metadataPdfPage": 98,
+      "positivePercent": {
+        "square": 11.5508,
+        "park": 19.7458
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "harbour-seal-source.bin",
+          "geotiff": "harbour-seal-source.tif",
+          "sha256": "a9b28e18df63c49b923a953b657aa5a0294af98140adfd63583c0dce2b9f0a26",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "mussel-reef",
+      "title": "Mussel reef",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Presence and habitat predictions. Zero can also mean no observations. Sparse features are retained without extension.",
+      "source": "regional/vasterhavet/National_eco_W_2018/05Mussel_Reefs_Total.tif",
+      "sourceSha256": "a38ea26e2077f95998054a5909deff161c37e0467729170a0d5c886b3ac72ddf",
+      "metadataPdfPage": 71,
+      "positivePercent": {
+        "square": 0.0082,
+        "park": 0.0169
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "mussel-reef-source.bin",
+          "geotiff": "mussel-reef-source.tif",
+          "sha256": "7d91d84315d764d1a812986988b99c0c6c5fd63e4513b84be1df2439fdacd185",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "artificial-reef",
+      "title": "Artificial reef",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Recorded structures that may form reefs; actual reef surface area is unknown. No extension.",
+      "source": "regional/vasterhavet/National_eco_W_2018/08Artificial_Reefs_Total.tif",
+      "sourceSha256": "1edfe756c36a48b83f640d2255b4032d2075903b40e4e5616ecfc7ed0a61fdfb",
+      "metadataPdfPage": 44,
+      "positivePercent": {
+        "square": 0.0164,
+        "park": 0.0508
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "artificial-reef-source.bin",
+          "geotiff": "artificial-reef-source.tif",
+          "sha256": "7fbf331489119655fd07b1b7df817b6420d8dbddb579b12cb90a9a797e792a0e",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "plankton-pelagic",
+      "title": "Plankton pelagic",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Normalized chlorophyll-a proxy for phytoplankton. Extension assumes a comparable offshore background; this is not zooplankton biomass.",
+      "source": "regional/vasterhavet/National_eco_W_2018/09Plankton_Community.tif",
+      "sourceSha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c",
+      "metadataPdfPage": 74,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": {
+        "method": "Nearest source cell across unknown offshore support; source values remain unchanged.",
+        "sensitivity": "Only inferred cells vary: lower/upper use source p10/p90 widened by held-out p90 absolute error, enclosing the nearest-cell estimate. These are illustrative sensitivity bounds, not confidence intervals.",
+        "distanceFile": "plankton-pelagic-distance-km.bin",
+        "maxDistanceKm": 27.504545211791992,
+        "beyondValidationPercent": 53.42774380431285,
+        "validation": {
+          "method": "Leave one 8 km spatial block out; >=100 source cells per held-out block.",
+          "blocks": 14,
+          "held_out_cells": 11749,
+          "nearest_mae": 0.31330325985190227,
+          "nearest_rmse": 0.8356777530871882,
+          "regional_median_mae": 1.2908332624053112,
+          "absolute_error_p90": 1.0,
+          "max_tested_distance_km": 8.0,
+          "limitation": "Internal spatial holdouts do not establish validity beyond the source footprint or across different habitats.",
+          "block_results": [
+            {
+              "row": 0,
+              "column": 0,
+              "cells": 1024,
+              "mae": 0.365234375
+            },
+            {
+              "row": 0,
+              "column": 32,
+              "cells": 1024,
+              "mae": 0.0615234375
+            },
+            {
+              "row": 0,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.0712890625
+            },
+            {
+              "row": 0,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.251953125
+            },
+            {
+              "row": 0,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.0234375
+            },
+            {
+              "row": 32,
+              "column": 0,
+              "cells": 272,
+              "mae": 0.5661764740943909
+            },
+            {
+              "row": 32,
+              "column": 32,
+              "cells": 784,
+              "mae": 0.38647958636283875
+            },
+            {
+              "row": 32,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.732421875
+            },
+            {
+              "row": 32,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.076171875
+            },
+            {
+              "row": 32,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.3180803656578064
+            },
+            {
+              "row": 64,
+              "column": 64,
+              "cells": 272,
+              "mae": 0.0
+            },
+            {
+              "row": 64,
+              "column": 96,
+              "cells": 842,
+              "mae": 0.18052256107330322
+            },
+            {
+              "row": 64,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.1194196417927742
+            },
+            {
+              "row": 96,
+              "column": 128,
+              "cells": 747,
+              "mae": 1.4230254888534546
+            }
+          ]
+        }
+      },
+      "variants": {
+        "source": {
+          "file": "plankton-pelagic-source.bin",
+          "geotiff": "plankton-pelagic-source.tif",
+          "sha256": "d8f10717307422017d2294c57190e7e3ff23e29c3e90fad3d6ea78af9eb2c545",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "extended": {
+          "file": "plankton-pelagic-extended.bin",
+          "geotiff": "plankton-pelagic-extended.tif",
+          "sha256": "0700693f907ac7b56dd50eb008c3a9d1d0c8b5bf1809b1e5b44943c2aa53c83c",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "lower": {
+          "file": "plankton-pelagic-lower.bin",
+          "geotiff": "plankton-pelagic-lower.tif",
+          "sha256": "7751950d44064540f63858aa90688854a9e7d322027d0a1e7df547c4a8d0ca7e",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        },
+        "upper": {
+          "file": "plankton-pelagic-upper.bin",
+          "geotiff": "plankton-pelagic-upper.tif",
+          "sha256": "31e24ea822fda9f35f41c0519a0a43d8867720a88e1c256230d88a23e14922e6",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 51.068
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "hard-bottom-aphotic",
+      "title": "Hard bottom aphotic",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Substrate habitat, not benthic biomass. No extension without supporting depth and sediment data.",
+      "source": "regional/vasterhavet/National_eco_W_2018/11Hardbottom_Aphotic.tif",
+      "sourceSha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b",
+      "metadataPdfPage": 65,
+      "positivePercent": {
+        "square": 0.1767,
+        "park": 0.2712
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "hard-bottom-aphotic-source.bin",
+          "geotiff": "hard-bottom-aphotic-source.tif",
+          "sha256": "2b89b846335758066e694c6cb8bc3512b038dbda52010813b080c60f7f150e13",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "transport-bottom-deep",
+      "title": "Transport bottom deep",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Deep substrate habitat, not benthic biomass. No extension without supporting depth and sediment data.",
+      "source": "regional/vasterhavet/National_eco_W_2018/15Transportbottom_Deep.tif",
+      "sourceSha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f",
+      "metadataPdfPage": 90,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "transport-bottom-deep-source.bin",
+          "geotiff": "transport-bottom-deep-source.tif",
+          "sha256": "ce6e55259d90f3ee61c923dbe252527036a532fb377547f8aa814129874ca4d5",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "soft-bottom-deep",
+      "title": "Soft bottom deep",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Deep soft-sediment habitat, not benthic biomass. No extension without supporting depth and sediment data.",
+      "source": "regional/vasterhavet/National_eco_W_2018/18Softbottom_Deep.tif",
+      "sourceSha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c",
+      "metadataPdfPage": 82,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "soft-bottom-deep-source.bin",
+          "geotiff": "soft-bottom-deep-source.tif",
+          "sha256": "9e977b99635db55f80003d4977da08db05fe18f30b3ca6fe84bc587f641f7b44",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "cod",
+      "title": "Cod",
+      "category": "ECOSYSTEM",
+      "theme": "Fish",
+      "future": false,
+      "note": "Coarse regional abundance index, recovered across the square. Not calibrated biomass.",
+      "source": "regional/vasterhavet/National_eco_W_2018/21torsk_lognorm_v2.tif",
+      "sourceSha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7",
+      "metadataPdfPage": 22,
+      "positivePercent": {
+        "square": 100.0,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "cod-source.bin",
+          "geotiff": "cod-source.tif",
+          "sha256": "56b48cdaf256fa1797c6194827112882ce008a634cac6f1901ed8678a2c87c8d",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 55.609,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "herring",
+      "title": "Herring",
+      "category": "ECOSYSTEM",
+      "theme": "Fish",
+      "future": false,
+      "note": "Coarse regional abundance index, recovered across the square. Not calibrated biomass.",
+      "source": "regional/vasterhavet/National_eco_W_2018/22sill_lognorm_v2.tif",
+      "sourceSha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166",
+      "metadataPdfPage": 25,
+      "positivePercent": {
+        "square": 100.0,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "herring-source.bin",
+          "geotiff": "herring-source.tif",
+          "sha256": "a7782560e9e5830de580f17c2046283a6e3e7f25a3ce2771dd8079a6a6eebc00",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 55.609,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "sprat",
+      "title": "Sprat",
+      "category": "ECOSYSTEM",
+      "theme": "Fish",
+      "future": false,
+      "note": "Coarse regional abundance index, recovered across the square. Not calibrated biomass.",
+      "source": "regional/vasterhavet/National_eco_W_2018/23skarpsill_lognorm_v2.tif",
+      "sourceSha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d",
+      "metadataPdfPage": 30,
+      "positivePercent": {
+        "square": 100.0,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "sprat-source.bin",
+          "geotiff": "sprat-source.tif",
+          "sha256": "9ebf8ebe2479c9ac6e5521682d022ef0c7e9d7cb292abfe05e19c71c5d0a3acc",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 55.609,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "fish-spawning",
+      "title": "Fish spawning",
+      "category": "ECOSYSTEM",
+      "theme": "Fish function",
+      "future": false,
+      "note": "Weighted spawning-area index; not a recruitment rate. No extrapolation.",
+      "source": "regional/vasterhavet/National_eco_W_2018/24Spawning_Areas_Commercial_Fish.tif",
+      "sourceSha256": "842bcced4da13474d0928ba239a144168ee435f30e5cb8a37c2f76409702d24e",
+      "metadataPdfPage": 36,
+      "positivePercent": {
+        "square": 47.9454,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "fish-spawning-source.bin",
+          "geotiff": "fish-spawning-source.tif",
+          "sha256": "b2f96132b58c35e76bd22381e0c87d07b543eaa68b49e4c9877068c5f7ecb774",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "rough-bottom-deep",
+      "title": "Rough bottom deep",
+      "category": "ECOSYSTEM",
+      "theme": "Habitat",
+      "future": false,
+      "note": "Deep substrate habitat. Small source values are preserved; no extension without depth and sediment evidence.",
+      "source": "regional/vasterhavet/National_eco_W_2018/32Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+      "sourceSha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c",
+      "metadataPdfPage": 51,
+      "positivePercent": {
+        "square": 12.7876,
+        "park": 4.5424
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "rough-bottom-deep-source.bin",
+          "geotiff": "rough-bottom-deep-source.tif",
+          "sha256": "1e692fbfd4657b21ef5edc1fffcbb592820030f39aa6b3fb2f8f065a9d9132ad",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "catch-gillnet",
+      "title": "Catch gillnet",
+      "category": "PRESSURE",
+      "theme": "Fishing",
+      "future": false,
+      "note": "Historical gear-effort proxy. Foreign-fleet coverage is incomplete; zero does not establish absence of fishing. No extension.",
+      "source": "regional/vasterhavet/National_press_W_2018/02Catch_Gillnet.tif",
+      "sourceSha256": "14a8fbee5077fbb1659cb498f9d92b2ca170cf1d6f2f885b28ad431a43330363",
+      "metadataPdfPage": 170,
+      "positivePercent": {
+        "square": 8.5881,
+        "park": 10.4576
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "catch-gillnet-source.bin",
+          "geotiff": "catch-gillnet-source.tif",
+          "sha256": "afe42557c6f4f0336652c07d5d4f92b64f9db54b3a25a76d0f3f68937bb40b28",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "catch-pelagic-trawl",
+      "title": "Catch pelagic trawl",
+      "category": "PRESSURE",
+      "theme": "Fishing",
+      "future": false,
+      "note": "Six source cells overlap the review square, all outside the wind park. No extrapolation.",
+      "source": "regional/vasterhavet/National_press_W_2018/03Catch_Pelagic_trawl.tif",
+      "sourceSha256": "ba2255914b6f7ac6a2272432981367125383e899d7c7a46f9be2910e7146ae9c",
+      "metadataPdfPage": 173,
+      "positivePercent": {
+        "square": 0.0247,
+        "park": 0.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "catch-pelagic-trawl-source.bin",
+          "geotiff": "catch-pelagic-trawl-source.tif",
+          "sha256": "0ecf676786e1844ce33124c2a4f2873d4c4c02c53206b586002907960635f490",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "catch-bottom-trawl",
+      "title": "Catch bottom trawl",
+      "category": "PRESSURE",
+      "theme": "Fishing",
+      "future": false,
+      "note": "Swept-area proxy, not fishing mortality. Shares the same raster values as trawling turbidity; avoid double counting.",
+      "source": "regional/vasterhavet/National_press_W_2018/04Catch_Bottom_trawl.tif",
+      "sourceSha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+      "metadataPdfPage": 166,
+      "positivePercent": {
+        "square": 48.2906,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "catch-bottom-trawl-source.bin",
+          "geotiff": "catch-bottom-trawl-source.tif",
+          "sha256": "235c81a9fc5987c20629abaa39fc698f748cdf3f4baadf7e26cb6a80da6e6975",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "turbidity-bottom-trawl",
+      "title": "Turbidity bottom trawl",
+      "category": "PRESSURE",
+      "theme": "Fishing",
+      "future": false,
+      "note": "Same source intensity as bottom-trawl catch. A separate ecological response would be needed; avoid double counting.",
+      "source": "regional/vasterhavet/National_press_W_2018/05Catch_Bottom_trawlCopy.tif",
+      "sourceSha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+      "metadataPdfPage": 177,
+      "positivePercent": {
+        "square": 48.2906,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "turbidity-bottom-trawl-source.bin",
+          "geotiff": "turbidity-bottom-trawl-source.tif",
+          "sha256": "235c81a9fc5987c20629abaa39fc698f748cdf3f4baadf7e26cb6a80da6e6975",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "abrasion-bottom-trawl",
+      "title": "Abrasion bottom trawl",
+      "category": "PRESSURE",
+      "theme": "Fishing",
+      "future": false,
+      "note": "Historical seabed abrasion index. Fishing-ground boundaries retained without extension.",
+      "source": "regional/vasterhavet/National_press_W_2018/08Abrasion_Bottomtrawl.tif",
+      "sourceSha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce",
+      "metadataPdfPage": 39,
+      "positivePercent": {
+        "square": 48.4878,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "abrasion-bottom-trawl-source.bin",
+          "geotiff": "abrasion-bottom-trawl-source.tif",
+          "sha256": "76078ac62b6317434bfe4bfdbcdd141297da1400a82762913b67f55dab549845",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "noise-125hz-shipping",
+      "title": "Noise 125Hz shipping",
+      "category": "PRESSURE",
+      "theme": "Shipping",
+      "future": false,
+      "note": "Normalized historical shipping-noise index, not dB. Original coverage and low values recovered; no extrapolation.",
+      "source": "regional/vasterhavet/National_press_W_2018/14Noise_125Hz_Shipping_20181122.tif",
+      "sourceSha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+      "metadataPdfPage": 224,
+      "positivePercent": {
+        "square": 93.5199,
+        "park": 98.7966
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "noise-125hz-shipping-source.bin",
+          "geotiff": "noise-125hz-shipping-source.tif",
+          "sha256": "cddd71aaabf958463fea528116a22879e54e1c7eea35a98af24ec06dc7add560",
+          "coverage": {
+            "square": {
+              "unknown": 0.0,
+              "source": 44.391,
+              "recovered": 55.609,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "oilspill-shipping",
+      "title": "Oilspill shipping",
+      "category": "PRESSURE",
+      "theme": "Shipping",
+      "future": false,
+      "note": "Shipping-related oil-spill pressure index. No extrapolation.",
+      "source": "regional/vasterhavet/National_press_W_2018/20Oilspill_2knots_Shipping.tif",
+      "sourceSha256": "c7a86fee7559c60e3c874560f1fc614061144cf811e7c1d8c5a3cb047be486ea",
+      "metadataPdfPage": 230,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "oilspill-shipping-source.bin",
+          "geotiff": "oilspill-shipping-source.tif",
+          "sha256": "0bb28cc072ea6bc713fd8ada265dd0b6a094f62b8d582c2585fd24e4ad81702e",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "heavy-metals-background",
+      "title": "Heavy metals background",
+      "category": "PRESSURE",
+      "theme": "General Pollution",
+      "future": false,
+      "note": "Normalized background contamination index. No extrapolation or assumed biological response.",
+      "source": "regional/vasterhavet/National_press_W_2018/22Tox_Metal_Background.tif",
+      "sourceSha256": "c4662df8250e7ba7791de9c2acef5b31cc0d56b12d4b19e7dcc03dc20e6834e7",
+      "metadataPdfPage": 183,
+      "positivePercent": {
+        "square": 48.907,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "heavy-metals-background-source.bin",
+          "geotiff": "heavy-metals-background-source.tif",
+          "sha256": "1d90faa60960874ef00dbb4f6fa4c8a40ab1bb901ec2eba7be5fb40492879dcf",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "toxic-munition-dump",
+      "title": "Toxic munition dump",
+      "category": "PRESSURE",
+      "theme": "General Pollution",
+      "future": false,
+      "note": "Distance-based risk around historical dumping sites and routes, not measured contamination. Spatial extent retained.",
+      "source": "regional/vasterhavet/National_press_W_2018/25Tox_Munition.tif",
+      "sourceSha256": "6be368b23471fa1e8d8a6f058cf606ba1cf707b0705b8e2d7b74be7b311781b3",
+      "metadataPdfPage": 195,
+      "positivePercent": {
+        "square": 16.1654,
+        "park": 47.4407
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "toxic-munition-dump-source.bin",
+          "geotiff": "toxic-munition-dump-source.tif",
+          "sha256": "3f5210a91610383e3cd779f8edd3eac71f5a7fc7f6939c62b541a7458216091f",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "synthetic-toxins-background",
+      "title": "Synthetic toxins background",
+      "category": "PRESSURE",
+      "theme": "General Pollution",
+      "future": false,
+      "note": "Normalized background contamination index. No extrapolation or assumed biological response.",
+      "source": "regional/vasterhavet/National_press_W_2018/26Tox_Synthetic_Background.tif",
+      "sourceSha256": "ded78651f29147032eaa1f9c43ca8affa886cd9e98e04777b0272a8e0f21e268",
+      "metadataPdfPage": 198,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "synthetic-toxins-background-source.bin",
+          "geotiff": "synthetic-toxins-background-source.tif",
+          "sha256": "d87b65a4685a94e4f7c6cf3da0a774f3149ff4a3ae3b7245299e28425a1426c7",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "nitrogen-background",
+      "title": "Nitrogen background",
+      "category": "PRESSURE",
+      "theme": "Eutrophication",
+      "future": false,
+      "note": "Processed eutrophication index, not a direct nutrient-food input. Small source values retained; no extension.",
+      "source": "regional/vasterhavet/National_press_W_2018/31Nitrogen_Background.tif",
+      "sourceSha256": "1e4a3eab5ad059c019b444a1cb891023bf993d22788489c213eef650238caa35",
+      "metadataPdfPage": 160,
+      "positivePercent": {
+        "square": 12.6027,
+        "park": 29.8305
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "nitrogen-background-source.bin",
+          "geotiff": "nitrogen-background-source.tif",
+          "sha256": "4c7672fd8876991ecb04e04c5337638b769e27f3591ff6a149c3d4998bcce268",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "phosphorous-background",
+      "title": "Phosphorous background",
+      "category": "PRESSURE",
+      "theme": "Eutrophication",
+      "future": false,
+      "note": "Processed eutrophication index, not a direct nutrient-food input. Small source values retained; no extension.",
+      "source": "regional/vasterhavet/National_press_W_2018/32Phosphorous_Background.tif",
+      "sourceSha256": "62f0e15f6e9d36955dfb167263c165e12131cea25ab3d881538efdf133ed29f6",
+      "metadataPdfPage": 163,
+      "positivePercent": {
+        "square": 2.0957,
+        "park": 3.9322
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "phosphorous-background-source.bin",
+          "geotiff": "phosphorous-background-source.tif",
+          "sha256": "f4b97afbeafdd6a706816c47011e85ee223dcab9543e832d2a30906e3b9010d0",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "climate-change-temperature",
+      "title": "Climate change temperature",
+      "category": "PRESSURE",
+      "theme": "Climate Change",
+      "future": true,
+      "note": "2050 future scenario; not present-day baseline temperature. No extrapolation.",
+      "source": "regional/vasterhavet/National_press_W_2018/35TempIncrease_Summer_2050.tif",
+      "sourceSha256": "2e5bb9f0a2b56f7b26b8c7bf1197a113d66a429ab968d9f24a8ceb78b75609b5",
+      "metadataPdfPage": 129,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "climate-change-temperature-source.bin",
+          "geotiff": "climate-change-temperature-source.tif",
+          "sha256": "5b02f3870f90b332b4f2e6d1d9b4c5ac2dc31d35b292be00f173a08929598c99",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "climate-change-acidification",
+      "title": "Climate change acidification",
+      "category": "PRESSURE",
+      "theme": "Human pressures",
+      "future": true,
+      "note": "2050 future scenario; not present-day baseline pH. No extrapolation.",
+      "source": "regional/vasterhavet/National_press_W_2018/36OA_2050.tif",
+      "sourceSha256": "fdee06fee1848adecae92c02e481305a30b7a395927d3a7b780993680723ea05",
+      "metadataPdfPage": 126,
+      "positivePercent": {
+        "square": 48.9316,
+        "park": 100.0
+      },
+      "extension": null,
+      "variants": {
+        "source": {
+          "file": "climate-change-acidification-source.bin",
+          "geotiff": "climate-change-acidification-source.tif",
+          "sha256": "a6e067c032f785110482dc20dca1bd582f905c694b53e6ca08b6e6869430cc9a",
+          "coverage": {
+            "square": {
+              "unknown": 51.068,
+              "source": 44.391,
+              "recovered": 4.541,
+              "inferred": 0.0
+            },
+            "park": {
+              "unknown": 0.0,
+              "source": 100.0,
+              "recovered": 0.0,
+              "inferred": 0.0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

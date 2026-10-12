@@ -1,0 +1,205 @@
+:host {
+  display: block;
+  min-width: 0;
+  color: #243c4a;
+}
+* {
+  box-sizing: border-box;
+}
+.chart-card {
+  padding: 14px 10px;
+  border: 1px solid #dce7eb;
+  border-radius: 7px;
+  background: white;
+}
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+h4 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.chart-header p {
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+  color: #617680;
+}
+button {
+  font: inherit;
+  font-size: 11px;
+  color: #214d5d;
+  border: 1px solid #c4d5dc;
+  background: white;
+  border-radius: 5px;
+  padding: 6px 9px;
+  cursor: pointer;
+}
+button:hover {
+  border-color: #177c87;
+  background: #f0f7f8;
+}
+button:focus-visible,
+svg:focus-visible,
+summary:focus-visible {
+  outline: 2px solid #177c87;
+  outline-offset: 3px;
+}
+.chart-header button {
+  flex-shrink: 0;
+}
+.chart-toolbar {
+  display: flex;
+  gap: 4px;
+  margin: 16px 0 12px;
+}
+.chart-toolbar [aria-pressed='true'] {
+  background: #135c70;
+  color: white;
+  border-color: #135c70;
+}
+.axis-caption {
+  font-size: 11px;
+  color: #4b6573;
+  margin-bottom: 4px;
+}
+.biomass-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  cursor: crosshair;
+}
+.axis-label {
+  font-size: 10px;
+  fill: #657983;
+  font-variant-numeric: tabular-nums;
+}
+.grid-line {
+  stroke: #e3eaed;
+  stroke-width: 1;
+}
+.species-line {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.current-marker {
+  stroke: #243c4a;
+  stroke-width: 1.25;
+  stroke-dasharray: 4 3;
+}
+.initial-line {
+  stroke: #93a7b1;
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.hover-marker {
+  stroke: #75939e;
+  stroke-width: 1;
+}
+.chart-tooltip {
+  pointer-events: none;
+}
+.interaction-hint,
+.chart-note {
+  font-size: 10px;
+  line-height: 1.5;
+  color: #617680;
+  margin: 8px 0 0;
+}
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.chart-legend button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  padding: 6px;
+}
+.chart-legend [aria-pressed='false'] {
+  color: #7d8a90;
+  border-style: dashed;
+}
+.chart-legend [aria-pressed='false'] .swatch {
+  opacity: 0.3;
+}
+.swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.empty-chart {
+  padding: 40px 12px;
+  text-align: center;
+  color: #617680;
+  font-size: 12px;
+}
+.chart-values {
+  margin-top: 14px;
+  font-size: 11px;
+}
+summary {
+  color: #266572;
+  cursor: pointer;
+  line-height: 1.5;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-variant-numeric: tabular-nums;
+}
+th,
+td {
+  text-align: left;
+  padding: 7px 0;
+  border-bottom: 1px solid #e7edef;
+}
+th {
+  font-weight: 500;
+}
+td,
+thead th:last-child {
+  text-align: right;
+}
+.expanded-chart {
+  width: min(1040px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
+  border: 0;
+  padding: 0;
+  border-radius: 12px;
+  color: #243c4a;
+  background: #fff;
+  box-shadow: 0 20px 80px #0f27344d;
+}
+.expanded-chart::backdrop {
+  background: #152d3b99;
+}
+.expanded-content {
+  padding: 26px;
+}
+.expanded-content h4 {
+  font-size: 21px;
+}
+.expanded-content .chart-header p,
+.expanded-content button,
+.expanded-content .axis-caption {
+  font-size: 12px;
+}
+@media (max-width: 600px) {
+  .expanded-content {
+    padding: 16px;
+  }
+}

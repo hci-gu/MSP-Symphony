@@ -1,37 +1,47 @@
 import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../app-reducer';
 import { UserSelectors, UserActions } from '@data/user';
-import { Observable, of } from 'rxjs';
-import { tap, take, switchMap, catchError } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { filter, map, take, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthenticationGuard  {
+export class AuthenticationGuard {
   private readonly store = inject<Store<State>>(Store);
+  private readonly router = inject(Router);
 
-
-  getFromStoreOrAPI(): Observable<unknown> {
+  getFromStoreOrAPI(): Observable<boolean | UrlTree> {
     return this.store.select(UserSelectors.selectIsLoggedIn).pipe(
-      tap((isLoggedIn: boolean) => {
-        if (!isLoggedIn) {
-          this.store.dispatch(UserActions.fetchUser());
+      take(1),
+      switchMap((isLoggedIn) => {
+        if (isLoggedIn) {
+          return of(true);
         }
-      }),
-      take(1)
+
+        this.store.dispatch(UserActions.fetchUser());
+
+        return combineLatest([
+          this.store.select(UserSelectors.selectIsLoggedIn),
+          this.store.select(UserSelectors.selectIsUserLoading)
+        ]).pipe(
+          filter(([, isLoading]) => !isLoading),
+          take(1),
+          map(([authenticated]) => (authenticated ? true : this.router.createUrlTree(['/login'])))
+        );
+      })
     );
   }
 
-  canActivate = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> =>
-    this.checkLogin(state.url);
+  canActivate = (
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> => this.checkLogin(state.url);
 
-  checkLogin = (url: string): Observable<boolean> => {
+  checkLogin = (url: string): Observable<boolean | UrlTree> => {
     this.store.dispatch(UserActions.updateRedirectUrl({ url }));
-    return this.getFromStoreOrAPI().pipe(
-      switchMap(() => of(true)),
-      catchError(() => of(false))
-    );
+    return this.getFromStoreOrAPI();
   };
 }

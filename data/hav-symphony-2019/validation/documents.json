@@ -1,0 +1,110 @@
+[
+  {
+    "file": "reference/ATTACHMENT02-grona-kartan.pdf",
+    "pages": 9,
+    "embedded_files": [],
+    "optional_content_layers": 51
+  },
+  {
+    "file": "reference/FULLTEXT01-report.pdf",
+    "pages": 74,
+    "embedded_files": [],
+    "optional_content_layers": 0
+  },
+  {
+    "file": "reference/metadata/Symphony Geodata Baltic Sea March 2019.pdf",
+    "pages": 3,
+    "embedded_files": [],
+    "optional_content_layers": 88
+  },
+  {
+    "file": "reference/metadata/Symphony Geodata Bay of Bothnia March 2019.pdf",
+    "pages": 3,
+    "embedded_files": [],
+    "optional_content_layers": 52
+  },
+  {
+    "file": "reference/metadata/Symphony Geodata Skagerrak and Kattegat March 2019.pdf",
+    "pages": 3,
+    "embedded_files": [],
+    "optional_content_layers": 88
+  },
+  {
+    "file": "reference/metadata/Symphony Metadata March 2019.pdf",
+    "pages": 253,
+    "embedded_files": [],
+    "optional_content_layers": 0
+  },
+  {
+    "file": "reference/results/ATTACHMENT03-S2-plan-west.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 684,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nVästerhavet\nS2 Nuläge plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT04-S2-plan-east.pdf",
+    "pages": 145,
+    "embedded_files": [],
+    "optional_content_layers": 1420,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nÖstersjön\nS2 Nuläge plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT05-S2-plan-north.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 720,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nBottniska viken\nS2 Nuläge plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT06-S3-outlook-2030-west.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 648,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nVästerhavet\nS3 Utblick 2030\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT07-S3-outlook-2030-east.pdf",
+    "pages": 145,
+    "embedded_files": [],
+    "optional_content_layers": 1349,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nÖstersjön\nS3 Utblick 2030\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT08-S3-outlook-2030-north.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 684,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nBottniska viken\nS3 Utblick 2030\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT09-S4-outlook-2030-plan-west.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 648,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nVästerhavet\nS4 Utblick 2030 med plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT10-S4-outlook-2030-plan-east.pdf",
+    "pages": 145,
+    "embedded_files": [],
+    "optional_content_layers": 1349,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nÖstersjön\nS4 Utblick 2030 med plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  },
+  {
+    "file": "reference/results/ATTACHMENT11-S4-outlook-2030-plan-north.pdf",
+    "pages": 75,
+    "embedded_files": [],
+    "optional_content_layers": 684,
+    "opening_pages_reviewed": 3,
+    "cover_text": "Symphony\nIntegrerat planeringsstöd för svensk havsplanering\nBottniska viken\nS4 Utblick 2030 med plan\nTeknisk rapport till Havs- och vattenmyndigheten\nSamrådsversion år 2018\n\n2018-03-23"
+  }
+]
