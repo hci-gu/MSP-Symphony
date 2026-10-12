@@ -49,7 +49,7 @@
     <select
       id="mareld-model"
       [ngModel]="session.modelId()"
-      (ngModelChange)="session.modelId.set($event)"
+      (ngModelChange)="session.selectModel($event)"
       [disabled]="session.discovering() || session.busy() || !session.models().length"
     >
       @if (!session.models().length) {
@@ -89,12 +89,12 @@
         [max]="maxStepsLimit"
         step="1"
         [ngModel]="session.maxSteps()"
-        (ngModelChange)="session.maxSteps.set($event)"
+        (ngModelChange)="session.setMaxSteps($event)"
         [disabled]="session.busy()"
         aria-describedby="mareld-duration"
       />
       <div class="duration" id="mareld-duration">
-        <span>{{ session.maxSteps() / 4 | number: '1.0-2' }} days</span>
+        <span>{{ stepsToDays(session.maxSteps()) | number: '1.0-2' }} days</span>
         <small>6 hours per step</small>
       </div>
     </div>
@@ -125,7 +125,7 @@
       <select
         id="mareld-species"
         [ngModel]="session.species()"
-        (ngModelChange)="session.species.set(+$event)"
+        (ngModelChange)="session.selectSpecies(+$event)"
       >
         @for (name of result.species; track $index) {
           <option [ngValue]="$index">{{ speciesLabel(name) }}</option>
@@ -133,7 +133,7 @@
       </select>
       <div class="slider-label">
         <label for="mareld-frame">Time</label
-        ><strong>Day {{ result.steps[session.frame()] / 4 | number: '1.0-2' }}</strong>
+        ><strong>Day {{ stepsToDays(result.steps[session.frame()]) | number: '1.0-2' }}</strong>
       </div>
       <div class="playback-controls">
         <button
@@ -182,7 +182,7 @@
         max="1"
         step="0.05"
         [ngModel]="session.opacity()"
-        (ngModelChange)="session.opacity.set(+$event)"
+        (ngModelChange)="session.setOpacity(+$event)"
       />
       <div class="legend">
         <div class="legend-title">Modeled biomass · tonnes / cell</div>

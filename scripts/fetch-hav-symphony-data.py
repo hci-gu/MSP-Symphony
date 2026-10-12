@@ -2,7 +2,7 @@
 """Restore or verify the public HaV Symphony data bundle; never alter a database."""
 
 import argparse
-import hashlib
+from hav_io import sha256
 import json
 import shutil
 import sys
@@ -13,14 +13,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1] / "data" / "hav-symphony-2019"
-
-
-def digest(path):
-    value = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            value.update(block)
-    return value.hexdigest()
 
 
 def contained_path(relative):
@@ -42,7 +34,7 @@ def member_name(member):
 
 
 def verify(path, expected):
-    if not path.is_file() or digest(path) != expected:
+    if not path.is_file() or sha256(path) != expected:
         raise ValueError(f"Missing or changed file: {path}")
 
 
@@ -66,8 +58,9 @@ def restore(source):
     with zipfile.ZipFile(path) as archive:
         for member in archive.infolist():
             name = member_name(member)
-            if member.is_dir() or any(part.startswith(".") or part == "__MACOSX"
-                                      for part in Path(name).parts):
+            if member.is_dir() or any(
+                part.startswith(".") or part == "__MACOSX" for part in Path(name).parts
+            ):
                 continue
             target = contained_path(str(Path(source["extract_to"]) / name))
             if target.exists():
@@ -95,7 +88,8 @@ def configure():
         "bver_presfilepath": str(ROOT / "rasters/Belastningar-cm-prod.tif"),
     }
     (ROOT / "runtime-paths.local.json").write_text(
-        json.dumps(paths, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        json.dumps(paths, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     properties = (
         "# Optional local configuration; not activated automatically.\n"
         "# Raster paths normally belong to each database baselineversion record.\n"
@@ -115,8 +109,11 @@ def configure():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--verify-only", action="store_true",
-                        help="Verify every payload checksum without downloading or writing files")
+    parser.add_argument(
+        "--verify-only",
+        action="store_true",
+        help="Verify every payload checksum without downloading or writing files",
+    )
     args = parser.parse_args()
     manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
     if not args.verify_only:

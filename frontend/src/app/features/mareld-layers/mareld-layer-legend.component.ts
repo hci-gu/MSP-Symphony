@@ -12,7 +12,7 @@ import { MareldLayers } from './mareld-layers.service';
           ><button
             type="button"
             aria-label="Hide MARELD data layer"
-            (click)="state.selectedId.set(null)"
+            (click)="state.clearSelection()"
           >
             ×
           </button>

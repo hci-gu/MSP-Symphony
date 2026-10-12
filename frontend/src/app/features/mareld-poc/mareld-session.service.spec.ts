@@ -45,8 +45,8 @@ describe('MARELD session lifecycle', () => {
     const result = biomassFixture();
     let resolve!: (value: MareldResult) => void;
     api.run.and.returnValue(new Promise((r) => (resolve = r)));
-    session.models.set([{ id: 'model', name: 'Model', species: ['codfish'] }]);
-    session.modelId.set('model');
+    api.models.and.resolveTo([{ id: 'model', name: 'Model', species: ['codfish'] }]);
+    await session.discover();
     const pending = session.run();
     const signal = api.run.calls.mostRecent().args[3];
     expect(session.busy()).toBeTrue();
@@ -80,7 +80,7 @@ describe('MARELD session lifecycle', () => {
     await session.discover();
     expect(session.modelId()).toBe('allminussb');
     // Reconnecting must preserve an explicit user selection.
-    session.modelId.set('codex_api_smoke_20261006');
+    session.selectModel('codex_api_smoke_20261006');
     await session.discover();
     expect(session.modelId()).toBe('codex_api_smoke_20261006');
   });
@@ -113,11 +113,14 @@ describe('MARELD session lifecycle', () => {
   });
 
   describe('simulation replay', () => {
-    beforeEach(() => {
-      jasmine.clock().install();
+    beforeEach(async () => {
       const result = biomassFixture();
-      session.input.set(result.input);
-      session.result.set(result);
+      api.models.and.resolveTo([{ id: 'test', name: 'Test', species: result.species }]);
+      api.run.and.resolveTo(result);
+      session.useExample();
+      await session.discover();
+      await session.run();
+      jasmine.clock().install();
     });
 
     afterEach(() => {
@@ -158,7 +161,7 @@ describe('MARELD session lifecycle', () => {
       expect(session.frame()).toBe(2);
     });
 
-    it('stops playback when results are cleared or the session is reset', () => {
+    it('stops playback when results are cleared or the session is reset', async () => {
       session.togglePlayback();
       session.clearResult();
       jasmine.clock().tick(1000);
@@ -166,7 +169,7 @@ describe('MARELD session lifecycle', () => {
       expect(session.playing()).toBeFalse();
       session.togglePlayback();
       expect(session.playing()).toBeFalse();
-      session.result.set(biomassFixture());
+      await session.run();
       session.togglePlayback();
       session.reset();
       jasmine.clock().tick(1000);
@@ -177,8 +180,9 @@ describe('MARELD session lifecycle', () => {
     it('stops playback while a replacement simulation runs', async () => {
       const result = biomassFixture();
       const model = { id: 'test', name: 'Test', species: result.species };
-      session.models.set([model]);
-      session.modelId.set(model.id);
+      api.models.and.resolveTo([model]);
+      await session.discover();
+      session.selectModel(model.id);
       api.run.and.resolveTo(result);
       session.togglePlayback();
       await session.run();

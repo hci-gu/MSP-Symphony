@@ -23,8 +23,21 @@ request or calibrated ecological input is produced.
 Run from the repository root:
 
 ```sh
+uv run --python 3.12 scripts/audit-mareld-overlap.py \
+  --area data/hav-symphony-2019/mareld-review-area.json
 uv run --python 3.12 scripts/prepare-mareld-layers.py
 ```
+
+The versioned area snapshot contains the same name, ID and EPSG:4326 polygon as
+the original audit. `--area` is required; the audit no longer depends implicitly
+on an ignored authenticated-session snapshot. To audit another explicitly saved
+snapshot, pass its path. Use `--output-dir` to keep exploratory audit JSON/PNG
+separate from the canonical validation reports.
+
+Shared script modules `scripts/hav_io.py` and `scripts/hav_grid.py` own checksum,
+JSON and north-first grid operations. Native baseline quantization and supplemental
+Float32/provenance handling remain separate. The native importer still defaults
+to SQL generation; `--apply` retains backup, transaction and checksum safeguards.
 
 Inputs are the overlap audit, its fixed 39 × 39 km review geometry, the local
 original HaV rasters and imported planning boundary. Source hashes are verified

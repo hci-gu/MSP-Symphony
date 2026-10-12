@@ -55,14 +55,19 @@ describe('MARELD source-layer map lifecycle', () => {
   });
 
   it('georeferences the selected raster and clears it without changing other map layers', async () => {
-    spyOn(state, 'load').and.resolveTo(fixture());
+    const load = spyOn(state, 'load').and.resolveTo(fixture());
     state.toggle('porpoise-north-sea');
     await settle();
     expect(image().getSource()!.getProjection()!.getCode()).toBe('EPSG:3035');
     expect(image().getSource()!.getImageExtent()).toEqual(MARELD_CATALOG.grid.extent);
-    state.opacity.set(0.4);
+    const source = image().getSource();
+    load.calls.reset();
+    state.updateDisplay({ opacity: 0.4 });
     await settle();
     expect(image().getOpacity()).toBe(0.4);
+    expect(image().getSource()).toBe(source);
+    expect(load).not.toHaveBeenCalled();
+    expect(state.loading()).toBeFalse();
     bridge.reset();
     await settle();
     expect(image().getSource()).toBeNull();
@@ -121,6 +126,23 @@ describe('MARELD source-layer map lifecycle', () => {
     await settle();
     expect(image().getSource()).toBeNull();
     expect(state.error()).toContain('could not be loaded');
+    expect(state.loading()).toBeFalse();
+  });
+
+  it('keeps an in-flight raster request when opacity changes', async () => {
+    let resolve!: (value: ReturnType<typeof fixture>) => void;
+    const load = spyOn(state, 'load').and.returnValue(new Promise((done) => (resolve = done)));
+    state.toggle('cod');
+    await settle();
+    const calls = load.calls.count();
+    state.updateDisplay({ opacity: 0.25 });
+    await settle();
+    expect(load.calls.count()).toBe(calls);
+    expect(state.loading()).toBeTrue();
+    resolve(fixture());
+    await settle();
+    expect(image().getSource()).not.toBeNull();
+    expect(image().getOpacity()).toBe(0.25);
     expect(state.loading()).toBeFalse();
   });
 });

@@ -7,7 +7,7 @@
         type="button"
         [attr.aria-pressed]="pressure.visible()"
         aria-label="Show MARELD wind park on map"
-        (click)="pressure.visible.set(!pressure.visible())"
+        (click)="pressure.setVisible(!pressure.visible())"
       >
         {{ pressure.visible() ? 'Visible' : 'Show on map' }}
       </button>

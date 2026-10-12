@@ -1,0 +1,11 @@
+{
+  "apiPath": "/mareld-api",
+  "defaultApiTarget": "http://localhost:8000",
+  "discoveryTimeoutMs": 15000,
+  "runTimeoutMs": 1800000,
+  "proxyGraceMs": 10000,
+  "tickDurationDays": 0.25,
+  "defaultSteps": 5000,
+  "maxSteps": 10000,
+  "maxTensorBytes": 8388608
+}

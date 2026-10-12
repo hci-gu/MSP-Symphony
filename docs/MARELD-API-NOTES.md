@@ -1,6 +1,6 @@
 # MARELD API research notes
 
-Reference findings from 2026-09-29. These describe the inspected repositories and local probes, not requirements that must all be resolved before building a POC. The current delivery scope is the [Symphony MARELD POC plan](MARELD-INTEGRATION-PLAN.md).
+Reference findings from 2026-09-29. These describe the inspected repositories and local probes, not requirements that must all be resolved before building a POC. Current behavior and operation are documented in [MARELD-POC.md](MARELD-POC.md); the [original integration plan](MARELD-INTEGRATION-PLAN.md) is historical.
 
 ## What the repositories establish
 

@@ -18,12 +18,19 @@ import { MareldPressureLayer } from './mareld-pressure-layer.service';
 import { biomassFixture } from './testing/biomass.fixture';
 
 describe('MARELD map layer lifecycle', () => {
-  it('adds a separate projected layer and removes it without disturbing Symphony layers', () => {
+  it('adds a separate projected layer and removes it without disturbing Symphony layers', async () => {
+    const result = biomassFixture();
     TestBed.configureTestingModule({
       providers: [
         provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
-        { provide: MareldApiClient, useValue: {} },
-        { provide: SymphonySelectionAdapter, useValue: {} }
+        {
+          provide: MareldApiClient,
+          useValue: {
+            models: async () => [{ id: 'test', name: 'Test', species: result.species }],
+            run: async () => result
+          }
+        },
+        { provide: SymphonySelectionAdapter, useValue: { capture: async () => result.input } }
       ]
     });
     const session = TestBed.inject(MareldSession),
@@ -32,9 +39,9 @@ describe('MARELD map layer lifecycle', () => {
     const map = new Map({ layers: [native], view: new View({ center: [0, 0], zoom: 5 }) });
     map.setSize([1200, 800]);
     bridge.attach(map);
-    const result = biomassFixture();
-    session.input.set(result.input);
-    session.result.set(result);
+    await session.capture();
+    await session.discover();
+    await session.run();
     TestBed.tick();
     const group = map
       .getLayers()
@@ -43,7 +50,7 @@ describe('MARELD map layer lifecycle', () => {
     const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
     expect(image.getSource()!.getProjection()!.getCode()).toBe('EPSG:3035');
     expect(image.getSource()!.getImageExtent()).toEqual(session.input()!.grid.extent);
-    session.opacity.set(0.35);
+    session.setOpacity(0.35);
     TestBed.tick();
     expect(image.getOpacity()).toBe(0.35);
     session.clearResult();
@@ -94,10 +101,10 @@ describe('MARELD map layer lifecycle', () => {
     expect(corner[0]).toBeCloseTo(10.73807, 5);
     expect(corner[1]).toBeCloseTo(58.01671, 5);
 
-    pressure.visible.set(false);
+    pressure.setVisible(false);
     TestBed.tick();
     expect(windpark.getVisible()).toBeFalse();
-    pressure.visible.set(true);
+    pressure.setVisible(true);
     bridge.reset();
     TestBed.tick();
     expect(windpark.getVisible()).toBeFalse();

@@ -1,3 +1,4 @@
+import { stepsToDays } from '../mareld-shared/run-config';
 import { Component, computed, effect, inject } from '@angular/core';
 import { environment } from '@src/environments/environment';
 import { rasterCanvas } from './mareld-input';
@@ -13,6 +14,7 @@ import { speciesLabel } from './mareld-biomass';
   styleUrls: ['./mareld-panel.component.scss']
 })
 export class MareldPanelComponent {
+  readonly stepsToDays = stepsToDays;
   readonly session = inject(MareldSession);
   readonly map = inject(MareldMapBridge);
   readonly gradient = BIOMASS_GRADIENT;
@@ -22,14 +24,7 @@ export class MareldPanelComponent {
   readonly preview = computed(() =>
     this.session.input() ? rasterCanvas(this.session.input()!, 'preview').toDataURL() : ''
   );
-  readonly canRun = computed(
-    () =>
-      !!this.session.input() &&
-      !this.session.busy() &&
-      !this.session.discovering() &&
-      !this.session.modelError() &&
-      this.session.models().some((m) => m.id === this.session.modelId())
-  );
+  readonly canRun = this.session.canRun;
   readonly speciesLabel = speciesLabel;
 
   constructor() {

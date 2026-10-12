@@ -1,3 +1,4 @@
+import { rasterSource } from '../mareld-shared/map-raster';
 import { effect, inject, Injectable } from '@angular/core';
 import Map from 'ol/Map';
 import LayerGroup from 'ol/layer/Group';
@@ -63,19 +64,19 @@ export class MareldMapBridge {
       properties: { id: 'mareld-windpark-pressure', category: 'PRESSURE' }
     });
     map.addLayer(this.windpark);
-    this.pressure.visible.set(this.pressure.reviewAreaActive());
+    this.pressure.activateContext();
     this.render();
   }
 
   reset(): void {
     this.session.reset();
-    this.pressure.visible.set(false);
+    this.pressure.reset();
     this.render();
   }
 
   detach(): void {
     this.session.reset();
-    this.pressure.visible.set(false);
+    this.pressure.reset();
     if (this.windpark) {
       this.map?.removeLayer(this.windpark);
       this.windpark.dispose();
@@ -83,6 +84,7 @@ export class MareldMapBridge {
     if (this.group) {
       this.map?.removeLayer(this.group);
       this.image?.setSource(null);
+      this.group.getLayers().forEach((layer) => layer.dispose());
       this.group.dispose();
     }
     this.map = undefined;
@@ -140,22 +142,7 @@ export class MareldMapBridge {
     }
     const key = `${result.id}:${frame}:${species}`;
     if (key === this.frameKey) return;
-    const { width, height, crs, extent } = result.input.grid;
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d')!;
-    const pixels = context.createImageData(width, height);
-    pixels.data.set(framePixels(result, frame, species));
-    context.putImageData(pixels, 0, 0);
-    this.image.setSource(
-      new ImageStatic({
-        url: canvas.toDataURL('image/png'),
-        projection: crs,
-        imageExtent: [...extent],
-        interpolate: false
-      })
-    );
+    this.image.setSource(rasterSource(result.input.grid, framePixels(result, frame, species)));
     this.frameKey = key;
   }
 }

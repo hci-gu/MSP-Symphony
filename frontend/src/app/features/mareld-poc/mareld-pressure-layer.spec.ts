@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { MareldLayers } from '../mareld-layers/mareld-layers.service';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import GeoJSON from 'ol/format/GeoJSON';
 import type Polygon from 'ol/geom/Polygon';
@@ -48,9 +50,13 @@ describe('MARELD wind-park pressure footprint', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
         provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
         { provide: MareldApiClient, useValue: {} },
-        { provide: SymphonySelectionAdapter, useValue: {} }
+        {
+          provide: SymphonySelectionAdapter,
+          useValue: { capture: async () => prepareInput(reviewArea(), name) }
+        }
       ]
     });
     store = TestBed.inject(MockStore);
@@ -84,9 +90,9 @@ describe('MARELD wind-park pressure footprint', () => {
     expect(pressure.visible()).toBeTrue();
     expect(session.input()).toBeNull();
 
-    pressure.visible.set(false);
+    pressure.setVisible(false);
     selectArea(name);
-    session.frame.set(2);
+    session.seekFrame(2);
     TestBed.tick();
     expect(pressure.visible()).toBeFalse();
 
@@ -98,8 +104,8 @@ describe('MARELD wind-park pressure footprint', () => {
     expect(pressure.visible()).toBeFalse();
   });
 
-  it('keeps the footprint available for a captured review area and releases it for another input', () => {
-    session.input.set(prepareInput(reviewArea(), name));
+  it('keeps the footprint available for a captured review area and releases it for another input', async () => {
+    await session.capture();
     TestBed.tick();
     expect(pressure.visible()).toBeTrue();
     selectArea('Another area');
@@ -108,6 +114,29 @@ describe('MARELD wind-park pressure footprint', () => {
     TestBed.tick();
     expect(pressure.visible()).toBeTrue();
     session.useExample();
+    TestBed.tick();
+    expect(pressure.visible()).toBeFalse();
+  });
+
+  it('shares area recognition while retaining different captured-input visibility rules', async () => {
+    const layers = TestBed.inject(MareldLayers);
+    selectArea(`  ${name.toUpperCase()}  `);
+    expect(pressure.visible()).toBeTrue();
+    expect(layers.selectedId()).toBe('porpoise-north-sea');
+    pressure.setVisible(false);
+    layers.toggle('cod');
+    selectArea(name);
+    expect(pressure.visible()).toBeFalse();
+    expect(layers.selectedId()).toBe('cod');
+
+    await session.capture();
+    selectArea(null);
+    // The selected-area raster clears; the captured review input still owns its footprint.
+    expect(layers.selected()).toBeNull();
+    expect(pressure.reviewAreaActive()).toBeTrue();
+    expect(pressure.visible()).toBeFalse();
+    pressure.setVisible(true);
+    session.reset();
     TestBed.tick();
     expect(pressure.visible()).toBeFalse();
   });

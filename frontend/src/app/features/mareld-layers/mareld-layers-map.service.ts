@@ -8,8 +8,7 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Stroke, Style } from 'ol/style';
 import { transformExtent } from 'ol/proj';
-import proj4 from 'proj4';
-import { register } from 'ol/proj/proj4';
+import { rasterSource, registerGridProjection } from '../mareld-shared/map-raster';
 import { layerPixels } from './mareld-layer-data';
 import { MareldLayers } from './mareld-layers.service';
 
@@ -25,19 +24,17 @@ export class MareldLayersMap {
     effect(() => {
       void this.render();
     });
+    effect(() => {
+      const opacity = this.state.opacity();
+      this.image?.setOpacity(opacity);
+    });
   }
 
   attach(map: Map): void {
     this.detach();
-    if (!proj4.defs('EPSG:3035')) {
-      proj4.defs(
-        'EPSG:3035',
-        '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs'
-      );
-      register(proj4);
-    }
+    registerGridProjection();
     this.map = map;
-    this.image = new ImageLayer();
+    this.image = new ImageLayer({ opacity: this.state.opacity() });
     const outlines = new VectorLayer({
       source: new VectorSource({
         features: new GeoJSON().readFeatures(
@@ -62,7 +59,7 @@ export class MareldLayersMap {
     });
     // Above native raster bands, below area editing and simulation result overlays.
     map.getLayers().insertAt(Math.min(2, map.getLayers().getLength()), this.group);
-    this.state.selectedId.set(this.state.reviewActive() ? this.state.catalog.defaultLayer : null);
+    this.state.activateContext();
     void this.render();
   }
 
@@ -103,45 +100,32 @@ export class MareldLayersMap {
 
   private async render(): Promise<void> {
     const asset = this.state.asset(),
-      scope = this.state.scope(),
-      opacity = this.state.opacity();
+      scope = this.state.scope();
     const provenance = this.state.showProvenance(),
       hatch = this.state.hatch();
     const revision = ++this.revision;
     if (!this.map || !this.image || !this.group) return;
     this.group.setVisible(!!asset);
-    this.image.setOpacity(opacity);
     this.image.setSource(null);
-    this.state.error.set('');
     if (!asset) {
-      this.state.loading.set(false);
+      this.state.finishLoading();
       return;
     }
-    this.state.loading.set(true);
+    this.state.beginLoading();
     try {
       const { raster, park } = await this.state.load(asset.file);
       if (revision !== this.revision || !this.image) return;
-      const { width, height, crs, extent } = this.state.catalog.grid;
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const context = canvas.getContext('2d')!;
-      const image = context.createImageData(width, height);
-      image.data.set(layerPixels(raster, width, park, scope, provenance, hatch));
-      context.putImageData(image, 0, 0);
-      const source = new ImageStatic({
-        url: canvas.toDataURL('image/png'),
-        imageExtent: [...extent],
-        projection: crs,
-        interpolate: false,
-        attributions: this.state.catalog.attribution
-      });
-      this.image.setSource(source);
-      this.state.loading.set(false);
+      this.image.setSource(
+        rasterSource(
+          this.state.catalog.grid,
+          layerPixels(raster, this.state.catalog.grid.width, park, scope, provenance, hatch),
+          this.state.catalog.attribution
+        )
+      );
+      this.state.finishLoading();
     } catch {
       if (revision !== this.revision) return;
-      this.state.loading.set(false);
-      this.state.error.set('This MARELD layer could not be loaded. Select it again to retry.');
+      this.state.finishLoading('This MARELD layer could not be loaded. Select it again to retry.');
     }
   }
 }

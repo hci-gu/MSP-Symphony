@@ -1,3 +1,4 @@
+import { stepsToDays } from '../mareld-shared/run-config';
 import {
   afterNextRender,
   Component,
@@ -26,6 +27,7 @@ import {
   styleUrls: ['./mareld-biomass-chart.component.scss']
 })
 export class MareldBiomassChartComponent {
+  readonly stepsToDays = stepsToDays;
   readonly result = input.required<MareldResult>();
   readonly frame = input(0);
   readonly frameChange = output<number>();

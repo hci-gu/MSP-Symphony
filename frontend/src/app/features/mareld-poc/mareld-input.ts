@@ -1,11 +1,10 @@
 import type { Feature, MultiPolygon, Polygon } from 'geojson';
 import GeoJSON from 'ol/format/GeoJSON';
 import type { Polygon as OlPolygon, MultiPolygon as OlMultiPolygon } from 'ol/geom';
-import { get as getProjection, transform } from 'ol/proj';
-import { register } from 'ol/proj/proj4';
-import proj4 from 'proj4';
+import { transform } from 'ol/proj';
+import { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
+export { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
 
-export const GRID_CRS = 'EPSG:3035';
 export const CELL_METRES = 1000;
 export const MAX_GRID_SIDE = 60;
 export type StudyArea = Feature<Polygon | MultiPolygon>;
@@ -23,16 +22,6 @@ export interface PreparedInput {
   /** Row zero is the northern row. One means accessible synthetic water. */
   water: Uint8Array;
   waterCells: number;
-}
-
-export function registerGridProjection(): void {
-  if (!getProjection(GRID_CRS)) {
-    proj4.defs(
-      GRID_CRS,
-      '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs'
-    );
-    register(proj4);
-  }
 }
 
 export function prepareInput(feature: StudyArea, name: string): PreparedInput {

@@ -29,3 +29,6 @@ target
 # Local browser verification artifacts
 /.playwright-cli/
 /output/playwright/
+
+# Python script caches
+__pycache__/

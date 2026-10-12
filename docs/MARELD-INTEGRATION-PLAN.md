@@ -1,6 +1,11 @@
 # Symphony MARELD: first POC
 
-Status: POC implemented 2026-09-30; real inference verified 2026-10-06 against Eco-evo on `tactik-pc:8001` over Tailscale. The native panel, selected-area pipeline, demo renderer and live HTTP client are built. A 48-step `Allminussb` run completed and rendered on the map. See the [review and startup guide](MARELD-POC.md) for delivered behavior and verification. The plan below records the scope agreed on 2026-09-29.
+**Historical plan, agreed 2026-09-29.** This records the original scope and tradeoffs,
+not the current feature inventory. The implementation has since removed Demo mode,
+added live inference, playback, population graphs and supplemental environmental layers.
+Use [MARELD-POC.md](MARELD-POC.md) as the authoritative operation and implementation
+guide, and [MARELD-LAYERS.md](MARELD-LAYERS.md) for map-data preparation and interpretation.
+The original plan below is retained for context.
 
 ## Goal
 

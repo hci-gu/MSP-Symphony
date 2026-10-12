@@ -1,10 +1,7 @@
+import { MareldReviewArea } from '../mareld-shared/review-area';
 import { computed, inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-import { State } from '@src/app/app-reducer';
-import { selectSelectedAreaData } from '@data/area/area.selectors';
-import { SelectableArea } from '@data/area/area.interfaces';
 import {
   decodeLayer,
   LayerRaster,
@@ -18,43 +15,66 @@ import {
 @Injectable({ providedIn: 'root' })
 export class MareldLayers {
   private readonly http = inject(HttpClient);
-  private readonly areas = inject<Store<State>>(Store).selectSignal(selectSelectedAreaData);
+  private readonly reviewArea = inject(MareldReviewArea);
   private readonly files = new Map<string, Promise<ArrayBuffer>>();
   readonly catalog = MARELD_CATALOG;
-  readonly reviewActive = computed(() =>
-    ((this.areas() || []) as SelectableArea[]).some(
-      (area) =>
-        area?.statePath?.[0] === 'userArea' &&
-        area.name?.trim().toLowerCase() === this.catalog.reviewAreaName.toLowerCase()
-    )
-  );
-  readonly selectedId = linkedSignal<string | null>(() =>
+  readonly reviewActive = this.reviewArea.selected;
+  private readonly selection = linkedSignal<string | null>(() =>
     this.reviewActive() ? this.catalog.defaultLayer : null
   );
+  readonly selectedId = this.selection.asReadonly();
   readonly selected = computed(
     () => this.catalog.layers.find((layer) => layer.id === this.selectedId()) ?? null
   );
-  readonly variant = signal<LayerVariant>('extended');
+  private readonly display = signal({
+    variant: 'extended' as LayerVariant,
+    scope: 'square' as LayerScope,
+    opacity: 0.85,
+    showProvenance: false,
+    hatch: true
+  });
+  readonly variant = computed(() => this.display().variant);
   readonly effectiveVariant = computed<LayerVariant>(() =>
     this.selected()?.variants[this.variant()] ? this.variant() : 'source'
   );
   readonly asset = computed(() => this.selected()?.variants[this.effectiveVariant()] ?? null);
-  readonly scope = signal<LayerScope>('square');
-  readonly opacity = signal(0.85);
-  readonly showProvenance = signal(false);
-  readonly hatch = signal(true);
-  readonly loading = signal(false);
-  readonly error = signal('');
+  readonly scope = computed(() => this.display().scope);
+  readonly opacity = computed(() => this.display().opacity);
+  readonly showProvenance = computed(() => this.display().showProvenance);
+  readonly hatch = computed(() => this.display().hatch);
+  private readonly loadState = signal({ loading: false, error: '' });
+  readonly loading = computed(() => this.loadState().loading);
+  readonly error = computed(() => this.loadState().error);
+
   readonly coverage = computed(() => this.asset()?.coverage[this.scope()] ?? null);
 
+  updateDisplay(options: Partial<ReturnType<typeof this.display>>): void {
+    this.display.update((current) => ({ ...current, ...options }));
+  }
+
+  activateContext(): void {
+    this.selection.set(this.reviewActive() ? this.catalog.defaultLayer : null);
+  }
+
+  clearSelection(): void {
+    this.selection.set(null);
+  }
+
+  beginLoading(): void {
+    this.loadState.set({ loading: true, error: '' });
+  }
+
+  finishLoading(error = ''): void {
+    this.loadState.set({ loading: false, error });
+  }
+
   toggle(id: string): void {
-    this.selectedId.set(this.selectedId() === id ? null : id);
+    this.selection.set(this.selectedId() === id ? null : id);
   }
 
   reset(): void {
-    this.selectedId.set(null);
-    this.loading.set(false);
-    this.error.set('');
+    this.selection.set(null);
+    this.finishLoading();
   }
 
   private file(name: string): Promise<ArrayBuffer> {

@@ -6,14 +6,7 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 docker start msp-symphony-db msp-symphony-wildfly
-mkdir -p "$root/.local/symphony"
-cat > "$root/.local/symphony/proxy.cjs" <<'JS'
-module.exports = {
-  '/mareld-api/**': { target: process.env.MARELD_API_URL || 'http://localhost:8000', changeOrigin: true, pathRewrite: {'^/mareld-api': ''}, timeout: 1810000, proxyTimeout: 1810000 },
-  '/symphony-ws/service/**': { target: 'http://127.0.0.1:8080', secure: false, changeOrigin: true },
-  '/socket/**': { target: 'http://127.0.0.1:8080', secure: false, ws: true, pathRewrite: {'^/socket': '/symphony-ws'} }
-};
-JS
 cd "$root/frontend"
-printf 'MARELD API: %s\n' "${MARELD_API_URL:-http://localhost:8000}"
-exec ./node_modules/.bin/ng serve --host 127.0.0.1 --port 4200 --ssl=false --proxy-config ../.local/symphony/proxy.cjs
+printf 'MARELD API: %s\n' "${MARELD_API_URL:-$(node -p "require('./src/app/features/mareld-shared/run-config.json').defaultApiTarget")}"
+export SYMPHONY_API_URL="${SYMPHONY_API_URL:-http://127.0.0.1:8080}"
+exec ./node_modules/.bin/ng serve --host 127.0.0.1 --port 4200 --ssl=false --proxy-config proxy.conf.js

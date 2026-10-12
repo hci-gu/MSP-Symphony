@@ -134,7 +134,7 @@ describe('MARELD map-only layer state', () => {
     http.expectOne(MARELD_ASSETS + file).flush(binary(Array(count).fill(83), Array(count).fill(1)));
     http.expectOne(MARELD_ASSETS + MARELD_CATALOG.windparkMask).flush(new Uint8Array(count).buffer);
     expect((await pending).raster.values[0]).toBe(83);
-    state.scope.set('park');
+    state.updateDisplay({ scope: 'park' });
     expect((await state.load(file)).raster.values[0]).toBe(83);
     http.expectNone(MARELD_ASSETS + file);
   });

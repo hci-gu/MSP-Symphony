@@ -1,3 +1,4 @@
+import { MARELD_RUN } from '../mareld-shared/run-config';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, fromEvent, takeUntil, timeout } from 'rxjs';
@@ -44,7 +45,7 @@ export class MareldApiClient {
 
   async models(): Promise<MareldModel[]> {
     const payload = await firstValueFrom(
-      this.http.get<unknown>(`${this.base}/v1/models`).pipe(timeout(15000))
+      this.http.get<unknown>(`${this.base}/v1/models`).pipe(timeout(MARELD_RUN.discoveryTimeoutMs))
     );
     if (!Array.isArray(payload)) throw new Error('The API returned an invalid model list.');
     const models = payload
@@ -87,7 +88,7 @@ export class MareldApiClient {
           max_steps: maxSteps,
           sample_every: sampleEvery(maxSteps),
           include_final: true,
-          tick_duration_days: 0.25
+          tick_duration_days: MARELD_RUN.tickDurationDays
         },
         species: model.species,
         pressures: [],
@@ -104,7 +105,7 @@ export class MareldApiClient {
     const text = await firstValueFrom(
       this.http
         .post(`${this.base}/v1/runs`, form, { responseType: 'text' })
-        .pipe(timeout(30 * 60 * 1000), takeUntil(fromEvent(signal, 'abort')))
+        .pipe(timeout(MARELD_RUN.runTimeoutMs), takeUntil(fromEvent(signal, 'abort')))
     );
     if (text.length > MAX_TENSOR_BYTES * 1.4 + 65536)
       throw new Error('The API response exceeds the POC size limit.');

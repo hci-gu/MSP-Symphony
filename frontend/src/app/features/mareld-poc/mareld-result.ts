@@ -1,8 +1,10 @@
 import { PreparedInput } from './mareld-input';
 
-export const MAX_TENSOR_BYTES = 8 * 1024 * 1024;
-export const DEFAULT_STEPS = 5000;
-export const MAX_STEPS = 10000;
+import { MARELD_RUN } from '../mareld-shared/run-config';
+
+export const MAX_TENSOR_BYTES = MARELD_RUN.maxTensorBytes;
+export const DEFAULT_STEPS = MARELD_RUN.defaultSteps;
+export const MAX_STEPS = MARELD_RUN.maxSteps;
 
 /** Compute every simulation step, retaining at most 51 map frames. */
 export function sampleEvery(maxSteps: number): number {

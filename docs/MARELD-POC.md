@@ -1,5 +1,8 @@
 # MARELD POC: review and operation
 
+This is the authoritative guide to the current implementation. The integration
+plan and dated verification entries preserve historical context.
+
 Implemented 2026-09-30; live API connection verified 2026-10-06. This is a real
 feature in Symphony's Angular sidebar and OpenLayers map. All simulations use
 real Eco-evo inference; the Demo mode and source toggle have been removed. The
@@ -85,7 +88,14 @@ loopback port 4200.
 
 Run Eco-evo locally on port 8000. Both the normal frontend proxy
 and the local startup script forward `/mareld-api` to `http://localhost:8000`,
-removing the prefix.
+removing the prefix. Both use `frontend/proxy.conf.js`; the startup script chooses
+the existing HTTP Symphony backend through `SYMPHONY_API_URL`. Normal frontend
+startup still honors `PROXY_TARGET`, unless `SYMPHONY_API_URL` overrides it.
+
+Shared defaults live in `features/mareld-shared/run-config.json`: API prefix,
+default inference target, discovery/run timeouts, proxy grace period, tick duration,
+step limits and tensor budget. The client, proxy and day labels consume the same
+settings. Model preference and feature enablement remain environment-specific.
 
 Check API access before running a simulation:
 
@@ -120,13 +130,16 @@ is not an authenticated shared-service deployment.
 
 ## Delivered components
 
-All feature code and focused tests live under
+Simulation code and focused tests live under
 [`frontend/src/app/features/mareld-poc/`](../frontend/src/app/features/mareld-poc/).
+Map-only environmental layers live under `features/mareld-layers/`. Both use
+`features/mareld-shared/` for projection/raster rendering, review-area recognition
+and configuration. Environmental layers do not depend on the simulation session.
 
 | Component | Responsibility |
 | --- | --- |
 | `mareld-poc.module.ts`, `mareld-panel.component.*` | Native sidebar, input preview, API/model controls, frame/species/opacity controls and legend |
-| `symphony-selection.adapter.ts` | The only feature-specific dependency on Symphony's area selectors; captures one selected record |
+| `symphony-selection.adapter.ts` | Captures one selected record for simulation; shared review-area recognition has its own selector adapter |
 | `mareld-input.ts` | Geometry snapshot, EPSG:3035 grid, cell-center mask, texture/depth PNGs and example geometry |
 | `mareld-api.client.ts` | Model discovery and multipart submission to the existing Eco-evo API |
 | `mareld-result.ts` | Response validation, little-endian float32 decoding, fixed scales and image generation |
@@ -163,6 +176,22 @@ without confidence bands. It uses the same sampled frames as the map: 51 points
 at the default 5,000 steps, with simulation days on the horizontal axis. Totals
 are calculated once per result; moving the map time does not rescan the tensor.
 
+## State and rendering ownership
+
+- `MareldSession` exposes read-only signals. Capture, discovery, run, model/species
+  selection, step/opacity changes, seeking, playback and reset go through its methods.
+  The session owns run eligibility, revision guards and browser-request abortion.
+- `MareldLayers` owns selection, display settings and loading state. Its public
+  actions preserve manual choices until the review context changes. The pressure
+  module independently owns footprint visibility, including captured-input context.
+- `mareld-shared/review-area.ts` recognizes the saved review area by its normalized
+  name and user-area type. Environmental layers follow selected areas; a captured
+  simulation input may keep the wind-park footprint available after deselection.
+- `mareld-shared/map-raster.ts` registers EPSG:3035 and turns north-first RGBA pixels
+  into a projected image source. Each map module owns and disposes its own layers.
+  Environmental-layer opacity updates do not reload, decode or regenerate imagery,
+  and do not invalidate an in-flight raster request.
+
 ## Limits and interpretation
 
 - The polygon defines **enclosed synthetic water**. Holes and outside cells are
@@ -196,6 +225,27 @@ See [MARELD-API-NOTES.md](MARELD-API-NOTES.md) for the underlying source review 
 engine/API limitations, and [the agreed POC plan](MARELD-INTEGRATION-PLAN.md) for
 deferred production work.
 
+## Cleanup verification (2026-10-12)
+
+- Created the pre-cleanup checkpoint `ae83fbf` on `codex/mareld-cleanup`.
+- All 226 frontend tests pass (224 before cleanup), including added coverage for
+  opacity during an in-flight load and the different selected/captured review-area
+  rules. Lifecycle tests exercise public state actions instead of writing signals.
+- Feature/environment ESLint and the production build pass. The existing initial
+  bundle warning remains: 2.33 MB against a 2 MB warning threshold.
+- Regenerated all six native regional TIFFs: the preparation report, including
+  output hashes, is byte-identical. Importer SQL is also byte-identical.
+- Regenerated all supplemental assets and their validation report byte-for-byte.
+  All 212 overlap-audit datasets match; only the audit timestamp changes.
+  Verified all 1,131 original/extracted source files against their pinned hashes.
+- Shell/JavaScript syntax, Python lint and real HTTP proxy smoke checks pass,
+  including target overrides, multipart forwarding and path rewriting.
+- The local frontend and Eco-evo server were not running during this review;
+  no new live inference or authenticated browser verification is claimed.
+  Earlier live-run evidence remains in the dated entries below.
+
+Cleanup logs are local under ignored `.local/symphony/cleanup/`.
+
 ## Disable or remove
 
 For a quick disable, set `mareldPoc.enabled` to `false` in the relevant environment
@@ -203,7 +253,8 @@ file and restart/rebuild. Development enables it; production already disables it
 The disabled feature adds no sidebar tab, map layer or inference request. The public
 map does not attach the feature's map bridge.
 
-For complete removal, delete the feature directory and remove only these hooks:
+For complete removal, delete `features/mareld-poc`, `features/mareld-layers` and
+`features/mareld-shared`, and remove these hooks:
 
 1. `MareldPocModule` import in `map-view.module.ts` and the matching test import in
    `main-view.component.spec.ts` (including its disabled-feature test).
@@ -211,11 +262,14 @@ For complete removal, delete the feature directory and remove only these hooks:
 3. `MareldMapBridge` import/injection and guarded attach/reset/detach calls in
    `map/map.component.ts`.
 4. The `mareldPoc` objects in the development and production environment files.
-5. The `/mareld-api` route in `frontend/proxy.conf.js` and the generated proxy in
-   `scripts/start-local-symphony.sh`.
+5. The `/mareld-api` route and shared-config import in `frontend/proxy.conf.js`,
+   and the MARELD target message in `scripts/start-local-symphony.sh`.
 6. The projected pressure control and search predicate in `main-view.component.*`,
    and `frontend/src/assets/pressures/mareld-windpark.json`. The generic projected
    content slot in `band-selection` can remain.
+7. `MareldLayersComponent`/`MareldLayerLegendComponent` imports, projected controls,
+   legend/search hooks and guarded `MareldLayersMap` calls, plus
+   `frontend/src/assets/mareld-layers/`.
 
 No migration rollback is necessary. Preserve unrelated local HaV data/import and
 authentication work already present in this checkout.

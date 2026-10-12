@@ -40,7 +40,7 @@
             <select
               [id]="'mareld-scope-' + category"
               [ngModel]="state.scope()"
-              (ngModelChange)="state.scope.set($event)"
+              (ngModelChange)="state.updateDisplay({ scope: $event })"
             >
               <option value="square">39 × 39 km square</option>
               <option value="park">Wind park only</option>
@@ -52,7 +52,7 @@
               <select
                 [id]="'mareld-variant-' + category"
                 [ngModel]="state.effectiveVariant()"
-                (ngModelChange)="state.variant.set($event)"
+                (ngModelChange)="state.updateDisplay({ variant: $event })"
               >
                 <option value="source">Source only</option>
                 <option value="extended">Extended · central</option>
@@ -67,7 +67,7 @@
             ><input
               type="checkbox"
               [ngModel]="state.showProvenance()"
-              (ngModelChange)="state.showProvenance.set($event)"
+              (ngModelChange)="state.updateDisplay({ showProvenance: $event })"
             />
             Show data origin</label
           >
@@ -78,7 +78,7 @@
               ><input
                 type="checkbox"
                 [ngModel]="state.hatch()"
-                (ngModelChange)="state.hatch.set($event)"
+                (ngModelChange)="state.updateDisplay({ hatch: $event })"
               />
               Mark inferred cells</label
             >
@@ -92,7 +92,7 @@
               max="1"
               step="0.05"
               [ngModel]="state.opacity()"
-              (ngModelChange)="state.opacity.set(+$event)"
+              (ngModelChange)="state.updateDisplay({ opacity: +$event })"
             />
           </label>
         </div>
@@ -104,8 +104,8 @@
           </p>
           <p class="small">
             Positive source values: {{ layer.positivePercent[state.scope()] | number: '1.0-2' }}%.
-            {{ coverage.recovered | number: '1.1-1' }}% recovered beyond the import boundary.
-            Source coverage includes zero values.
+            {{ coverage.recovered | number: '1.1-1' }}% recovered beyond the import boundary. Source
+            coverage includes zero values.
           </p>
         }
         @if (state.scope() === 'park' && layer.extension) {

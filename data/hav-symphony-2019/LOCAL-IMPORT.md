@@ -58,8 +58,9 @@ To restart later, start Docker Desktop and run from the repository root:
 
 This reuses the two existing containers and starts Angular on `127.0.0.1:4200`.
 It requires the already installed frontend dependencies. Stop an existing Angular
-server before starting another on the same port. The frontend proxy generated
-under `.local/` avoids changing the repository's existing proxy configuration.
+server before starting another on the same port. Both startup paths use `frontend/proxy.conf.js`. The script selects the local
+HTTP backend with `SYMPHONY_API_URL=http://127.0.0.1:8080`; an explicit value
+can override it. `MARELD_API_URL` independently selects the inference server.
 
 ## Transformation and scientific limits
 
