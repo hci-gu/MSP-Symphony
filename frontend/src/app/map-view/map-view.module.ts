@@ -49,6 +49,9 @@ import { SummaryModelAccordionComponent } from './band-selection/summary-model-s
 import { SummaryModelControlsComponent } from './band-selection/summary-model-selection/summary-model-controls/summary-model-controls.component';
 import { SummaryModelDialogComponent } from './band-selection/summary-model-selection/summary-model-dialog/summary-model-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
+import { MareldLayersComponent } from '../features/mareld-layers/mareld-layers.component';
+import { MareldLayerLegendComponent } from '../features/mareld-layers/mareld-layer-legend.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +89,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     SummaryModelDialogComponent
   ],
   imports: [
+    MareldLayersComponent,
+    MareldLayerLegendComponent,
+    MareldPocModule,
     SharedModule,
     CoreModule,
     FormsModule,

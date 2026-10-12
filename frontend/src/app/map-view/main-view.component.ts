@@ -30,6 +30,8 @@ import { isMacOS } from '@src/util/agent';
 import { CompoundComparisonListDialogComponent } from '@src/app/map-view/compound-comparison-list-dialog/compound-comparison-list-dialog.component';
 import { DialogService } from '@shared/dialog/dialog.service';
 import { MapViewModule } from '@src/app/map-view/map-view.module';
+import { windparkMatchesSearch } from '../features/mareld-poc/mareld-pressure-layer.service';
+import { mareldLayersMatch } from '../features/mareld-layers/mareld-layer-data';
 
 @Component({
   selector: 'app-main-view',
@@ -56,6 +58,9 @@ export class MainViewComponent implements OnInit, AfterViewInit {
     CalculationSelectors.selectCompoundComparisonSuccessCount
   );
   center = environment.map.center;
+  readonly mareldPocEnabled = environment.mareldPoc.enabled;
+  readonly windparkMatchesSearch = windparkMatchesSearch;
+  readonly mareldLayersMatch = mareldLayersMatch;
   visibleImpact = false;
   visibleComparison = false;
   singleSelection = false;

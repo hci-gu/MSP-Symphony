@@ -1,0 +1,1144 @@
+{
+  "file": "Belastningar-cm-prod.tif",
+  "width": 2606,
+  "height": 5057,
+  "bands": 69,
+  "crs": "EPSG:3035",
+  "transform": [
+    250.0,
+    0.0,
+    4322750.0,
+    0.0,
+    -250.0,
+    4811000.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "bounds": [
+    4322750.0,
+    3546750.0,
+    4974250.0,
+    4811000.0
+  ],
+  "dtypes": [
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8",
+    "uint8"
+  ],
+  "nodata": null,
+  "block_shapes": [
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ],
+    [
+      256,
+      256
+    ]
+  ],
+  "tiled": true,
+  "compression": "None",
+  "descriptions": [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "tags": {
+    "AREA_OR_POINT": "Area"
+  },
+  "band_tags": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "band_statistics": [
+    {
+      "band": 1,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12748642,
+      "pixels_1_to_100": 429900,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 2,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 11151108,
+      "pixels_1_to_100": 2027434,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 3,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12047320,
+      "pixels_1_to_100": 1131222,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 4,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12842338,
+      "pixels_1_to_100": 336204,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 5,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12966185,
+      "pixels_1_to_100": 212357,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 6,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12876634,
+      "pixels_1_to_100": 301908,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 7,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13175103,
+      "pixels_1_to_100": 3439,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 8,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13174047,
+      "pixels_1_to_100": 4495,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 9,
+      "min": 0,
+      "max": 6,
+      "zero_pixels": 13153840,
+      "pixels_1_to_100": 24702,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 10,
+      "min": 0,
+      "max": 20,
+      "zero_pixels": 12996963,
+      "pixels_1_to_100": 181579,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 11,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13140473,
+      "pixels_1_to_100": 38069,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 12,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13178221,
+      "pixels_1_to_100": 321,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 13,
+      "min": 0,
+      "max": 90,
+      "zero_pixels": 13178273,
+      "pixels_1_to_100": 269,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 14,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13173595,
+      "pixels_1_to_100": 4947,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 15,
+      "min": 0,
+      "max": 47,
+      "zero_pixels": 13178136,
+      "pixels_1_to_100": 406,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 16,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13178326,
+      "pixels_1_to_100": 216,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 17,
+      "min": 0,
+      "max": 91,
+      "zero_pixels": 10930497,
+      "pixels_1_to_100": 2248045,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 18,
+      "min": 0,
+      "max": 255,
+      "zero_pixels": 2474260,
+      "pixels_1_to_100": 38344,
+      "pixels_101_to_254": 0,
+      "pixels_255": 10665938
+    },
+    {
+      "band": 19,
+      "min": 0,
+      "max": 255,
+      "zero_pixels": 2512017,
+      "pixels_1_to_100": 587,
+      "pixels_101_to_254": 0,
+      "pixels_255": 10665938
+    },
+    {
+      "band": 20,
+      "min": 0,
+      "max": 20,
+      "zero_pixels": 12972075,
+      "pixels_1_to_100": 206467,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 21,
+      "min": 0,
+      "max": 10,
+      "zero_pixels": 12980739,
+      "pixels_1_to_100": 197803,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 22,
+      "min": 0,
+      "max": 96,
+      "zero_pixels": 10772763,
+      "pixels_1_to_100": 2405779,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 23,
+      "min": 0,
+      "max": 75,
+      "zero_pixels": 11182712,
+      "pixels_1_to_100": 1995830,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 24,
+      "min": 0,
+      "max": 29,
+      "zero_pixels": 13177405,
+      "pixels_1_to_100": 1137,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 25,
+      "min": 0,
+      "max": 26,
+      "zero_pixels": 13147066,
+      "pixels_1_to_100": 31476,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 26,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13122061,
+      "pixels_1_to_100": 56481,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 27,
+      "min": 0,
+      "max": 95,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 28,
+      "min": 0,
+      "max": 55,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 29,
+      "min": 0,
+      "max": 30,
+      "zero_pixels": 10697268,
+      "pixels_1_to_100": 2481274,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 30,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 31,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 32,
+      "min": 0,
+      "max": 60,
+      "zero_pixels": 10695324,
+      "pixels_1_to_100": 2483218,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 33,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 34,
+      "min": 0,
+      "max": 76,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 35,
+      "min": 0,
+      "max": 47,
+      "zero_pixels": 10690831,
+      "pixels_1_to_100": 2487711,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 36,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 37,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 38,
+      "min": 0,
+      "max": 97,
+      "zero_pixels": 10665969,
+      "pixels_1_to_100": 2512573,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 39,
+      "min": 0,
+      "max": 83,
+      "zero_pixels": 10671517,
+      "pixels_1_to_100": 2507025,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 40,
+      "min": 0,
+      "max": 62,
+      "zero_pixels": 10771010,
+      "pixels_1_to_100": 2407532,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 41,
+      "min": 0,
+      "max": 38,
+      "zero_pixels": 11844793,
+      "pixels_1_to_100": 1333749,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 42,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10666009,
+      "pixels_1_to_100": 2512533,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 43,
+      "min": 0,
+      "max": 89,
+      "zero_pixels": 10758025,
+      "pixels_1_to_100": 2420517,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 44,
+      "min": 0,
+      "max": 66,
+      "zero_pixels": 11750752,
+      "pixels_1_to_100": 1427790,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 45,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 46,
+      "min": 0,
+      "max": 62,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 47,
+      "min": 0,
+      "max": 46,
+      "zero_pixels": 10665946,
+      "pixels_1_to_100": 2512596,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 48,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 49,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 50,
+      "min": 0,
+      "max": 53,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 51,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 52,
+      "min": 0,
+      "max": 63,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 53,
+      "min": 0,
+      "max": 38,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 54,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 55,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 56,
+      "min": 0,
+      "max": 74,
+      "zero_pixels": 10665938,
+      "pixels_1_to_100": 2512604,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 57,
+      "min": 0,
+      "max": 18,
+      "zero_pixels": 13177700,
+      "pixels_1_to_100": 842,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 58,
+      "min": 0,
+      "max": 6,
+      "zero_pixels": 10671556,
+      "pixels_1_to_100": 2506986,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 59,
+      "min": 0,
+      "max": 54,
+      "zero_pixels": 13151898,
+      "pixels_1_to_100": 26644,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 60,
+      "min": 0,
+      "max": 75,
+      "zero_pixels": 11019609,
+      "pixels_1_to_100": 2158933,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 61,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13122061,
+      "pixels_1_to_100": 56481,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 62,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 10760189,
+      "pixels_1_to_100": 2418353,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 63,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13134333,
+      "pixels_1_to_100": 44209,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 64,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13176042,
+      "pixels_1_to_100": 2500,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 65,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13176796,
+      "pixels_1_to_100": 1746,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 66,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13083366,
+      "pixels_1_to_100": 95176,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 67,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 12842338,
+      "pixels_1_to_100": 336204,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 68,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13178326,
+      "pixels_1_to_100": 216,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    },
+    {
+      "band": 69,
+      "min": 0,
+      "max": 100,
+      "zero_pixels": 13137288,
+      "pixels_1_to_100": 41254,
+      "pixels_101_to_254": 0,
+      "pixels_255": 0
+    }
+  ]
+}

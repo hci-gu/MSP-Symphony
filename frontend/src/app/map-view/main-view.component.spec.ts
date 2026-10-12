@@ -3,6 +3,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
 
 import { MainViewComponent } from './main-view.component';
+import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
+import { MareldApiClient } from '../features/mareld-poc/mareld-api.client';
+import { MareldLayersComponent } from '../features/mareld-layers/mareld-layers.component';
+import { MareldLayerLegendComponent } from '../features/mareld-layers/mareld-layer-legend.component';
+import { environment } from '@src/environments/environment';
 import { SharedModule } from '@shared/shared.module';
 import { MapComponent } from './map/map.component';
 import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
@@ -50,6 +55,9 @@ describe('MainViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        MareldLayersComponent,
+        MareldLayerLegendComponent,
+        MareldPocModule,
         SharedModule,
         CoreModule,
         TranslationSetupModule,
@@ -87,6 +95,12 @@ describe('MainViewComponent', () => {
       ],
       providers: [
         FormBuilder,
+        {
+          provide: MareldApiClient,
+          useValue: {
+            models: () => Promise.resolve([{ id: 'test', name: 'Test', species: ['codfish'] }])
+          }
+        },
         provideMockStore({
           initialState: {
             user: { baseline: undefined },
@@ -107,5 +121,22 @@ describe('MainViewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('omits the MARELD tab when the feature is disabled', () => {
+    fixture.destroy();
+    const enabled = environment.mareldPoc.enabled;
+    environment.mareldPoc.enabled = false;
+    try {
+      fixture = TestBed.createComponent(MainViewComponent);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('#mareld-poc')).toBeNull();
+      expect(fixture.nativeElement.querySelector('app-mareld-panel')).toBeNull();
+      expect(fixture.nativeElement.querySelector('app-mareld-pressure-layer')).toBeNull();
+      expect(fixture.nativeElement.querySelector('app-mareld-layers')).toBeNull();
+      expect(fixture.nativeElement.querySelector('app-mareld-layer-legend')).toBeNull();
+    } finally {
+      environment.mareldPoc.enabled = enabled;
+    }
   });
 });

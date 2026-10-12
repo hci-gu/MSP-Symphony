@@ -1,0 +1,21 @@
+{
+  "verified_on": "2026-09-29",
+  "database_coefficients_checked_against_source": 3703,
+  "matrix_value_and_band_index_match": true,
+  "sql_rerun_without_duplicate_baselines": true,
+  "browser_baseline": "HAV_2019_WEST_LOCAL",
+  "browser_scenario_id": 5,
+  "browser_calculation_id": 6,
+  "browser_calculation_rendered": true,
+  "screenshot": ".local/symphony/hav-working-result.png",
+  "normalization_domain_values": {
+    "HAV_2019_NORTH_LOCAL": 8641,
+    "HAV_2019_EAST_LOCAL": 31441,
+    "HAV_2019_WEST_LOCAL": 33135
+  },
+  "original_test_baseline_retained": true,
+  "backend_containers": [
+    "msp-symphony-db",
+    "msp-symphony-wildfly"
+  ]
+}

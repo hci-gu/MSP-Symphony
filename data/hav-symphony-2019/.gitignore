@@ -1,0 +1,12 @@
+# Downloaded source material and extracted GIS data stay local.
+/source/
+/rasters/
+/regional/
+/reference/
+/cache/
+/summary-models/
+/derived/
+/validation/*.txt
+/*.local.properties
+/*.local.json
+*.part

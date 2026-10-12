@@ -59,6 +59,8 @@ import { ScenarioService } from '@data/scenario/scenario.service';
 import { selectPublicAccess } from '@data/systemproperties/systemproperties.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { MareldMapBridge } from '../../features/mareld-poc/mareld-map.bridge';
+import { MareldLayersMap } from '../../features/mareld-layers/mareld-layers-map.service';
 
 @Component({
   selector: 'app-map',
@@ -74,6 +76,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private readonly translateService = inject(TranslateService);
   private readonly dataLayerService = inject(DataLayerService);
   private readonly scenarioService = inject(ScenarioService);
+  private readonly mareld = inject(MareldMapBridge);
+  private readonly mareldLayers = inject(MareldLayersMap);
 
   @Input() mapCenter?: Coordinate;
   @Output() resultLayerGroupChange: EventEmitter<number> = new EventEmitter<number>();
@@ -378,7 +382,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         this.scenarioLayer.clearLayers();
         this.areaLayer.deselectAreas();
         this.clearResult();
+        if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareld.reset();
+        if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareldLayers.reset();
       });
+    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareld.attach(this.map!);
+    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareldLayers.attach(this.map!);
   }
 
   public clearResult() {
@@ -419,6 +427,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   };
 
   ngOnDestroy() {
+    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareld.detach();
+    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareldLayers.detach();
     if (this.storeSubscription) {
       this.storeSubscription.unsubscribe();
     }

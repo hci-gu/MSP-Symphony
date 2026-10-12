@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  mareldPoc: { enabled: false, apiUrl: '/mareld-api', modelId: '' },
   // Branding switch (change this line to switch instantly)
   brandingFile: 'branding.json', // ← generic by default
   // brandingFile: 'branding_swam.json',  // ← uncomment for SwAM

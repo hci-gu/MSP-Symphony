@@ -1,0 +1,240 @@
+{
+  "dataset": "HaV Symphony publication 2018:1 with 2019 data updates",
+  "retrieved_on": "2026-09-29",
+  "publication_url": "https://www.havochvatten.se/data-kartor-och-rapporter/rapporter-och-andra-publikationer/publikationer/2018-04-10-symphony---integrerat-planeringsstod-for-statlig-havsplanering-utifran-en-ekosystemansats.html",
+  "publication_updated_on": "2025-08-19",
+  "scope": "All 18 dataset/report downloads for this publication, excluding separate related-publication links.",
+  "zip_extraction": "Preserve bytes; omit __MACOSX and hidden files; recover unflagged UTF-8 filenames and normalize names to NFC.",
+  "database_imported": true,
+  "downloads": [
+    {
+      "title": "National production baseline 2019",
+      "url": "https://www.havochvatten.se/download/18.5d3a53bc19898be468f88d96/1755612309164/MSP-Symphony_sv_Baseline2019.zip",
+      "path": "source/MSP-Symphony_sv_Baseline2019.zip",
+      "purpose": "national-runtime-rasters",
+      "bytes": 26336967,
+      "sha256": "9d69f2b7b453b8fbddc675cef05d7a3f9944c8daf92cd864152dd681b7d52ea4",
+      "extract_to": "rasters",
+      "extracted_files": 2,
+      "extracted_bytes": 1499468604,
+      "extracted_extensions": {
+        ".tif": 2
+      }
+    },
+    {
+      "title": "Appendix 3: May 2019 regional sensitivity matrices",
+      "url": "https://www.havochvatten.se/download/18.3b63ec651740ce15990cc9f1/1708680042782/bilaga-3-kanslighetsmatris-2019.zip",
+      "path": "source/bilaga-3-kanslighetsmatris-2019.zip",
+      "purpose": "regional-sensitivity-matrices",
+      "bytes": 5837,
+      "sha256": "9bb9abac505c0be37ade257eca4edd8d4b1f64e894faaf3a662214ec5d5ae249",
+      "extract_to": "matrices/original",
+      "extracted_files": 3,
+      "extracted_bytes": 19090,
+      "extracted_extensions": {
+        ".csv": 3
+      }
+    },
+    {
+      "title": "Data processing logs",
+      "url": "https://www.havochvatten.se/download/18.52d593d41624ea1d549dc239/1708680065411/processlogg.zip",
+      "path": "source/processlogg.zip",
+      "purpose": "provenance",
+      "bytes": 2008248,
+      "sha256": "af1027b58c40202b7c98f69197b793d0eea0cbaa1db583f42769bfb23efae6a5",
+      "extract_to": "reference/process-logs",
+      "extracted_files": 50,
+      "extracted_bytes": 2241557,
+      "extracted_extensions": {
+        ".xlsx": 50
+      }
+    },
+    {
+      "title": "Appendix 1: March 2019 metadata and interactive geodata maps",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT01.zip",
+      "path": "source/ATTACHMENT01-metadata.zip",
+      "purpose": "metadata-reference",
+      "bytes": 41531844,
+      "sha256": "68d44bc78eced7809bffbf7b4c0d07d7267ce6a8bdf1e95863e0c2defc1232e1",
+      "extract_to": "reference/metadata",
+      "extracted_files": 4,
+      "extracted_bytes": 43228384,
+      "extracted_extensions": {
+        ".pdf": 4
+      }
+    },
+    {
+      "title": "Gulf of Bothnia regional GIS data",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT13.zip",
+      "path": "source/ATTACHMENT13-bottniska-viken.zip",
+      "purpose": "regional-source-rasters",
+      "bytes": 73587466,
+      "sha256": "80f12ada4ea78a288154beffe236d5823ff54e5e7ba6b859559c85733365deae",
+      "extract_to": "regional/bottniska-viken",
+      "extracted_files": 358,
+      "extracted_bytes": 382527955,
+      "extracted_extensions": {
+        ".ovr": 70,
+        ".tfw": 72,
+        ".tif": 72,
+        ".xml": 144
+      }
+    },
+    {
+      "title": "Skagerrak and Kattegat regional GIS data",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT14.zip",
+      "path": "source/ATTACHMENT14-vasterhavet.zip",
+      "purpose": "regional-source-rasters",
+      "bytes": 72891282,
+      "sha256": "e4fc51b700015a155aa196a9f61fb21f9de4173cc9b850f20666223bd809bbe2",
+      "extract_to": "regional/vasterhavet",
+      "extracted_files": 343,
+      "extracted_bytes": 379005258,
+      "extracted_extensions": {
+        ".ovr": 67,
+        ".tfw": 69,
+        ".tif": 69,
+        ".xml": 138
+      }
+    },
+    {
+      "title": "Baltic Sea regional GIS data",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT15.zip",
+      "path": "source/ATTACHMENT15-ostersjon.zip",
+      "purpose": "regional-source-rasters",
+      "bytes": 73463893,
+      "sha256": "fbcc65bb59c4646cc5a7969d9e4a966f4d9733fcf2f7246ba55d75b8cab0f9bb",
+      "extract_to": "regional/ostersjon",
+      "extracted_files": 353,
+      "extracted_bytes": 381507152,
+      "extracted_extensions": {
+        ".ovr": 69,
+        ".tfw": 71,
+        ".tif": 71,
+        ".xml": 142
+      }
+    },
+    {
+      "title": "Appendix 2: Green map",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT02.pdf",
+      "path": "reference/ATTACHMENT02-grona-kartan.pdf",
+      "purpose": "reference-map",
+      "bytes": 3371202,
+      "sha256": "3bc883e835303aef36088373c87fab23e954d80e4b7218a9124d5cf47f728e53"
+    },
+    {
+      "title": "Symphony method report 2018:1",
+      "url": "https://www.havochvatten.se/download/18.52d593d41624ea1d549cfe1d/1708680065493/rapport-symphony-integrerat-planeringsstod-for-statlig-havsplanering-utifran-en-ekosystemansats.pdf",
+      "path": "reference/FULLTEXT01-report.pdf",
+      "purpose": "method-report",
+      "bytes": 18157273,
+      "sha256": "08e22909301301761990a4632135d63e570ddf4cf21db47ec42caeda264cbab5",
+      "identical_mirror_url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/FULLTEXT01.pdf"
+    },
+    {
+      "title": "S2 plan west",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT03.pdf",
+      "path": "reference/results/ATTACHMENT03-S2-plan-west.pdf",
+      "purpose": "published-result-map",
+      "bytes": 17091138,
+      "sha256": "9a9ca94d27d6afc7009771c5c6ca69704d101686e5151ceda9a450ac1332f57f",
+      "publication_label": "Appendix 4a-current-west",
+      "label_mismatch": true
+    },
+    {
+      "title": "S2 plan east",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT04.pdf",
+      "path": "reference/results/ATTACHMENT04-S2-plan-east.pdf",
+      "purpose": "published-result-map",
+      "bytes": 104499375,
+      "sha256": "54aecbc8d90e1503379ecb3342a37873bff8648c82ebfcb2bcb1e63a491a7695",
+      "publication_label": "Appendix 4b-current-east",
+      "label_mismatch": true
+    },
+    {
+      "title": "S2 plan north",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT05.pdf",
+      "path": "reference/results/ATTACHMENT05-S2-plan-north.pdf",
+      "purpose": "published-result-map",
+      "bytes": 34751990,
+      "sha256": "0dc5e12a8d1aaa5b83fa79ce661c8e8c8e6c4d2c71f8beb276af3d1e2bedd701",
+      "publication_label": "Appendix 4c-current-north",
+      "label_mismatch": true
+    },
+    {
+      "title": "S3 outlook-2030 west",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT06.pdf",
+      "path": "reference/results/ATTACHMENT06-S3-outlook-2030-west.pdf",
+      "purpose": "published-result-map",
+      "bytes": 18202242,
+      "sha256": "293d7844595db23c6eb9f6d61e1f8addfeda447388cdecbdf9cfc3159fe5d73a",
+      "publication_label": "Appendix 5a-plan-west",
+      "label_mismatch": true
+    },
+    {
+      "title": "S3 outlook-2030 east",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT07.pdf",
+      "path": "reference/results/ATTACHMENT07-S3-outlook-2030-east.pdf",
+      "purpose": "published-result-map",
+      "bytes": 105024222,
+      "sha256": "eaf1bed1424e8fcd1128b2a4ace7ac8cb844d25e6932471647d70ad3b336d706",
+      "publication_label": "Appendix 5b-plan-east",
+      "label_mismatch": true
+    },
+    {
+      "title": "S3 outlook-2030 north",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT08.pdf",
+      "path": "reference/results/ATTACHMENT08-S3-outlook-2030-north.pdf",
+      "purpose": "published-result-map",
+      "bytes": 35335435,
+      "sha256": "e3418433c2b5dd71df1cccf902aa4973a43c12dec4e1c16c3db86f43ee5b483f",
+      "publication_label": "Appendix 5c-plan-north",
+      "label_mismatch": true
+    },
+    {
+      "title": "S4 outlook-2030-plan west",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT09.pdf",
+      "path": "reference/results/ATTACHMENT09-S4-outlook-2030-plan-west.pdf",
+      "purpose": "published-result-map",
+      "bytes": 16341428,
+      "sha256": "0e749af0c31717e2d785f4144f3bc1f85fcce8491e857fafca8073c0044988b6",
+      "publication_label": "Appendix 6a-outlook-2030-west",
+      "label_mismatch": true
+    },
+    {
+      "title": "S4 outlook-2030-plan east",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT10.pdf",
+      "path": "reference/results/ATTACHMENT10-S4-outlook-2030-plan-east.pdf",
+      "purpose": "published-result-map",
+      "bytes": 104190001,
+      "sha256": "f2691da99723dcaf732ff2e2a4e23f246fbd037361d060504b98fd5d3afe1c06",
+      "publication_label": "Appendix 6b-outlook-2030-east",
+      "label_mismatch": true
+    },
+    {
+      "title": "S4 outlook-2030-plan north",
+      "url": "https://havochvatten.diva-portal.org/smash/get/diva2%3A1370819/ATTACHMENT11.pdf",
+      "path": "reference/results/ATTACHMENT11-S4-outlook-2030-plan-north.pdf",
+      "purpose": "published-result-map",
+      "bytes": 34014914,
+      "sha256": "a520eff96ee207e8c1f854ddf0bed61363b9cbd17d7dc4101bccafd24e3c37b3",
+      "publication_label": "Appendix 6c-outlook-2030-north",
+      "label_mismatch": true
+    }
+  ],
+  "download_bytes": 780804757,
+  "payload_files": 1131,
+  "payload_bytes": 3468802757,
+  "missing_for_national_baseline": [
+    "Authoritative 1-based band-to-component metadata for all 35 ecosystem and 69 pressure bands",
+    "Sensitivity matrices aligned to the national band inventory, or an authoritative mapping/expansion rule",
+    "Calculation-area and national/boundary polygons and their matrix couplings",
+    "Normalization/calibration values (or a completed calibration workflow)",
+    "Confirmation of the meaning of 255 in pressure bands 18 and 19 (1-based); the TIFF has no NoData tag"
+  ],
+  "publication_issues": [
+    "All nine result-map links have scenario labels that disagree with the PDF covers: page appendices 4, 5, 6 link to S2, S3, S4 respectively. Local filenames follow the PDF covers."
+  ],
+  "database_import_scope": "Three local reconstructions from the 212 regional sources, matched regional matrices and separately retrieved 2022 offshore planning boundaries. National production stacks are not registered.",
+  "database_import_documentation": "LOCAL-IMPORT.md"
+}

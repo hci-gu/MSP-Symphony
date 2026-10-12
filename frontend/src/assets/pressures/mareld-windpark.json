@@ -1,0 +1,24 @@
+{
+  "type": "Feature",
+  "id": "mareld-windpark",
+  "properties": {
+    "name": "MARELD wind park",
+    "category": "PRESSURE",
+    "kind": "Wind-farm footprint",
+    "source": "Wind-park corner coordinates supplied by the user on 2026-10-06",
+    "reviewAreaName": "MARELD POC review area"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [10.73807, 58.01671],
+        [10.54526, 58.13823],
+        [10.09537, 58.25139],
+        [10.67884, 58.25276],
+        [10.72402, 58.20089],
+        [10.73807, 58.01671]
+      ]
+    ]
+  }
+}

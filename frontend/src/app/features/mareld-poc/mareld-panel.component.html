@@ -1,0 +1,219 @@
+<div class="mareld-panel">
+  <header>
+    <div class="eyebrow">ECOSYSTEM SIMULATION</div>
+    <h2>MARELD</h2>
+    <p>Explore a changing ecosystem<br />on your Symphony map.</p>
+  </header>
+
+  <section aria-labelledby="mareld-area-heading">
+    <h3 id="mareld-area-heading"><span class="step">1</span> Area</h3>
+    <p class="hint">Select or draw one area in the Areas tab, then capture it here.</p>
+    <div class="buttons">
+      <button type="button" (click)="session.capture()" [disabled]="session.busy()">
+        Use selected area
+      </button>
+      <button
+        type="button"
+        class="quiet"
+        (click)="session.useExample()"
+        [disabled]="session.busy()"
+      >
+        Try example area
+      </button>
+    </div>
+    @if (session.input(); as input) {
+      <div class="input-card">
+        <img
+          [src]="preview()"
+          alt="Rasterized study area. Teal cells are accessible; pale cells are outside the domain."
+          width="86"
+          height="86"
+        />
+        <div>
+          <strong>{{ input.name }}</strong>
+          <div class="metrics">{{ input.grid.width }} × {{ input.grid.height }} cells · 1 km</div>
+          <div class="metrics">{{ input.waterCells }} accessible cells</div>
+          <button type="button" class="text-button" (click)="map.fit()">Show on map ↗</button>
+        </div>
+      </div>
+    }
+    <div class="notice">
+      Synthetic domain: the selected shape acts as enclosed water. Coastlines, depth and
+      environmental layers are not connected.
+    </div>
+  </section>
+
+  <section aria-labelledby="mareld-model-heading" [attr.aria-busy]="session.discovering()">
+    <h3 id="mareld-model-heading"><span class="step">2</span> Select model</h3>
+    <label for="mareld-model">Model</label>
+    <select
+      id="mareld-model"
+      [ngModel]="session.modelId()"
+      (ngModelChange)="session.modelId.set($event)"
+      [disabled]="session.discovering() || session.busy() || !session.models().length"
+    >
+      @if (!session.models().length) {
+        <option [value]="session.modelId()" disabled>
+          {{ session.discovering() ? 'Loading models…' : 'No models available' }}
+        </option>
+      }
+      @for (model of session.models(); track model.id) {
+        <option [value]="model.id">
+          {{ model.name }}{{ model.id === defaultModelId ? ' (default)' : '' }}
+        </option>
+      }
+    </select>
+    @if (session.discovering()) {
+      <p class="hint" role="status">Loading available models…</p>
+    }
+    @if (session.modelError()) {
+      <p class="error" role="alert">{{ session.modelError() }}</p>
+      <button type="button" (click)="session.discover()" [disabled]="session.busy()">
+        Retry loading models
+      </button>
+    }
+    <p class="hint">
+      Choose the Eco-evo model to use for your area. Current model settings are experimental;
+      pressure effects are not included.
+    </p>
+  </section>
+
+  <section aria-labelledby="mareld-run-heading">
+    <h3 id="mareld-run-heading"><span class="step">3</span> Simulation</h3>
+    <div class="run-settings">
+      <label for="mareld-steps">Simulation steps</label>
+      <input
+        id="mareld-steps"
+        type="number"
+        min="1"
+        [max]="maxStepsLimit"
+        step="1"
+        [ngModel]="session.maxSteps()"
+        (ngModelChange)="session.maxSteps.set($event)"
+        [disabled]="session.busy()"
+        aria-describedby="mareld-duration"
+      />
+      <div class="duration" id="mareld-duration">
+        <span>{{ session.maxSteps() / 4 | number: '1.0-2' }} days</span>
+        <small>6 hours per step</small>
+      </div>
+    </div>
+    <p class="hint">
+      Map snapshots every {{ sampleInterval() }} steps, including the final state. The model
+      computes every step.
+    </p>
+    <button type="button" class="primary" [disabled]="!canRun()" (click)="session.run()">
+      {{ session.busy() ? 'Running…' : 'Run simulation' }}
+      <span aria-hidden="true">→</span>
+    </button>
+    @if (session.busy()) {
+      <p class="hint" role="status">
+        Running the simulation. Longer runs can take several minutes. Keep this page open.
+      </p>
+    }
+    @if (session.error()) {
+      <p class="error" role="alert">{{ session.error() }}</p>
+    }
+  </section>
+
+  @if (session.result(); as result) {
+    <section aria-labelledby="mareld-result-heading" class="result-section">
+      <h3 id="mareld-result-heading">Explore the result</h3>
+      <span class="source-badge">LIVE MODEL RESULT</span>
+      <p class="hint">{{ result.input.name }} · {{ result.model }}</p>
+      <label for="mareld-species">Species</label>
+      <select
+        id="mareld-species"
+        [ngModel]="session.species()"
+        (ngModelChange)="session.species.set(+$event)"
+      >
+        @for (name of result.species; track $index) {
+          <option [ngValue]="$index">{{ speciesLabel(name) }}</option>
+        }
+      </select>
+      <div class="slider-label">
+        <label for="mareld-frame">Time</label
+        ><strong>Day {{ result.steps[session.frame()] / 4 | number: '1.0-2' }}</strong>
+      </div>
+      <div class="playback-controls">
+        <button
+          type="button"
+          class="playback-button"
+          [attr.aria-label]="
+            session.playing() ? 'Pause simulation replay' : 'Play simulation replay'
+          "
+          [disabled]="session.busy() || result.steps.length < 2"
+          (click)="session.togglePlayback()"
+        >
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+            @if (session.playing()) {
+              <path d="M3 2h4v12H3zM9 2h4v12H9z" />
+            } @else {
+              <path d="M4 2v12l10-6z" />
+            }
+          </svg>
+          {{ session.playing() ? 'Pause' : 'Play' }}
+        </button>
+        <input
+          id="mareld-frame"
+          type="range"
+          min="0"
+          [max]="result.steps.length - 1"
+          step="1"
+          [ngModel]="session.frame()"
+          (ngModelChange)="session.seekFrame(+$event)"
+        />
+      </div>
+      <div class="range-labels">
+        <span>Day 0</span
+        ><span
+          >Step {{ result.steps[session.frame()] }} /
+          {{ result.steps[result.steps.length - 1] }}</span
+        >
+      </div>
+      <div class="slider-label">
+        <label for="mareld-opacity">Map opacity</label
+        ><span>{{ session.opacity() * 100 | number: '1.0-0' }}%</span>
+      </div>
+      <input
+        id="mareld-opacity"
+        type="range"
+        min="0"
+        max="1"
+        step="0.05"
+        [ngModel]="session.opacity()"
+        (ngModelChange)="session.opacity.set(+$event)"
+      />
+      <div class="legend">
+        <div class="legend-title">Modeled biomass · tonnes / cell</div>
+        <div class="color-ramp" [style.background]="gradient"></div>
+        <div class="range-labels">
+          <span>0</span><span>{{ result.maxima[session.species()] | number: '1.0-2' }}</span>
+        </div>
+        <small>Scale stays fixed across all frames.</small>
+      </div>
+      <div class="buttons">
+        <button type="button" (click)="map.fit()">Fit result</button
+        ><button
+          type="button"
+          class="quiet"
+          (click)="session.clearResult()"
+          [disabled]="session.busy()"
+        >
+          Clear result
+        </button>
+      </div>
+    </section>
+  }
+  @if (session.result(); as result) {
+    <section aria-labelledby="mareld-trend-heading">
+      <h3 id="mareld-trend-heading">Population trends</h3>
+      <app-mareld-biomass-chart
+        [result]="result"
+        [frame]="session.frame()"
+        (frameChange)="session.seekFrame($event)"
+      />
+    </section>
+  }
+  <footer>Results are kept for this session.</footer>
+</div>

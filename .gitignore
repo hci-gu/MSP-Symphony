@@ -22,3 +22,10 @@ target
 .history/*
 *.code-workspace
 *.war
+
+# Local runtime state, database backups and development credentials
+/.local/
+
+# Local browser verification artifacts
+/.playwright-cli/
+/output/playwright/

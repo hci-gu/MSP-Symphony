@@ -8,6 +8,7 @@
       "declaration": false,
       "module": "es2020",
       "moduleResolution": "bundler",
+      "resolveJsonModule": true,
       "experimentalDecorators": true,
       "importHelpers": true,
       "allowSyntheticDefaultImports": true,

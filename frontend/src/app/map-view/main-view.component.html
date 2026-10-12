@@ -19,17 +19,30 @@
   </app-slide-view-tab>
   <app-slide-view-tab [title]="'map.intensity.ecosystems' | translate" icon="fish">
     <app-band-selection
+      #ecosystemBands
       bandType="ecoComponents"
       [title]="'map.intensity.ecosystems' | translate"
       [bandGroups]="$any(metadata | async).ecoComponent"
-    ></app-band-selection>
+      [hasAdditionalSearchMatches]="mareldPocEnabled && mareldLayersMatch('ECOSYSTEM', ecosystemBands.search)"
+    >
+      @if (mareldPocEnabled) {
+        <app-mareld-layers category="ECOSYSTEM" [search]="ecosystemBands.search"></app-mareld-layers>
+      }
+    </app-band-selection>
   </app-slide-view-tab>
   <app-slide-view-tab [title]="'map.intensity.pressures' | translate" icon="human">
     <app-band-selection
+      #pressureBands
       bandType="pressures"
       [title]="'map.intensity.pressures' | translate"
       [bandGroups]="$any(metadata | async).pressureComponent"
-    ></app-band-selection>
+      [hasAdditionalSearchMatches]="mareldPocEnabled && (windparkMatchesSearch(pressureBands.search) || mareldLayersMatch('PRESSURE', pressureBands.search))"
+    >
+      @if (mareldPocEnabled) {
+        <app-mareld-pressure-layer [search]="pressureBands.search"></app-mareld-pressure-layer>
+        <app-mareld-layers category="PRESSURE" [search]="pressureBands.search"></app-mareld-layers>
+      }
+    </app-band-selection>
   </app-slide-view-tab>
   <app-slide-view-tab [title]="'map.compare.title' | translate" icon="compare">
     <app-comparison></app-comparison>
@@ -37,6 +50,11 @@
   <app-slide-view-tab [title]="'map.history.title' | translate" icon="report">
     <app-history></app-history>
   </app-slide-view-tab>
+  @if (mareldPocEnabled) {
+    <app-slide-view-tab id="mareld-poc" title="MARELD" icon="grid">
+      <app-mareld-panel></app-mareld-panel>
+    </app-slide-view-tab>
+  }
   <div id="map-overlay">
     @if (activeScenario$ | async) {
       <app-active-scenario-display
@@ -95,6 +113,9 @@
       </div>
     }
     <div id="scale-container"></div>
+    @if (mareldPocEnabled) {
+      <app-mareld-layer-legend></app-mareld-layer-legend>
+    }
   </div>
 </app-slide-view>
 <app-map [mapCenter]="center"

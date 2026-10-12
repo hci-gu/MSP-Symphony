@@ -52,6 +52,7 @@ export class BandSelectionComponent implements OnInit, OnChanges {
   @Input() title?: string;
   @Input() bandGroups: BandGroup[] = [];
   @Input() bandType: BandType_Alt = 'ecoComponents';
+  @Input() hasAdditionalSearchMatches = false;
   search = '';
   filteredGroups: BandGroup[] = [];
   scenarioDisplayNames?: Observable<ScenarioDisplayMeta>;

@@ -14,6 +14,8 @@
     [scenarioActive]="!!(scenarioDisplayNames | async)?.scenarioName"
   ></app-summary-model-selection>
 
+  <ng-content></ng-content>
+
   <div class="select-all-wrapper">
     @if ((scenarioDisplayNames | async)?.scenarioName !== undefined && title) {
       <mat-checkbox
@@ -37,7 +39,7 @@
       [scenarioActive]="!!(scenarioDisplayNames | async)?.scenarioName"
     ></app-checkbox-accordion>
   }
-  @if (filteredGroups.length === 0) {
+  @if (filteredGroups.length === 0 && !hasAdditionalSearchMatches) {
     <p>{{ 'map.eco-component.search.no-matches' | translate}}</p>
   }
 </app-selection-layout>

@@ -1,0 +1,373 @@
+{
+  "source_audit_sha256": "d7ce6417964b51779039a5542cbe0bf3381ceba7c59295b880f1f0be8c730044",
+  "layers": [
+    {
+      "id": "porpoise-north-sea",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": {
+        "method": "Nearest source cell across unknown offshore support; source values remain unchanged.",
+        "sensitivity": "Only inferred cells vary: lower/upper use source p10/p90 widened by held-out p90 absolute error, enclosing the nearest-cell estimate. These are illustrative sensitivity bounds, not confidence intervals.",
+        "distanceFile": "porpoise-north-sea-distance-km.bin",
+        "maxDistanceKm": 27.504545211791992,
+        "beyondValidationPercent": 53.42774380431285,
+        "validation": {
+          "method": "Leave one 8 km spatial block out; >=100 source cells per held-out block.",
+          "blocks": 14,
+          "held_out_cells": 11749,
+          "nearest_mae": 0.8640736407732008,
+          "nearest_rmse": 1.4035813041813152,
+          "regional_median_mae": 3.4007992843068178,
+          "absolute_error_p90": 2.0000038146972656,
+          "max_tested_distance_km": 8.0,
+          "limitation": "Internal spatial holdouts do not establish validity beyond the source footprint or across different habitats.",
+          "block_results": [
+            {
+              "row": 0,
+              "column": 0,
+              "cells": 1024,
+              "mae": 1.3730473518371582
+            },
+            {
+              "row": 0,
+              "column": 32,
+              "cells": 1024,
+              "mae": 0.17480485141277313
+            },
+            {
+              "row": 0,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.3505859971046448
+            },
+            {
+              "row": 0,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.8515644073486328
+            },
+            {
+              "row": 0,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.945311963558197
+            },
+            {
+              "row": 32,
+              "column": 0,
+              "cells": 272,
+              "mae": 0.41544079780578613
+            },
+            {
+              "row": 32,
+              "column": 32,
+              "cells": 784,
+              "mae": 0.6874992251396179
+            },
+            {
+              "row": 32,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.5839842557907104
+            },
+            {
+              "row": 32,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.6953127384185791
+            },
+            {
+              "row": 32,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.6819199323654175
+            },
+            {
+              "row": 64,
+              "column": 64,
+              "cells": 272,
+              "mae": 0.14338235557079315
+            },
+            {
+              "row": 64,
+              "column": 96,
+              "cells": 842,
+              "mae": 0.8764838576316833
+            },
+            {
+              "row": 64,
+              "column": 128,
+              "cells": 896,
+              "mae": 1.2578126192092896
+            },
+            {
+              "row": 96,
+              "column": 128,
+              "cells": 747,
+              "mae": 2.6934401988983154
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "harbour-seal",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "mussel-reef",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "artificial-reef",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "plankton-pelagic",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": {
+        "method": "Nearest source cell across unknown offshore support; source values remain unchanged.",
+        "sensitivity": "Only inferred cells vary: lower/upper use source p10/p90 widened by held-out p90 absolute error, enclosing the nearest-cell estimate. These are illustrative sensitivity bounds, not confidence intervals.",
+        "distanceFile": "plankton-pelagic-distance-km.bin",
+        "maxDistanceKm": 27.504545211791992,
+        "beyondValidationPercent": 53.42774380431285,
+        "validation": {
+          "method": "Leave one 8 km spatial block out; >=100 source cells per held-out block.",
+          "blocks": 14,
+          "held_out_cells": 11749,
+          "nearest_mae": 0.31330325985190227,
+          "nearest_rmse": 0.8356777530871882,
+          "regional_median_mae": 1.2908332624053112,
+          "absolute_error_p90": 1.0,
+          "max_tested_distance_km": 8.0,
+          "limitation": "Internal spatial holdouts do not establish validity beyond the source footprint or across different habitats.",
+          "block_results": [
+            {
+              "row": 0,
+              "column": 0,
+              "cells": 1024,
+              "mae": 0.365234375
+            },
+            {
+              "row": 0,
+              "column": 32,
+              "cells": 1024,
+              "mae": 0.0615234375
+            },
+            {
+              "row": 0,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.0712890625
+            },
+            {
+              "row": 0,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.251953125
+            },
+            {
+              "row": 0,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.0234375
+            },
+            {
+              "row": 32,
+              "column": 0,
+              "cells": 272,
+              "mae": 0.5661764740943909
+            },
+            {
+              "row": 32,
+              "column": 32,
+              "cells": 784,
+              "mae": 0.38647958636283875
+            },
+            {
+              "row": 32,
+              "column": 64,
+              "cells": 1024,
+              "mae": 0.732421875
+            },
+            {
+              "row": 32,
+              "column": 96,
+              "cells": 1024,
+              "mae": 0.076171875
+            },
+            {
+              "row": 32,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.3180803656578064
+            },
+            {
+              "row": 64,
+              "column": 64,
+              "cells": 272,
+              "mae": 0.0
+            },
+            {
+              "row": 64,
+              "column": 96,
+              "cells": 842,
+              "mae": 0.18052256107330322
+            },
+            {
+              "row": 64,
+              "column": 128,
+              "cells": 896,
+              "mae": 0.1194196417927742
+            },
+            {
+              "row": 96,
+              "column": 128,
+              "cells": 747,
+              "mae": 1.4230254888534546
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "hard-bottom-aphotic",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "transport-bottom-deep",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "soft-bottom-deep",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "cod",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "herring",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "sprat",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "fish-spawning",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "rough-bottom-deep",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "catch-gillnet",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "catch-pelagic-trawl",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "catch-bottom-trawl",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "turbidity-bottom-trawl",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "abrasion-bottom-trawl",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "noise-125hz-shipping",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "oilspill-shipping",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "heavy-metals-background",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "toxic-munition-dump",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "synthetic-toxins-background",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "nitrogen-background",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "phosphorous-background",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "climate-change-temperature",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    },
+    {
+      "id": "climate-change-acidification",
+      "sourceValuesPreserved": true,
+      "windparkValuesUnchanged": true,
+      "extension": null
+    }
+  ]
+}
