@@ -1,4 +1,5 @@
-import { exampleArea, prepareInput } from '../mareld-input';
+import { exampleArea } from '../testing/example-area.fixture';
+import { prepareInput } from '../mareld-input';
 import { MareldResult } from '../mareld-result';
 
 export function biomassFixture(): MareldResult {

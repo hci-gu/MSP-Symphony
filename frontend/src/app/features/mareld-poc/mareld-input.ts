@@ -1,9 +1,9 @@
 import type { Feature, MultiPolygon, Polygon } from 'geojson';
 import GeoJSON from 'ol/format/GeoJSON';
 import type { Polygon as OlPolygon, MultiPolygon as OlMultiPolygon } from 'ol/geom';
-import { transform } from 'ol/proj';
 import { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
 import type { PreparedImpacts } from './mareld-impacts';
+import type { CalculationInput, CalculationGrid } from './calculation-input';
 export { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
 
 export const CELL_METRES = 1000;
@@ -23,11 +23,18 @@ export interface PreparedInput {
   /** Row zero is the northern row. One means accessible synthetic water. */
   water: Uint8Array;
   waterCells: number;
+  source?: CalculationInput;
+  nativeGrid?: CalculationGrid;
+  assumptions?: string[];
   /** Immutable-by-convention snapshot of the demo inputs submitted with this run. */
   impacts?: PreparedImpacts;
 }
 
-export function prepareInput(feature: StudyArea, name: string): PreparedInput {
+export function prepareInput(
+  feature: StudyArea,
+  name: string,
+  exportedGrid?: PreparedInput['grid']
+): PreparedInput {
   registerGridProjection();
   if (!feature?.geometry || !['Polygon', 'MultiPolygon'].includes(feature.geometry.type)) {
     throw new Error('Choose one polygon or multipolygon in the Areas panel.');
@@ -68,7 +75,16 @@ export function prepareInput(feature: StudyArea, name: string): PreparedInput {
     featureProjection: GRID_CRS
   }) as OlPolygon | OlMultiPolygon;
   if (!(projected.getArea() > 0)) throw new Error('The selected polygon has no valid area.');
-  const bounds = projected.getExtent();
+  if (
+    exportedGrid &&
+    (exportedGrid.crs !== GRID_CRS ||
+      exportedGrid.cellMetres !== CELL_METRES ||
+      exportedGrid.extent.length !== 4 ||
+      exportedGrid.width * CELL_METRES !== exportedGrid.extent[2] - exportedGrid.extent[0] ||
+      exportedGrid.height * CELL_METRES !== exportedGrid.extent[3] - exportedGrid.extent[1])
+  )
+    throw new Error('Invalid native calculation grid.');
+  const bounds = exportedGrid?.extent ?? projected.getExtent();
   if (!bounds.every(Number.isFinite))
     throw new Error('The selected area cannot be projected to the simulation grid.');
   // A projection round trip can move an exact grid boundary by a fraction of a
@@ -108,7 +124,7 @@ export function prepareInput(feature: StudyArea, name: string): PreparedInput {
     }
   }
   const waterCells = water.reduce((sum, value) => sum + value, 0);
-  if (!waterCells)
+  if (!waterCells && !exportedGrid)
     throw new Error('No 1 km cell centers fall inside this area. Draw a wider area.');
   return {
     id: crypto.randomUUID(),
@@ -151,32 +167,4 @@ export function pngBlob(canvas: HTMLCanvasElement): Promise<Blob> {
       'image/png'
     )
   );
-}
-
-/** A full 60 × 60 cell synthetic water world, at the model's reference scale. */
-export function exampleArea(): StudyArea {
-  registerGridProjection();
-  const [x, y] = transform([16.6, 56.4], 'EPSG:4326', GRID_CRS);
-  const originX = Math.floor(x / CELL_METRES) * CELL_METRES,
-    originY = Math.floor(y / CELL_METRES) * CELL_METRES;
-  const ring = (points: number[][]) =>
-    points.map(([dx, dy]) =>
-      transform([originX + dx * CELL_METRES, originY + dy * CELL_METRES], GRID_CRS, 'EPSG:4326')
-    );
-  return {
-    type: 'Feature',
-    properties: { name: 'Example 60 × 60 world' },
-    geometry: {
-      type: 'Polygon',
-      coordinates: [
-        ring([
-          [0, 0],
-          [60, 0],
-          [60, 60],
-          [0, 60],
-          [0, 0]
-        ])
-      ]
-    }
-  };
 }

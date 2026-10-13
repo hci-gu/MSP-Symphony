@@ -1,8 +1,8 @@
+import { exampleArea } from './testing/example-area.fixture';
 import { transform } from 'ol/proj';
 import type { Polygon } from 'geojson';
 import {
   GRID_CRS,
-  exampleArea,
   prepareInput,
   rasterCanvas,
   registerGridProjection,

@@ -1,0 +1,529 @@
+{
+  "version": "poseidon-reference-v1",
+  "geography": "../../poseidon.md",
+  "studyArea": "study-area.geojson",
+  "parkFootprint": "windpark.geojson",
+  "coverageAudit": "coverage-audit.json",
+  "baselineId": 4,
+  "baselineName": "HAV_2019_WEST_LOCAL",
+  "userAreaId": 3,
+  "scenarioId": 6,
+  "calculation": {
+    "id": 7,
+    "name": "Poseidon — EcoTwin reference",
+    "timestamp": 1791887208406,
+    "owner": "hav-local",
+    "isPurged": false,
+    "hasChanges": false
+  },
+  "selectedEcosystems": [
+    1,
+    8,
+    10,
+    14,
+    17,
+    20,
+    21,
+    22,
+    31
+  ],
+  "selectedPressures": [
+    3,
+    13
+  ],
+  "normalization": {
+    "type": "AREA",
+    "userDefinedValue": 0.0,
+    "stdDevMultiplier": 0.0
+  },
+  "operation": 0,
+  "operationOptions": null,
+  "nativeReport": {
+    "name": "Poseidon — EcoTwin reference",
+    "baselineName": "HAV_2019_WEST_LOCAL",
+    "operationName": "CumulativeImpact",
+    "operationOptions": {},
+    "total": 76042630.0,
+    "average": 3165.145889698231,
+    "min": 0.0,
+    "max": 9562.0,
+    "stddev": 2207.7446961041146,
+    "histogram": [
+      5723.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      57.0,
+      96.0,
+      58.0,
+      72.0,
+      68.0,
+      57.0,
+      160.0,
+      360.0,
+      317.0,
+      169.0,
+      263.0,
+      337.0,
+      210.0,
+      187.0,
+      223.0,
+      155.0,
+      118.0,
+      166.0,
+      149.0,
+      343.0,
+      454.0,
+      622.0,
+      690.0,
+      510.0,
+      438.0,
+      357.0,
+      359.0,
+      410.0,
+      380.0,
+      481.0,
+      632.0,
+      561.0,
+      507.0,
+      545.0,
+      569.0,
+      638.0,
+      522.0,
+      454.0,
+      343.0,
+      236.0,
+      212.0,
+      255.0,
+      220.0,
+      268.0,
+      310.0,
+      386.0,
+      257.0,
+      234.0,
+      241.0,
+      226.0,
+      233.0,
+      199.0,
+      93.0,
+      78.0,
+      67.0,
+      87.0,
+      83.0,
+      99.0,
+      159.0,
+      114.0,
+      184.0,
+      124.0,
+      119.0,
+      74.0,
+      39.0,
+      97.0,
+      119.0,
+      75.0,
+      54.0,
+      74.0,
+      53.0,
+      21.0,
+      8.0,
+      3.0,
+      0.0,
+      0.0,
+      13.0,
+      6.0,
+      10.0,
+      13.0,
+      53.0,
+      2.0,
+      1.0,
+      5.0,
+      14.0,
+      13.0,
+      9.0,
+      24.0,
+      1.0
+    ],
+    "geographicalArea": 7301364657390089.0,
+    "calculatedPixels": 24025,
+    "gridResolution": 250.0,
+    "areaMatrices": [
+      {
+        "areaName": "Poseidon POC review area",
+        "matrix": "Published May 2019 – Västerhavet"
+      }
+    ],
+    "normalization": {
+      "type": "AREA",
+      "userDefinedValue": 0.0,
+      "stdDevMultiplier": 0.0
+    },
+    "impactPerPressure": {
+      "3": 44648199.0,
+      "13": 31394431.0
+    },
+    "impactPerEcoComponent": {
+      "1": 12125205.0,
+      "17": 21167817.0,
+      "20": 13819988.0,
+      "21": 15103063.0,
+      "22": 12597838.0,
+      "8": 0.0,
+      "10": 51537.0,
+      "14": 659958.0,
+      "31": 517224.0
+    },
+    "chartData": {
+      "nodes": [
+        {
+          "nodeId": 0,
+          "name": "b3"
+        },
+        {
+          "nodeId": 1,
+          "name": "b13"
+        },
+        {
+          "nodeId": 2,
+          "name": "e1"
+        },
+        {
+          "nodeId": 5,
+          "name": "e14"
+        },
+        {
+          "nodeId": 6,
+          "name": "e17"
+        },
+        {
+          "nodeId": 7,
+          "name": "e20"
+        },
+        {
+          "nodeId": 8,
+          "name": "e21"
+        },
+        {
+          "nodeId": 9,
+          "name": "e22"
+        },
+        {
+          "nodeId": 10,
+          "name": "e31"
+        }
+      ],
+      "links": [
+        {
+          "source": 0,
+          "target": 2,
+          "value": 0.08558073280737397
+        },
+        {
+          "source": 0,
+          "target": 5,
+          "value": 0.0048016356088683414
+        },
+        {
+          "source": 0,
+          "target": 6,
+          "value": 0.19843491736148527
+        },
+        {
+          "source": 0,
+          "target": 7,
+          "value": 0.0993396204208087
+        },
+        {
+          "source": 0,
+          "target": 8,
+          "value": 0.1077499818194084
+        },
+        {
+          "source": 0,
+          "target": 9,
+          "value": 0.08589643730102443
+        },
+        {
+          "source": 0,
+          "target": 10,
+          "value": 0.005123336738879231
+        },
+        {
+          "source": 1,
+          "target": 2,
+          "value": 0.07387199785173132
+        },
+        {
+          "source": 1,
+          "target": 5,
+          "value": 0.0038771541699701866
+        },
+        {
+          "source": 1,
+          "target": 6,
+          "value": 0.07993284819317796
+        },
+        {
+          "source": 1,
+          "target": 7,
+          "value": 0.08240038515238098
+        },
+        {
+          "source": 1,
+          "target": 8,
+          "value": 0.09086312506550602
+        },
+        {
+          "source": 1,
+          "target": 9,
+          "value": 0.07977166228995498
+        },
+        {
+          "source": 1,
+          "target": 10,
+          "value": 0.0016784269560376857
+        }
+      ]
+    },
+    "chartWeightThreshold": 0.001,
+    "scenarioChanges": {
+      "areaChanges": {
+        "5": {}
+      },
+      "baseChanges": {}
+    },
+    "timestamp": 1791887208406
+  },
+  "nativeGeoTiffSha256": "4bc77fcdd04452ba33d1b937c250b97fcb16577be8031a16ede9529241fd7c9f",
+  "simulationRunIds": [
+    "9b43465e-77ec-4bbb-a566-04eeda448787",
+    "69b26222-0eda-4235-ba7c-bf39142f67a4"
+  ],
+  "inputFingerprint": "be517ca5956e626c83a11353179ab43bba0885818895dfd3277ef5f505049c3c",
+  "sourceFingerprints": {
+    "ECOSYSTEM": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+    "PRESSURE": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+    "supportManifest": "6588d025e13b992a389a847d597e5d3271f06b576a735abbb1aeaeb38b875a60"
+  },
+  "inputExportChecks": {
+    "nativeResultUnchanged": true,
+    "nativeReportUnchanged": true,
+    "nativeDomainKm2": 1143.875,
+    "savedCalculationUnaffectedByScenarioEdit": true,
+    "recalculationChangesTrawling": true,
+    "noiseUnaffected": true,
+    "domainUnchanged": true,
+    "invalidRequestsRejected": [
+      "stale fingerprint",
+      "unselected band",
+      "oversized grid"
+    ],
+    "supportedDomainKm2": 1143.875,
+    "sourceSupportComplete": true
+  },
+  "nativeRegression": {
+    "repeatedCalculationId": 8,
+    "identicalGeoTiff": true,
+    "identicalStatistics": true
+  },
+  "modifiedCalculation": {
+    "id": 9,
+    "name": "Poseidon — 50% bottom trawling",
+    "timestamp": 1791888383034,
+    "hasChanges": false,
+    "purged": false
+  },
+  "modifiedInputFingerprint": "1dd537c9fa4b8bbcb208c4cb0e42f0a65093862c751ce7d060a1ca69b177ee76",
+  "simulationGrid": {
+    "crs": "EPSG:3035",
+    "extent": [
+      4357000.0,
+      3858000.0,
+      4397000.0,
+      3898000.0
+    ],
+    "width": 40,
+    "height": 40,
+    "cellMetres": 1000.0
+  },
+  "modifiedSimulationRunIds": [
+    "ef48d0b8-8d25-4407-a3aa-de82e19eb8d1"
+  ],
+  "simulationRuns": [
+    {
+      "runId": "9b43465e-77ec-4bbb-a566-04eeda448787",
+      "calculationId": 7,
+      "completedAt": 1791889593288,
+      "model": {
+        "id": "2026-10-08",
+        "name": "2026 10 08",
+        "species": [
+          "codfish",
+          "pelagicFish",
+          "porpoises",
+          "benthic_community",
+          "phytoplankton",
+          "zooplankton"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "maxSteps": 40,
+        "sampleEvery": 4,
+        "mappingVersion": "hav-west-native-v1",
+        "tickDurationDays": 0.25
+      },
+      "grid": {
+        "crs": "EPSG:3035",
+        "width": 40,
+        "extent": [
+          4357000,
+          3858000,
+          4397000,
+          3898000
+        ],
+        "height": 40,
+        "cellMetres": 1000
+      },
+      "waterCells": 1227,
+      "nativeAreaKm2": 1143.875
+    },
+    {
+      "runId": "69b26222-0eda-4235-ba7c-bf39142f67a4",
+      "calculationId": 7,
+      "completedAt": 1791889667105,
+      "model": {
+        "id": "2026-10-08",
+        "name": "2026 10 08",
+        "species": [
+          "codfish",
+          "pelagicFish",
+          "porpoises",
+          "benthic_community",
+          "phytoplankton",
+          "zooplankton"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "maxSteps": 80,
+        "sampleEvery": 4,
+        "mappingVersion": "hav-west-native-v1",
+        "tickDurationDays": 0.25
+      },
+      "grid": {
+        "crs": "EPSG:3035",
+        "width": 40,
+        "extent": [
+          4357000,
+          3858000,
+          4397000,
+          3898000
+        ],
+        "height": 40,
+        "cellMetres": 1000
+      },
+      "waterCells": 1227,
+      "nativeAreaKm2": 1143.875
+    },
+    {
+      "runId": "ef48d0b8-8d25-4407-a3aa-de82e19eb8d1",
+      "calculationId": 9,
+      "completedAt": 1791889684391,
+      "model": {
+        "id": "2026-10-08",
+        "name": "2026 10 08",
+        "species": [
+          "codfish",
+          "pelagicFish",
+          "porpoises",
+          "benthic_community",
+          "phytoplankton",
+          "zooplankton"
+        ]
+      },
+      "config": {
+        "seed": 42,
+        "maxSteps": 40,
+        "sampleEvery": 4,
+        "mappingVersion": "hav-west-native-v1",
+        "tickDurationDays": 0.25
+      },
+      "grid": {
+        "crs": "EPSG:3035",
+        "width": 40,
+        "extent": [
+          4357000,
+          3858000,
+          4397000,
+          3898000
+        ],
+        "height": 40,
+        "cellMetres": 1000
+      },
+      "waterCells": 1227,
+      "nativeAreaKm2": 1143.875
+    }
+  ],
+  "savedChanges": {
+    "areaChanges": {
+      "5": {}
+    },
+    "baseChanges": {}
+  },
+  "verification": {
+    "frontendTests": 231,
+    "nativeRegression": {
+      "repeatedCalculationId": 8,
+      "identicalGeoTiff": true,
+      "identicalStatistics": true
+    },
+    "persistence": {
+      "checks": [
+        "idempotent retry",
+        "conflicting identity rejected",
+        "malformed grid rejected atomically",
+        "forged native inputs rejected",
+        "foreign owner read/write rejected",
+        "TIFF purge retains appendix and read-only export",
+        "anonymous access rejected",
+        "cross-calculation run reference rejected",
+        "single and bulk deletion cascade",
+        "late save cannot resurrect deleted calculation"
+      ],
+      "disposableCalculationIds": [
+        13,
+        14,
+        15
+      ],
+      "cleanedUp": true
+    },
+    "schemaFreshAndPopulated": true,
+    "backendTests": {
+      "tests": 102,
+      "passed": 101,
+      "skipped": 1
+    },
+    "reportChecks": {
+      "referenceRuns": 2,
+      "modifiedRuns": 1,
+      "emptyReportHasNoAppendix": true,
+      "iframe": true,
+      "newTab": true,
+      "reloadWithModelStopped": true,
+      "reportModelRequests": 0,
+      "a4PdfPages": 11,
+      "appendixPagesVisuallyReviewed": 6,
+      "nativePressureChangeLabel": "Catch bottom trawl -50%"
+    },
+    "frontendProductionBuild": true,
+    "changedFrontendLint": true,
+    "fixtureRecreationScript": true
+  }
+}

@@ -74,7 +74,7 @@ def main():
     )
     args = parser.parse_args()
     area = load_json(args.area)
-    windpark = load_json(ROOT / "frontend/src/assets/pressures/mareld-windpark.json")
+    windpark = load_json(ROOT / "data/hav-symphony-2019/historical-mareld/windpark.json")
     to_grid = Transformer.from_crs(4326, 3035, always_xy=True).transform
     square = transform(to_grid, shape(area["polygon"]))
     park = transform(to_grid, shape(windpark["geometry"]))

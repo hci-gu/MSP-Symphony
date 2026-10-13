@@ -17,7 +17,7 @@ import {
 export function apiError(error: unknown): string {
   if (error instanceof HttpErrorResponse) {
     if (error.status === 0 || error.status === 502 || error.status === 504)
-      return 'The MARELD API is unavailable. Check the Eco-evo server and network connection.';
+      return 'The Eco-evo API is unavailable. Check the model server and network connection.';
     let body = error.error;
     if (typeof body === 'string') {
       try {
@@ -33,7 +33,7 @@ export function apiError(error: unknown): string {
     if (body?.error === 'MODEL_CHECKPOINT_MISMATCH')
       return `This model is incompatible with the server's current project. Choose another model in the Model list and run again. ${message}`;
     if (body?.error === 'MISSING_FILE' && /(?:noise|trawling)-\d+\.png/.test(message))
-      return 'Eco-evo could not read the impact masks. The server needs the Symphony demo impact setup before running with noise or trawling. Runs with both impacts off are still available.';
+      return 'Eco-evo could not read the impact masks. Start the model server with the Symphony impact configuration, then retry this calculation.';
     return message;
   }
   if (error instanceof Error && error.name === 'TimeoutError')
@@ -92,10 +92,11 @@ export class MareldApiClient {
     );
     if (signal.aborted) throw new Error('Request discarded.');
     const form = new FormData();
+    const runId = crypto.randomUUID();
     form.append(
       'request',
       JSON.stringify({
-        run_id: `symphony-${crypto.randomUUID()}`,
+        run_id: runId,
         seed: 42,
         model: { id: model.id },
         grid: { width: input.grid.width, height: input.grid.height },
@@ -132,6 +133,11 @@ export class MareldApiClient {
     } catch {
       throw new Error('The API returned invalid JSON.');
     }
-    return decodeResult(payload, input, model.species, maxSteps, model.name);
+    return {
+      ...decodeResult(payload, input, model.species, maxSteps, model.name),
+      id: runId,
+      modelId: model.id,
+      completedAt: Date.now()
+    };
   }
 }

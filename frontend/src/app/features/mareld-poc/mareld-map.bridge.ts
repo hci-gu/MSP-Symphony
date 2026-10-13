@@ -1,5 +1,5 @@
 import { rasterSource } from '../mareld-shared/map-raster';
-import { effect, inject, Injectable } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import Map from 'ol/Map';
 import LayerGroup from 'ol/layer/Group';
 import ImageLayer from 'ol/layer/Image';
@@ -9,23 +9,24 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import Feature from 'ol/Feature';
 import MultiLineString from 'ol/geom/MultiLineString';
-import { Fill, Stroke, Style, Text } from 'ol/style';
+import { Stroke, Style } from 'ol/style';
 import { transformExtent } from 'ol/proj';
 import { MareldSession } from './mareld-session.service';
 import { framePixels } from './mareld-result';
-import { MareldPressureLayer } from './mareld-pressure-layer.service';
 import { IMPACT_KINDS, ImpactKind, impactPixels } from './mareld-impacts';
 import { impactOutlineLines, IMPACT_OUTLINE_STYLES } from './mareld-impact-outline';
 
 @Injectable({ providedIn: 'root' })
 export class MareldMapBridge {
   private readonly session = inject(MareldSession);
-  private readonly pressure = inject(MareldPressureLayer);
-  private map?: Map;
+  private readonly active = signal(false);
+  private readonly mapState = signal<Map | undefined>(undefined);
+  private get map(): Map | undefined {
+    return this.mapState();
+  }
   private group?: LayerGroup;
   private image?: ImageLayer<ImageStatic>;
   private outline?: VectorLayer<VectorSource>;
-  private windpark?: VectorLayer<VectorSource>;
   private impactOutlines: Partial<Record<ImpactKind, VectorLayer<VectorSource>>> = {};
   private impactOutlineKey = '';
   private inputId = '';
@@ -37,7 +38,18 @@ export class MareldMapBridge {
 
   attach(map: Map): void {
     this.detach();
-    this.map = map;
+    this.mapState.set(map);
+    this.render();
+  }
+
+  setActive(active: boolean): void {
+    this.active.set(active);
+    if (!active) this.session.pausePlayback();
+    this.render();
+  }
+
+  private createLayers(): void {
+    const map = this.map!;
     this.image = new ImageLayer();
     this.outline = new VectorLayer({
       source: new VectorSource(),
@@ -45,31 +57,10 @@ export class MareldMapBridge {
     });
     this.group = new LayerGroup({
       layers: [this.image, this.outline],
-      properties: { id: 'mareld-poc' }
+      properties: { id: 'mareld-poc' },
+      zIndex: 20
     });
     map.getLayers().insertAt(Math.min(3, map.getLayers().getLength()), this.group);
-    this.windpark = new VectorLayer({
-      source: new VectorSource({
-        features: new GeoJSON().readFeatures(this.pressure.feature, {
-          dataProjection: 'EPSG:4326',
-          featureProjection: map.getView().getProjection()
-        })
-      }),
-      style: new Style({
-        fill: new Fill({ color: 'rgba(246, 182, 76, 0.28)' }),
-        stroke: new Stroke({ color: '#ba5700', width: 3 }),
-        text: new Text({
-          text: this.pressure.feature.properties.name,
-          font: '600 14px Roboto, sans-serif',
-          fill: new Fill({ color: '#753600' }),
-          stroke: new Stroke({ color: '#fffaf2', width: 4 })
-        })
-      }),
-      // Keep the footprint legible above the selected-area fill and biomass image.
-      zIndex: 20,
-      properties: { id: 'mareld-windpark-pressure', category: 'PRESSURE' }
-    });
-    map.addLayer(this.windpark);
     for (const kind of IMPACT_KINDS) {
       const { color, lineDash } = IMPACT_OUTLINE_STYLES[kind];
       const layer = new VectorLayer({
@@ -84,42 +75,29 @@ export class MareldMapBridge {
         properties: { id: `mareld-${kind}-outline` }
       });
       this.impactOutlines[kind] = layer;
-      map.addLayer(layer);
+      this.group.getLayers().push(layer);
     }
-    this.pressure.activateContext();
-    this.render();
   }
 
   reset(): void {
     this.session.reset();
-    this.pressure.reset();
     this.render();
   }
 
   detach(): void {
-    this.session.reset();
-    this.pressure.reset();
-    for (const layer of Object.values(this.impactOutlines)) {
-      this.map?.removeLayer(layer);
-      layer.dispose();
-    }
+    if (this.map) this.session.detach();
     this.impactOutlines = {};
     this.impactOutlineKey = '';
-    if (this.windpark) {
-      this.map?.removeLayer(this.windpark);
-      this.windpark.dispose();
-    }
     if (this.group) {
       this.map?.removeLayer(this.group);
       this.image?.setSource(null);
       this.group.getLayers().forEach((layer) => layer.dispose());
       this.group.dispose();
     }
-    this.map = undefined;
+    this.mapState.set(undefined);
     this.group = undefined;
     this.image = undefined;
     this.outline = undefined;
-    this.windpark = undefined;
     this.inputId = '';
     this.frameKey = '';
   }
@@ -136,6 +114,11 @@ export class MareldMapBridge {
   }
 
   private render(): void {
+    if (!this.map) return;
+    const active = this.active();
+    if (active && !this.group) this.createLayers();
+    this.group?.setVisible(active);
+    if (!active) return;
     const result = this.session.result();
     const prepared = this.session.preparedImpacts();
     const preview = prepared?.layers.find((layer) => layer.kind === this.session.previewImpact());
@@ -143,8 +126,6 @@ export class MareldMapBridge {
     const frame = this.session.frame(),
       species = this.session.species(),
       opacity = this.session.opacity();
-    const pressureVisible = this.pressure.visible();
-    this.windpark?.setVisible(pressureVisible);
     this.renderImpactOutlines();
     if (!this.map || !this.image || !this.outline) return;
     this.image.setOpacity(opacity);

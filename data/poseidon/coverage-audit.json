@@ -1,0 +1,793 @@
+{
+  "baseline": "HAV_2019_WEST_LOCAL",
+  "reference": "poseidon.md",
+  "grid": {
+    "crs": "EPSG:3035",
+    "extent": [
+      4358000,
+      3858000,
+      4397000,
+      3897000
+    ],
+    "width": 156,
+    "height": 156,
+    "cellMetres": 250,
+    "rowOrder": "north-first"
+  },
+  "nativeDomainCells": 18484,
+  "squareCells": 24336,
+  "parkAreaKm2": 152.10056524131275,
+  "supportPolicy": "Finite nonnegative original cells inside imported boundary. Fish/noise use original validity; other bands require joint porpoise/plankton support or positive original values. Zero outside that support remains unknown.",
+  "layers": [
+    {
+      "category": "Ecosystem",
+      "bandNumber": 1,
+      "title": "Porpoise north sea",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/02Porpoise_Northsea.tif",
+        "sha256": "288456e7aefd4663b5fa89aaf32c26abbad8f27b99b811d4df649fc9dfd2c00b"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 55.0,
+          "maximum": 96.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 60.0,
+          "maximum": 96.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 55.0,
+          "maximum": 96.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 60.0,
+          "maximum": 96.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 8,
+      "title": "Plankton pelagic",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/09Plankton_Community.tif",
+        "sha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 72.0,
+          "maximum": 97.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 89.0,
+          "maximum": 97.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 72.0,
+          "maximum": 97.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 89.0,
+          "maximum": 97.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 10,
+      "title": "Hard bottom aphotic",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/11Hardbottom_Aphotic.tif",
+        "sha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 1815,
+          "zeroCells": 16669,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 71.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 0,
+          "zeroCells": 2434,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 1815,
+          "zeroCells": 16669,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 71.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 0,
+          "zeroCells": 2434,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 0.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 14,
+      "title": "Transport bottom deep",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/15Transportbottom_Deep.tif",
+        "sha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 16281,
+          "zeroCells": 2203,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 65.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2426,
+          "zeroCells": 8,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 3.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 16281,
+          "zeroCells": 2203,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 65.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2426,
+          "zeroCells": 8,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 3.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 17,
+      "title": "Soft bottom deep",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/18Softbottom_Deep.tif",
+        "sha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 16281,
+          "zeroCells": 2203,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 99.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2426,
+          "zeroCells": 8,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 99.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 16281,
+          "zeroCells": 2203,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 99.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2426,
+          "zeroCells": 8,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 99.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 20,
+      "title": "Cod",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/21torsk_lognorm_v2.tif",
+        "sha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 77.0,
+          "maximum": 96.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 83.0,
+          "maximum": 96.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 77.0,
+          "maximum": 96.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 83.0,
+          "maximum": 96.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 21,
+      "title": "Herring",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/22sill_lognorm_v2.tif",
+        "sha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 88.0,
+          "maximum": 100.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 88.0,
+          "maximum": 100.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 88.0,
+          "maximum": 100.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 88.0,
+          "maximum": 100.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 22,
+      "title": "Sprat",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/23skarpsill_lognorm_v2.tif",
+        "sha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 56.0,
+          "maximum": 100.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 56.0,
+          "maximum": 100.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 56.0,
+          "maximum": 100.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 56.0,
+          "maximum": 100.0
+        }
+      }
+    },
+    {
+      "category": "Ecosystem",
+      "bandNumber": 31,
+      "title": "Rough bottom deep",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/ecosystems.tif",
+      "nativeSha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_eco_W_2018/32Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+        "sha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 2344,
+          "zeroCells": 16140,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 68.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 4,
+          "zeroCells": 2430,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 12.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 2344,
+          "zeroCells": 16140,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 68.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 4,
+          "zeroCells": 2430,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 12.0
+        }
+      }
+    },
+    {
+      "category": "Pressure",
+      "bandNumber": 3,
+      "title": "Catch bottom trawl",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/pressures.tif",
+      "nativeSha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_press_W_2018/04Catch_Bottom_trawl.tif",
+        "sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 17066,
+          "zeroCells": 1418,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 62.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 13.0,
+          "maximum": 49.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 17066,
+          "zeroCells": 1418,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 62.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 13.0,
+          "maximum": 49.0
+        }
+      }
+    },
+    {
+      "category": "Pressure",
+      "bandNumber": 4,
+      "title": "Turbidity bottom trawl",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/pressures.tif",
+      "nativeSha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_press_W_2018/05Catch_Bottom_trawlCopy.tif",
+        "sha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 17066,
+          "zeroCells": 1418,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 62.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 13.0,
+          "maximum": 49.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 17066,
+          "zeroCells": 1418,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 62.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 13.0,
+          "maximum": 49.0
+        }
+      }
+    },
+    {
+      "category": "Pressure",
+      "bandNumber": 7,
+      "title": "Abrasion bottom trawl",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/pressures.tif",
+      "nativeSha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_press_W_2018/08Abrasion_Bottomtrawl.tif",
+        "sha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 17350,
+          "zeroCells": 1134,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 81.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 33.0,
+          "maximum": 73.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 17350,
+          "zeroCells": 1134,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 81.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 33.0,
+          "maximum": 73.0
+        }
+      }
+    },
+    {
+      "category": "Pressure",
+      "bandNumber": 13,
+      "title": "Noise 125Hz shipping",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/pressures.tif",
+      "nativeSha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_press_W_2018/14Noise_125Hz_Shipping_20181122.tif",
+        "sha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 12.0,
+          "maximum": 31.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 12.0,
+          "maximum": 25.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 18484,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 12.0,
+          "maximum": 31.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 2434,
+          "zeroCells": 0,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 12.0,
+          "maximum": 25.0
+        }
+      }
+    },
+    {
+      "category": "Pressure",
+      "bandNumber": 14,
+      "title": "Noise 125Hz wind power",
+      "nativePath": "data/hav-symphony-2019/derived/vasterhavet/pressures.tif",
+      "nativeSha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "sourceScale": "normalized relative index; typically 0–1",
+      "nativeScale": "rounded UInt8 relative index 0–100",
+      "source": {
+        "path": "regional/vasterhavet/National_press_W_2018/15Noise_125Hz_Windpower.tif",
+        "sha256": "a4eba6372ed3989e64d8badb403a3b7dab366061e6b8ed559132301e4166dcad"
+      },
+      "coverage": {
+        "square": {
+          "cells": 24336,
+          "supportedCells": 18484,
+          "positiveCells": 0,
+          "zeroCells": 18484,
+          "unknownCells": 5852,
+          "coverage": 0.7595332018408941,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        "park": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 0,
+          "zeroCells": 2434,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        "nativeSquare": {
+          "cells": 18484,
+          "supportedCells": 18484,
+          "positiveCells": 0,
+          "zeroCells": 18484,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        "nativePark": {
+          "cells": 2434,
+          "supportedCells": 2434,
+          "positiveCells": 0,
+          "zeroCells": 2434,
+          "unknownCells": 0,
+          "coverage": 1.0,
+          "minimum": 0.0,
+          "maximum": 0.0
+        }
+      }
+    }
+  ]
+}

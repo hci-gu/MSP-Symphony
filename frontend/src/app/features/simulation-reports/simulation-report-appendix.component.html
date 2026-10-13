@@ -1,0 +1,157 @@
+@if (loading()) {
+  <p class="load-state" role="status">Loading saved simulation appendices…</p>
+}
+@if (error()) {
+  <div class="load-state" role="alert">
+    <p>Simulation appendices could not be loaded. The Symphony report above remains available.</p>
+    <p>{{ error() }}</p>
+    <button type="button" (click)="load()">Retry appendix</button>
+  </div>
+}
+@if (figures().length) {
+  <section class="appendix">
+    <h1>Appendix — EcoTwin simulations</h1>
+    <p>
+      Optional experimental model results attached to calculation #{{ calculationId }}. Symphony's
+      impact statistics are unchanged.
+    </p>
+    @for (figure of figures(); track figure.run.runId) {
+      <article class="simulation-run">
+        <h2>
+          Simulation {{ $index + 1 }} · {{ figure.run.completedAt | date: 'yyyy-MM-dd HH:mm' }}
+        </h2>
+        <dl>
+          <dt>Source calculation</dt>
+          <dd>
+            {{ figure.run.source.name }} · #{{ figure.run.calculationId }} ·
+            {{ figure.run.source.baselineName }}
+          </dd>
+          <dt>Run</dt>
+          <dd>{{ figure.run.runId }}</dd>
+          <dt>Model</dt>
+          <dd>{{ figure.run.model.name }} · {{ figure.run.model.id }}</dd>
+          <dt>Simulation</dt>
+          <dd>
+            {{ figure.days | number: '1.0-2' }} days · {{ figure.run.config.maxSteps }} steps · seed
+            {{ figure.run.config.seed }} · sampled every {{ figure.run.config.sampleEvery }} steps
+          </dd>
+          <dt>Grid</dt>
+          <dd>
+            {{ figure.run.grid.width }} × {{ figure.run.grid.height }} at
+            {{ figure.run.grid.cellMetres }} m · {{ figure.run.grid.crs }} ·
+            {{ figure.run.waterCells }} model water cells
+          </dd>
+          <dt>Native domain</dt>
+          <dd>
+            {{ figure.run.nativeAreaKm2 | number: '1.0-2' }} km² within the saved calculation area
+          </dd>
+          <dt>Extent [west, south, east, north]</dt>
+          <dd>{{ figure.run.grid.extent.join(', ') }} m</dd>
+          <dt>Input fingerprint</dt>
+          <dd>{{ figure.run.source.fingerprint }}</dd>
+          <dt>Mapping</dt>
+          <dd>{{ figure.run.config.mappingVersion }}</dd>
+        </dl>
+        <h3>Inputs and assumptions</h3>
+        @for (pressure of figure.run.pressures; track pressure.kind) {
+          <p>
+            {{ pressure.kind }} · {{ pressure.sourceId }} ·
+            {{ pressure.coverage * 100 | number: '1.0-1' }}% source support ·
+            {{ pressure.affectedCells }} affected model cells
+          </p>
+        }
+        <p>
+          Ecosystem components (context only):
+          @for (band of figure.run.source.bands; track band.category + band.bandNumber) {
+            @if (band.category === 'ECOSYSTEM') {
+              <span>{{ band.title }}; </span>
+            }
+          }
+        </p>
+        <ul>
+          @for (assumption of figure.run.assumptions; track $index) {
+            <li>{{ assumption }}</li>
+          }
+        </ul>
+        <p>
+          Source files were fingerprinted at export. Historical calculations did not archive
+          immutable baseline rasters.
+        </p>
+        <section class="biomass-page">
+          <h3>Biomass over time</h3>
+          <p>
+            Total modeled biomass within model water cells, tonnes. Each species is shown across all
+            saved frames.
+          </p>
+          <svg viewBox="0 0 720 315" role="img" aria-label="Biomass time series for all species">
+            <line x1="60" y1="30" x2="60" y2="270" stroke="#666" />
+            <line x1="60" y1="270" x2="680" y2="270" stroke="#666" />
+            <text x="55" y="35" text-anchor="end">{{ figure.chartMaximum | number: '1.0-1' }}</text>
+            <text x="55" y="273" text-anchor="end">0</text>
+            <text x="60" y="297">Day 0</text>
+            <text x="680" y="297" text-anchor="end">Day {{ figure.days | number: '1.0-2' }}</text>
+            @for (species of figure.species; track species.name) {
+              <path
+                [attr.d]="species.path"
+                [attr.stroke]="species.color"
+                fill="none"
+                stroke-width="2"
+              />
+            }
+          </svg>
+          <div class="species-legend">
+            @for (species of figure.species; track species.name) {
+              <span><i [style.background]="species.color"></i>{{ species.name }}</span>
+            }
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Species</th>
+                <th>Initial (t)</th>
+                <th>Final (t)</th>
+                <th>Change (t)</th>
+                <th>Change (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (species of figure.species; track species.name) {
+                <tr>
+                  <th>{{ species.name }}</th>
+                  <td>{{ species.initial | number: '1.0-3' }}</td>
+                  <td>{{ species.final | number: '1.0-3' }}</td>
+                  <td>{{ species.change | number: '1.0-3' }}</td>
+                  <td>
+                    {{
+                      species.percent === null ? 'Not defined' : (species.percent | number: '1.0-2')
+                    }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </section>
+        <h3 class="spatial-heading">
+          Final spatial biomass · day {{ figure.days | number: '1.0-2' }}
+        </h3>
+        <p>
+          North is up. White cells are outside the model domain. Extent:
+          {{ figure.run.grid.extent.join(', ') }} m ({{ figure.run.grid.crs }}). Each species uses a
+          fixed scale across all saved frames.
+        </p>
+        <div class="spatial-figures">
+          @for (species of figure.species; track species.name) {
+            <figure>
+              <figcaption>{{ species.name }}</figcaption>
+              <img [src]="species.image" [alt]="species.name + ' final biomass, north up'" />
+              <div class="ramp" [style.background]="gradient"></div>
+              <div class="scale">
+                <span>0</span><span>{{ species.maximum | number: '1.0-3' }} tonnes/cell</span>
+              </div>
+            </figure>
+          }
+        </div>
+      </article>
+    }
+  </section>
+}

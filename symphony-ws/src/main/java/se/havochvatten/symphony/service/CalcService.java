@@ -141,6 +141,10 @@ public class CalcService {
                 getResultList();
     }
 
+    public List<CalculationResultSlice> findAllBaselinesByUser(Principal user) {
+        return findAllByUsername(user.getName());
+    }
+
     private List<CalculationResultSlice> findAllByUsername(String username) {
         return em.createNamedQuery("CalculationResultSlice.findAllByOwner", CalculationResultSlice.class).
                 setParameter("owner", username).
@@ -239,6 +243,13 @@ public class CalcService {
     public synchronized void delete(Object entity) {
         try {
             transaction.begin();
+            if (entity instanceof CalculationResult calculation) {
+                // A scenario's convenience pointer must not prevent history deletion.
+                em.createQuery("SELECT s FROM Scenario s WHERE s.latestCalculation.id = :id", Scenario.class)
+                    .setParameter("id", calculation.getId()).getResultList()
+                    .forEach(scenario -> scenario.setLatestCalculation(null));
+                em.flush();
+            }
             em.remove(em.merge(entity));
             transaction.commit();
         } catch (Exception e) {
@@ -426,15 +437,7 @@ public class CalcService {
     }
 
     private GridGeometry2D getTargetGridGeometry(Envelope targetGridEnvelope, ReferencedEnvelope targetEnv) {
-        return new GridGeometry2D( // FIXME reuse roiGridEnvelope?
-                new GridEnvelope2D(/*roiGridEnvelope, PixelInCell.CELL_CENTER */
-                        (int) targetGridEnvelope.getMinX(),
-                        (int) targetGridEnvelope.getMinY(),
-                        (int) targetGridEnvelope.getWidth(),
-                        (int) targetGridEnvelope.getHeight()
-                ),
-                targetEnv
-        );
+        return se.havochvatten.symphony.calculation.CalculationDomain.geometry(targetGridEnvelope, targetEnv);
     }
 
     @SuppressWarnings({ "java:S1854", "java:S1481", "java:S1659"})
@@ -724,11 +727,7 @@ public class CalcService {
     }
 
     private ImageLayout getImageLayout(Envelope envelope) {
-        return new ImageLayout2(         // TODO be more precise with rounding stemming from integer cast?
-                (int) envelope.getMinX(),
-                (int) envelope.getMinY(),
-                (int) envelope.getWidth(),
-                (int) envelope.getHeight());
+        return se.havochvatten.symphony.calculation.CalculationDomain.layout(envelope);
     }
 
     public CalculationResult persistCalculation(GridCoverage2D result,

@@ -1,45 +1,73 @@
 <div class="mareld-panel">
   <header>
     <div class="eyebrow">ECOSYSTEM SIMULATION</div>
-    <h2>MARELD</h2>
+    <h2>EcoTwin</h2>
     <p>Explore a changing ecosystem<br />on your Symphony map.</p>
   </header>
 
-  <section aria-labelledby="mareld-area-heading">
-    <h3 id="mareld-area-heading"><span class="step">1</span> Area</h3>
-    <p class="hint">Select or draw one area in the Areas tab, then capture it here.</p>
-    <div class="buttons">
-      <button type="button" (click)="session.capture()" [disabled]="session.busy()">
-        Use selected area
-      </button>
-      <button
-        type="button"
-        class="quiet"
-        (click)="session.useExample()"
-        [disabled]="session.busy()"
-      >
-        Try example area
-      </button>
-    </div>
+  <section aria-labelledby="mareld-calculation-heading">
+    <h3 id="mareld-calculation-heading"><span class="step">1</span> Saved calculation</h3>
+    <label for="ecotwin-calculation">Calculation</label>
+    <select
+      id="ecotwin-calculation"
+      [ngModel]="session.selectedId()"
+      (ngModelChange)="session.selectCalculation(+$event)"
+    >
+      <option [ngValue]="null" disabled>Choose a completed calculation</option>
+      @for (calculation of session.calculations.calculations(); track calculation.id) {
+        <option [ngValue]="calculation.id">
+          {{ calculation.name }} · {{ calculation.timestamp | date: 'short' }} · #{{
+            calculation.id
+          }}
+        </option>
+      }
+    </select>
+    <button type="button" class="text-button" (click)="session.calculations.refresh()">
+      Refresh calculations
+    </button>
+    @if (session.calculations.error()) {
+      <p class="error" role="alert">{{ session.calculations.error() }}</p>
+    }
+    @if (!session.calculations.loading() && !session.calculations.calculations().length) {
+      <p class="hint">Create and complete a calculation in Symphony first, then return here.</p>
+    }
+    @if (session.loading()) {
+      <p role="status">Loading saved calculation inputs…</p>
+    }
+    @if (session.context(); as source) {
+      <p class="hint">
+        {{ source.name }} · #{{ source.calculationId }}<br />
+        {{ source.timestamp | date: 'medium' }}<br />{{ source.baselineName }}
+      </p>
+      @for (error of session.compatibilityErrors(); track $index) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+      <details>
+        <summary>Saved input selection and provenance</summary>
+        @for (band of source.bands; track band.category + band.bandNumber) {
+          <p class="hint">
+            {{ band.title }} · {{ band.category }} / {{ band.bandNumber }} · {{ band.units }}
+          </p>
+        }
+        @for (note of source.notes; track $index) {
+          <p class="hint">{{ note }}</p>
+        }
+      </details>
+    }
     @if (session.input(); as input) {
       <div class="input-card">
-        <img
-          [src]="preview()"
-          alt="Rasterized study area. Teal cells are accessible; pale cells are outside the domain."
-          width="86"
-          height="86"
-        />
+        <img [src]="preview()" alt="Calculation domain on the model grid" width="86" height="86" />
         <div>
           <strong>{{ input.name }}</strong>
           <div class="metrics">{{ input.grid.width }} × {{ input.grid.height }} cells · 1 km</div>
-          <div class="metrics">{{ input.waterCells }} accessible cells</div>
+          <div class="metrics">{{ input.waterCells }} model water cells</div>
           <button type="button" class="text-button" (click)="map.fit()">Show on map ↗</button>
         </div>
       </div>
     }
     <div class="notice">
-      Synthetic domain: the selected shape acts as enclosed water. Coastlines and depth are not
-      connected. Optional noise and trawling inputs are configured below.
+      Uses this calculation's saved inputs. To change native pressures, edit your scenario and
+      calculate again.
     </div>
   </section>
 
@@ -73,14 +101,30 @@
       </button>
     }
     <p class="hint">
-      Choose the Eco-evo model to use for your area. Model settings and demo impact strengths are
-      experimental.
+      Choose the Eco-evo model. Model initialization and pressure conversion are experimental.
     </p>
   </section>
 
   <section aria-labelledby="mareld-impacts-heading">
-    <h3 id="mareld-impacts-heading"><span class="step">3</span> Demo impacts</h3>
-    <app-mareld-impact-controls />
+    <h3 id="mareld-impacts-heading"><span class="step">3</span> Calculation inputs</h3>
+    @for (layer of session.preparedImpacts()?.layers ?? []; track layer.kind) {
+      <p>
+        {{ layer.kind === 'noise' ? 'Shipping noise' : 'Bottom trawling' }} ·
+        {{ layer.affectedCells }} affected cells · {{ layer.coverage * 100 | number: '1.0-1' }}%
+        source support
+      </p>
+      <button type="button" (click)="session.showImpact(layer.kind)">
+        Preview {{ layer.kind }}
+      </button>
+    }
+    @if (session.input(); as input) {
+      <details>
+        <summary>Model assumptions</summary>
+        @for (assumption of input.assumptions; track $index) {
+          <p class="hint">{{ assumption }}</p>
+        }
+      </details>
+    }
     @if (!session.result()) {
       <app-mareld-impact-outlines />
     }
@@ -127,7 +171,21 @@
   @if (session.result(); as result) {
     <section aria-labelledby="mareld-result-heading" class="result-section">
       <h3 id="mareld-result-heading">Explore the result</h3>
-      <span class="source-badge">LIVE MODEL RESULT</span>
+      <span class="source-badge">{{
+        result.source === 'saved' ? 'SAVED MODEL RESULT' : 'LIVE MODEL RESULT'
+      }}</span>
+      @if (session.saved()) {
+        <p role="status">Added to calculation report.</p>
+      }
+      @if (session.saving()) {
+        <p role="status">Saving result and report appendix…</p>
+      }
+      @if (session.saveError()) {
+        <p class="error" role="alert">The appendix has not been saved: {{ session.saveError() }}</p>
+        <button type="button" (click)="session.saveResult()" [disabled]="session.saving()">
+          Retry saving this result
+        </button>
+      }
       <p class="hint">{{ result.input.name }} · {{ result.model }}</p>
       <div class="notice">
         Inputs used for this result:
@@ -221,7 +279,7 @@
           type="button"
           class="quiet"
           (click)="session.clearResult()"
-          [disabled]="session.busy()"
+          [disabled]="session.busy() || session.saving()"
         >
           Clear result
         </button>
@@ -238,5 +296,22 @@
       />
     </section>
   }
-  <footer>Results are kept for this session.</footer>
+  <section aria-label="Saved simulations">
+    <h3>Saved simulations</h3>
+    @if (session.historyError()) {
+      <p class="error" role="alert">{{ session.historyError() }}</p>
+      <button type="button" (click)="session.loadHistory()">Retry loading saved runs</button>
+    }
+    @for (run of session.history(); track run.runId) {
+      <button
+        type="button"
+        (click)="session.openSaved(run.runId)"
+        [disabled]="session.busy() || session.saving() || (!!session.result() && !session.saved())"
+      >
+        {{ run.completedAt | date: 'medium' }} · {{ run.model.name }} ·
+        {{ run.config.maxSteps }} steps
+      </button>
+    }
+  </section>
+  <footer>Saved simulations appear as appendices in their calculation report.</footer>
 </div>

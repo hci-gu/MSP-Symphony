@@ -619,7 +619,7 @@ public class DataLayerService {
      * @param baselineVersionId baseline version identifier
      * @return absolute/relative file path to coverage source
      */
-    String getComponentFilePath(LayerType type, int baselineVersionId) {
+    public String getComponentFilePath(LayerType type, int baselineVersionId) {
         String localDevFilePath = localDevFilePath(type);
         if (localDevFilePath != null) return localDevFilePath;
         BaselineVersion baselineVersion = baselineVersionService.getBaselineVersionById(baselineVersionId);

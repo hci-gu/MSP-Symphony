@@ -40,9 +40,15 @@ export abstract class ReportModalComponent implements OnDestroy {
     this.dialog.close();
   };
 
-  print() {
-    this.iframe?.nativeElement.contentWindow?.print();
+  async print() {
+    const frame = this.iframe?.nativeElement.contentWindow;
+    if (!frame || !this.printReady) return;
+    await frame.document.fonts.ready;
+    await Promise.all(Array.from(frame.document.images).map(img => img.decode().catch(() => undefined)));
+    if (this.printReady) frame.print();
   }
+
+  get printReady(): boolean { return true; }
 
   open() {
     window.open(this.url + this.param_annex, '_blank');

@@ -29,7 +29,7 @@ describe('CalculationReportModalComponent', () => {
           provide: DialogConfig,
           useValue: {
             data: {
-              reportId: 1
+              id: 1
             }
           }
         },
@@ -49,5 +49,19 @@ describe('CalculationReportModalComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('only enables printing after this report iframe confirms the appendix is rendered', () => {
+    const frame = component.iframe!.nativeElement.contentWindow;
+    const message = (origin = window.origin, source = frame, calcId = 1, state = 'ready') =>
+      new MessageEvent('message', { origin, source, data: { type: 'simulationAppendixState', calcId, state } });
+    expect(component.printReady).toBeFalse();
+    component.onAppendixState(message('https://unrelated.invalid'));
+    component.onAppendixState(message(window.origin, window));
+    component.onAppendixState(message(window.origin, frame, 2));
+    expect(component.printReady).toBeFalse();
+    component.onAppendixState(message()); expect(component.printReady).toBeTrue();
+    component.onAppendixState(message(window.origin, frame, 1, 'error'));
+    expect(component.printReady).toBeFalse();
   });
 });

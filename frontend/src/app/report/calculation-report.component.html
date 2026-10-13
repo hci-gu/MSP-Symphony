@@ -116,6 +116,9 @@
     {{ report().timestamp | date: 'yyyy-MM-dd HH:mm' }}
   </p>
   </tbody>
+  @if (calculationId) {
+    <app-simulation-report-appendix [calculationId]="calculationId" />
+  }
 }
 
 @if (loadingReport) {

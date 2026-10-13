@@ -27,7 +27,7 @@ from shapely.ops import transform
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/hav-symphony-2019"
-OUTPUT = ROOT / "frontend/src/assets/mareld-layers"
+OUTPUT = ROOT / "data/hav-symphony-2019/historical-mareld/layers"
 PIXEL = 250
 EXTEND = {"Porpoise north sea", "Plankton pelagic"}
 FULL_SUPPORT = {"Cod", "Herring", "Sprat", "Noise 125Hz shipping"}

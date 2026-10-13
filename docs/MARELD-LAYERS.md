@@ -1,3 +1,7 @@
+# Historical MARELD supplemental-layer experiment
+
+Retired from the application on 2026-10-13. Native tabs no longer contain these widgets or overlays. The notes below describe the previous experiment; use [the current EcoTwin guide](MARELD-POC.md) for supported workflows. Assets are preserved under `data/hav-symphony-2019/historical-mareld/`, outside the frontend bundle.
+
 # MARELD map layers
 
 The Ecosystems and Pressures panels contain a **MARELD area data** collection:
@@ -88,7 +92,7 @@ deferred until API integration and model calibration.
 
 ## Reusable data contract
 
-Generated assets live in `frontend/src/assets/mareld-layers/`. `manifest.json`
+Generated assets live in `data/hav-symphony-2019/historical-mareld/layers/`. `manifest.json`
 records grid geometry, source filenames/hashes, metadata pages, units, caveats,
 coverage by provenance, validation, sensitivity assumptions and variant paths.
 

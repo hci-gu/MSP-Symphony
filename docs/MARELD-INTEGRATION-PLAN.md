@@ -1,3 +1,5 @@
+> Historical original POC plan. The current saved-calculation rewrite is described in [implementation-plan.md](../implementation-plan.md) and [the operation guide](MARELD-POC.md).
+
 # Symphony MARELD: first POC
 
 **Historical plan, agreed 2026-09-29.** This records the original scope and tradeoffs,

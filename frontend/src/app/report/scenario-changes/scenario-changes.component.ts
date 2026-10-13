@@ -30,7 +30,8 @@ export class ScenarioChangesComponent {
     const changes: ChangesProperty = {};
     for(const category of BandTypes) {
       for (const bandNumber in this.scenarioChanges.baseChanges[category]) {
-        changes[bandNumber] = this.scenarioChanges.baseChanges[category][bandNumber];
+        // The category key is authoritative; older/API-created edits can omit type.
+        changes[bandNumber] = { ...this.scenarioChanges.baseChanges[category][bandNumber], type: category };
       }
     }
     return changes;
@@ -42,7 +43,7 @@ export class ScenarioChangesComponent {
       changes[areaId] = {};
       for(const category of BandTypes) {
         for(const bandName in this.scenarioChanges.areaChanges[areaId][category]) {
-          changes[areaId][bandName] = this.scenarioChanges.areaChanges[areaId][category][bandName];
+          changes[areaId][bandName] = { ...this.scenarioChanges.areaChanges[areaId][category][bandName], type: category };
         }
       }
     }

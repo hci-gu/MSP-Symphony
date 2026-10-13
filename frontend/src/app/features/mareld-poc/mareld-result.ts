@@ -17,7 +17,9 @@ export interface MareldModel {
 }
 export interface MareldResult {
   id: string;
-  source: 'live';
+  source: 'live' | 'saved';
+  modelId?: string;
+  completedAt?: number;
   model: string;
   input: PreparedInput;
   species: string[];
@@ -120,8 +122,7 @@ export const BIOMASS_COLORS = [
   [250, 133, 28],
   [255, 235, 80]
 ];
-export const BIOMASS_GRADIENT =
-  `linear-gradient(90deg, ${BIOMASS_COLORS.map((color) => `rgb(${color.join(',')})`).join(', ')})`;
+export const BIOMASS_GRADIENT = `linear-gradient(90deg, ${BIOMASS_COLORS.map((color) => `rgb(${color.join(',')})`).join(', ')})`;
 export function framePixels(
   result: MareldResult,
   frame: number,

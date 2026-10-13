@@ -15,6 +15,7 @@ import { ComparisonReportComponent } from "@src/app/report/comparison-report.com
 import { OrdinalPipe } from "@shared/ordinal.pipe";
 import { HistogramComponent } from './histogram/histogram.component';
 import { HistogramChartComponent } from './histogram/histogram-chart/histogram-chart.component';
+import { SimulationReportAppendixComponent } from '../features/simulation-reports/simulation-report-appendix.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { HistogramChartComponent } from './histogram/histogram-chart/histogram-c
     HistogramChartComponent,
   ],
   imports: [
+    SimulationReportAppendixComponent,
     CommonModule,
     SharedModule,
     CalculationReportRoutingModule,

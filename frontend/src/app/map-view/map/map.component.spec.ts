@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { MapComponent } from './map.component';
+import { MareldMapBridge } from '../../features/mareld-poc/mareld-map.bridge';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { MapOpacitySliderComponent } from './map-opacity-slider/map-opacity-slider.component';
 import { CoreModule } from '@src/app/core/core.module';
@@ -34,6 +35,7 @@ describe('MapComponent', () => {
         ToolbarButtonComponent
       ],
       providers: [
+        { provide: MareldMapBridge, useValue: jasmine.createSpyObj('MareldMapBridge', ['attach', 'detach']) },
         provideMockStore({
           initialState: {
             metadata: metadata,

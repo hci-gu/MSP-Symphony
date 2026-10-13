@@ -1,5 +1,5 @@
 import { stepsToDays } from '../mareld-shared/run-config';
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, DestroyRef, inject } from '@angular/core';
 import { environment } from '@src/environments/environment';
 import { rasterCanvas } from './mareld-input';
 import { BIOMASS_GRADIENT, MAX_STEPS, sampleEvery } from './mareld-result';
@@ -28,14 +28,12 @@ export class MareldPanelComponent {
   readonly speciesLabel = speciesLabel;
 
   constructor() {
-    effect(() => {
-      if (
-        !this.session.models().length &&
-        !this.session.discovering() &&
-        !this.session.modelError()
-      ) {
-        void this.session.discover();
-      }
-    });
+    this.map.setActive(true);
+    this.session.calculations.refresh();
+    this.session.resume();
+    if (!this.session.models().length && !this.session.discovering()) {
+      void this.session.discover();
+    }
+    inject(DestroyRef).onDestroy(() => this.map.setActive(false));
   }
 }

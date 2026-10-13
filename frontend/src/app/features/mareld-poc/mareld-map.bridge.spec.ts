@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { computed, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -7,215 +7,123 @@ import ImageLayer from 'ol/layer/Image';
 import ImageStatic from 'ol/source/ImageStatic';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import type Polygon from 'ol/geom/Polygon';
-import { transform } from 'ol/proj';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { selectSelectedAreaData } from '@data/area/area.selectors';
 import { MareldMapBridge } from './mareld-map.bridge';
 import { MareldSession } from './mareld-session.service';
-import { MareldApiClient } from './mareld-api.client';
-import { SymphonySelectionAdapter } from './symphony-selection.adapter';
-import { MareldPressureLayer } from './mareld-pressure-layer.service';
+import { MareldResult } from './mareld-result';
+import { PreparedInput } from './mareld-input';
+import { PreparedImpacts } from './mareld-impacts';
 import { biomassFixture } from './testing/biomass.fixture';
-import { MareldImpactData } from './mareld-impact-data.service';
-import { impactSourceFixture } from './testing/impact.fixture';
+import { impactFixture } from './testing/impact.fixture';
 
-describe('MARELD map layer lifecycle', () => {
-  it('toggles both footprints above biomass, keeps run snapshots and clears them with the session', async () => {
-    const result = biomassFixture();
-    const api = jasmine.createSpyObj('API', ['models', 'run']);
-    api.models.and.resolveTo([{ id: 'test', name: 'Test', species: result.species }]);
-    api.run.and.callFake(async (input: typeof result.input) => ({ ...result, input }));
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
-        { provide: MareldApiClient, useValue: api },
-        { provide: SymphonySelectionAdapter, useValue: { capture: async () => result.input } },
-        {
-          provide: MareldImpactData,
-          useValue: { load: async () => impactSourceFixture(result.input) }
-        }
-      ]
-    });
-    const session = TestBed.inject(MareldSession),
-      bridge = TestBed.inject(MareldMapBridge);
-    const map = new Map({ view: new View({ center: [0, 0], zoom: 5 }) });
+describe('simulation map isolation', () => {
+  function setup() {
+    const input = signal<PreparedInput | null>(null);
+    const result = signal<MareldResult | null>(null);
+    const preparedImpacts = signal<PreparedImpacts | null>(null);
+    const session = {
+      input,
+      result,
+      preparedImpacts,
+      previewImpact: signal<'noise' | 'trawling' | null>(null),
+      frame: signal(0),
+      species: signal(0),
+      opacity: signal(0.8),
+      impactOutlines: signal({ noise: false, trawling: false }),
+      mapImpacts: computed(() => ({ input: input(), impacts: preparedImpacts() })),
+      pausePlayback: jasmine.createSpy('pausePlayback'),
+      detach: jasmine.createSpy('detach'),
+      reset: () => {
+        input.set(null);
+        result.set(null);
+        preparedImpacts.set(null);
+      }
+    };
+    TestBed.configureTestingModule({ providers: [{ provide: MareldSession, useValue: session }] });
+    const bridge = TestBed.inject(MareldMapBridge);
+    // In the application this root service's effect runs before the map mounts.
+    TestBed.tick();
+    const native = new LayerGroup();
+    const map = new Map({ layers: [native], view: new View({ center: [0, 0], zoom: 5 }) });
     map.setSize([1200, 800]);
     bridge.attach(map);
-    await session.capture();
-    await session.discover();
-    session.setImpactEnabled('noise', true);
-    session.setImpactEnabled('trawling', true);
-    await session.prepareImpacts();
-    await session.run();
-    const vector = (kind: string) =>
-      map
+    return { bridge, session, native, map };
+  }
+
+  it('adds nothing until activation, then hides all owned layers without changing native layers', () => {
+    const { bridge, session, native, map } = setup();
+    expect(map.getLayers().getArray()).toEqual([native]);
+    const fixture = biomassFixture();
+    session.input.set(fixture.input);
+    session.result.set(fixture);
+    TestBed.tick();
+    expect(map.getLayers().getArray()).toEqual([native]);
+    bridge.setActive(true);
+    const group = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
+    const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
+    expect(image.getSource()!.getImageExtent()).toEqual(fixture.input.grid.extent);
+    expect(image.getSource()!.getProjection()!.getCode()).toBe('EPSG:3035');
+    bridge.setActive(false);
+    expect(group.getVisible()).toBeFalse();
+    expect(native.getVisible()).toBeTrue();
+    expect(session.pausePlayback).toHaveBeenCalled();
+    expect(session.result()).toBe(fixture);
+    const fit = spyOn(map.getView(), 'fit');
+    bridge.setActive(true);
+    expect(group.getVisible()).toBeTrue();
+    expect(fit).not.toHaveBeenCalled();
+    expect(session.result()).toBe(fixture);
+    bridge.detach();
+    expect(map.getLayers().getArray()).toEqual([native]);
+    expect(session.input()).toBe(fixture.input);
+    map.dispose();
+  });
+
+  it('reacts to asynchronous input after the map attaches and the empty tab activates', () => {
+    const { bridge, session, map } = setup();
+    bridge.setActive(true);
+    TestBed.tick();
+    const fixture = biomassFixture();
+    session.input.set(fixture.input);
+    session.result.set(fixture);
+    TestBed.tick();
+    const group = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
+    expect((group.getLayers().item(0) as ImageLayer<ImageStatic>).getSource()).not.toBeNull();
+    bridge.detach();
+    map.dispose();
+  });
+
+  it('owns impact outlines in the same group and never creates the fixed wind-park layer', () => {
+    const { bridge, session, map } = setup();
+    const fixture = biomassFixture();
+    session.input.set(fixture.input);
+    session.preparedImpacts.set(impactFixture(fixture.input));
+    session.impactOutlines.set({ noise: true, trawling: true });
+    bridge.setActive(true);
+    TestBed.tick();
+    const group = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
+    for (const kind of ['noise', 'trawling']) {
+      const outline = group
         .getLayers()
         .getArray()
         .find((layer) => layer.get('id') === `mareld-${kind}-outline`) as VectorLayer<VectorSource>;
-    const group = map
-      .getLayers()
-      .getArray()
-      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
-    TestBed.tick();
-    const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
-    const imageSource = image.getSource();
-    expect(vector('noise').getVisible()).toBeFalse();
-    session.setImpactOutline('noise', true);
-    session.setImpactOutline('trawling', true);
-    TestBed.tick();
-    for (const kind of ['noise', 'trawling']) {
-      expect(vector(kind).getVisible()).toBeTrue();
-      expect(vector(kind).getZIndex()).toBe(21);
-      expect(vector(kind).getSource()!.getFeatures().length).toBe(1);
+      expect(outline.getVisible()).toBeTrue();
+      expect(outline.getSource()!.getFeatures().length).toBeGreaterThan(0);
     }
-    expect(image.getSource()).toBe(imageSource);
-    expect(api.run).toHaveBeenCalledTimes(1);
-    const snapshotFeature = vector('noise').getSource()!.getFeatures()[0];
-    session.setImpactStrength('noise', 0);
-    await session.prepareImpacts();
-    session.seekFrame(1);
-    TestBed.tick();
-    expect(vector('noise').getSource()!.getFeatures()[0]).toBe(snapshotFeature);
-    expect(session.mapImpacts().fromResult).toBeTrue();
-    session.showImpact('noise');
-    TestBed.tick();
-    expect(vector('noise').getVisible()).toBeFalse();
-    expect(vector('noise').getSource()!.getFeatures()).toEqual([]);
-    session.showImpact('noise');
-    TestBed.tick();
-    expect(vector('noise').getVisible()).toBeTrue();
-    session.setImpactOutline('noise', false);
-    TestBed.tick();
-    expect(vector('noise').getVisible()).toBeFalse();
-    expect(vector('trawling').getVisible()).toBeTrue();
-    bridge.reset();
-    TestBed.tick();
-    expect(vector('trawling').getVisible()).toBeFalse();
-    expect(vector('trawling').getSource()!.getFeatures()).toEqual([]);
-    expect(session.impactOutlines()).toEqual({ noise: false, trawling: false });
+    expect(
+      map.getAllLayers().some((layer) => layer.get('id') === 'mareld-windpark-pressure')
+    ).toBeFalse();
+    bridge.setActive(false);
+    expect(group.getVisible()).toBeFalse();
     bridge.detach();
-    expect(map.getLayers().getLength()).toBe(0);
-    map.dispose();
-  });
-
-  it('adds a separate projected layer and removes it without disturbing Symphony layers', async () => {
-    const result = biomassFixture();
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
-        {
-          provide: MareldApiClient,
-          useValue: {
-            models: async () => [{ id: 'test', name: 'Test', species: result.species }],
-            run: async () => result
-          }
-        },
-        { provide: SymphonySelectionAdapter, useValue: { capture: async () => result.input } }
-      ]
-    });
-    const session = TestBed.inject(MareldSession),
-      bridge = TestBed.inject(MareldMapBridge);
-    const native = new LayerGroup();
-    const map = new Map({ layers: [native], view: new View({ center: [0, 0], zoom: 5 }) });
-    map.setSize([1200, 800]);
-    bridge.attach(map);
-    await session.capture();
-    await session.discover();
-    await session.run();
-    TestBed.tick();
-    const group = map
-      .getLayers()
-      .getArray()
-      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
-    const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
-    expect(image.getSource()!.getProjection()!.getCode()).toBe('EPSG:3035');
-    expect(image.getSource()!.getImageExtent()).toEqual(session.input()!.grid.extent);
-    session.setOpacity(0.35);
-    TestBed.tick();
-    expect(image.getOpacity()).toBe(0.35);
-    const resultUrl = image.getSource()!.getUrl();
-    spyOn(TestBed.inject(MareldImpactData), 'load').and.resolveTo(
-      impactSourceFixture(session.input()!)
-    );
-    session.setImpactEnabled('noise', true);
-    await session.prepareImpacts();
-    session.showImpact('noise');
-    TestBed.tick();
-    expect(image.getSource()!.getUrl()).not.toBe(resultUrl);
-    expect(image.getSource()!.getImageExtent()).toEqual(session.input()!.grid.extent);
-    session.showImpact('noise');
-    TestBed.tick();
-    expect(image.getSource()!.getUrl()).toBe(resultUrl);
-    session.clearResult();
-    TestBed.tick();
-    expect(image.getSource()).toBeNull();
-    bridge.detach();
-    expect(map.getLayers().getArray()).toEqual([native]);
-    expect(session.input()).toBeNull();
-    bridge.attach(map);
-    bridge.detach();
-    expect(map.getLayers().getArray()).toEqual([native]);
-    map.dispose();
-  });
-
-  it('shows the pressure before input capture, above results, and cleans up on reset and detach', () => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
-        { provide: MareldApiClient, useValue: {} },
-        { provide: SymphonySelectionAdapter, useValue: {} }
-      ]
-    });
-    const store = TestBed.inject(MockStore);
-    const pressure = TestBed.inject(MareldPressureLayer);
-    const bridge = TestBed.inject(MareldMapBridge);
-    const native = new LayerGroup();
-    const map = new Map({ layers: [native], view: new View({ center: [0, 0], zoom: 5 }) });
-    map.setSize([1200, 800]);
-    bridge.attach(map);
-    const windpark = map
-      .getLayers()
-      .getArray()
-      .find((layer) => layer.get('id') === 'mareld-windpark-pressure') as VectorLayer<VectorSource>;
-    expect(windpark.getVisible()).toBeFalse();
-    store.overrideSelector(selectSelectedAreaData, [
-      {
-        name: pressure.feature.properties.reviewAreaName,
-        statePath: ['userArea', 1]
-      }
-    ]);
-    store.refreshState();
-    TestBed.tick();
-    expect(windpark.getVisible()).toBeTrue();
-    expect(windpark.getZIndex()).toBeGreaterThan(native.getZIndex() ?? 0);
-    const polygon = windpark.getSource()!.getFeatures()[0].getGeometry() as Polygon;
-    expect(polygon.getCoordinates()[0].length).toBe(6);
-    const corner = transform(polygon.getCoordinates()[0][0], 'EPSG:3857', 'EPSG:4326');
-    expect(corner[0]).toBeCloseTo(10.73807, 5);
-    expect(corner[1]).toBeCloseTo(58.01671, 5);
-
-    pressure.setVisible(false);
-    TestBed.tick();
-    expect(windpark.getVisible()).toBeFalse();
-    pressure.setVisible(true);
-    bridge.reset();
-    TestBed.tick();
-    expect(windpark.getVisible()).toBeFalse();
-    bridge.detach();
-    expect(map.getLayers().getArray()).toEqual([native]);
-    bridge.attach(map);
-    TestBed.tick();
-    const reattached = map
-      .getLayers()
-      .getArray()
-      .find((layer) => layer.get('id') === 'mareld-windpark-pressure');
-    expect(reattached!.getVisible()).toBeTrue();
-    bridge.detach();
-    expect(map.getLayers().getArray()).toEqual([native]);
     map.dispose();
   });
 });

@@ -1,0 +1,577 @@
+{
+  "version": "native-input-support-v1",
+  "baselineName": "HAV_2019_WEST_LOCAL",
+  "crs": "EPSG:3035",
+  "units": "relative index 0–100",
+  "sourceUnits": "historical normalized index, typically 0–1",
+  "policy": "Published finite nonnegative cells within the imported planning boundary. Fish and shipping noise use original validity. Other layers use joint positive porpoise/plankton regional support or positive original values. Regional support is a documented proxy; source values may be modelled and zeros outside support remain unknown.",
+  "historicalLimitation": "Hashes describe files at export preparation time, not independently archived calculation-time files.",
+  "sources": {
+    "ECOSYSTEM": {
+      "sha256": "50b1f59a6d7f397b0591301afca840475493a1026efe582731fcc7a34a1fc69c",
+      "supportFile": "ecosystems-support.tif",
+      "supportSha256": "5dce54487ebb86ae9572214726072a5a8ff0088ffb72b4fdda683cc45f812754"
+    },
+    "PRESSURE": {
+      "sha256": "05457c8aabbab343d3e0c6afc589eb8601e783e0f12079c37ecf7b19004dd7ff",
+      "supportFile": "pressures-support.tif",
+      "supportSha256": "4d59b0965c6cbb9a1e16805215ee18d46289715efcfa2cbee434949f4b3e55e2"
+    }
+  },
+  "layers": [
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 0,
+      "title": "Porpoise belt sea",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/01Porpoise_Beltsea.tif",
+      "sourceSha256": "39df7c8410227ddb3ffdf3d5bf82703cad6d8b7aced66917549b06ca364f97c1",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 1,
+      "title": "Porpoise north sea",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/02Porpoise_Northsea.tif",
+      "sourceSha256": "288456e7aefd4663b5fa89aaf32c26abbad8f27b99b811d4df649fc9dfd2c00b",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 2,
+      "title": "Grey seal",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/03Grey_Seals.tif",
+      "sourceSha256": "7952f19fa7d68caa87db8033613533a10cdcfcd4be15970c3e05d9b2909ad363",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 3,
+      "title": "Harbour seal",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/04Harbour_Seals.tif",
+      "sourceSha256": "8cc2e6caa0313bac86671890c13c0beb2ff4c1c45aaee0961098d3f72a5d321a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 4,
+      "title": "Mussel reef",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/05Mussel_Reefs_Total.tif",
+      "sourceSha256": "a38ea26e2077f95998054a5909deff161c37e0467729170a0d5c886b3ac72ddf",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 5,
+      "title": "Deep reef",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/06Deep_Reef.tif",
+      "sourceSha256": "49e7fba695d52b2da2bc424447742a4cc70452b78e7decb36b9d78a1193065ca",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 6,
+      "title": "Haploops reef",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/07Haploops_Reef.tif",
+      "sourceSha256": "d871ea742e6d14d10262389c381efa028f481c470e1379efed8aecbeb3fc8e23",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 7,
+      "title": "Artificial reef",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/08Artificial_Reefs_Total.tif",
+      "sourceSha256": "1edfe756c36a48b83f640d2255b4032d2075903b40e4e5616ecfc7ed0a61fdfb",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 8,
+      "title": "Plankton pelagic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/09Plankton_Community.tif",
+      "sourceSha256": "2bd4c86f9c074ff62389c5d8b8844ea74fdd1fa2aa1c017a4cb08a32ecc7191c",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 9,
+      "title": "Hard bottom photic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/10Hardbottom_Photic.tif",
+      "sourceSha256": "6ad90dabd8bb8decbc82021778bad21dca9044941515bd13693ab8268328f6eb",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 10,
+      "title": "Hard bottom aphotic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/11Hardbottom_Aphotic.tif",
+      "sourceSha256": "1a873e646431e36414dba1b05db20dbdf30186e97876bbaae2f8eb819be1bc8b",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 11,
+      "title": "Hard bottom deep",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/12Hardbottom_Deep.tif",
+      "sourceSha256": "8d587fc1e3ef3effe0bcb327f9000e94a29b3c9a9c475a06c7601e16c9dd878c",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 12,
+      "title": "Transport bottom photic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/13Transportbottom_Photic.tif",
+      "sourceSha256": "1bb4e554bba34749fb9d7c6bb22e6a218cecba9f77536c94668c8639ba3163da",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 13,
+      "title": "Transport bottom aphotic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/14Transportbottom_Aphotic.tif",
+      "sourceSha256": "ba58ad276d88943e162d68de49d1bc7451512beff04b9e1caa8884c5b2bba293",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 14,
+      "title": "Transport bottom deep",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/15Transportbottom_Deep.tif",
+      "sourceSha256": "517eafbb80e33b9477b4326c94b7061dd3dc1e82b826738782d25698c7efde9f",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 15,
+      "title": "Soft bottom photic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/16Softbottom_Photic.tif",
+      "sourceSha256": "d61e909e54d011b7c1fefc0f8b5f41aaa36a831ebb62f6d77e902c8c02c9420e",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 16,
+      "title": "Soft bottom aphotic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/17Softbottom_Aphotic.tif",
+      "sourceSha256": "e65b395ede83c79b0ead74bc5cd129f450ceeed17b76c7c8d4abc17cba940d4a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 17,
+      "title": "Soft bottom deep",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/18Softbottom_Deep.tif",
+      "sourceSha256": "88beb18252985951df0eea0fa46662162fe696f5c80d4ad7c8e66766f792171c",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 18,
+      "title": "Shoreline",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/19Shoreline_Complexity.tif",
+      "sourceSha256": "47d38e98b3f97bc6eaefd6001066f48e09fb824ae26de77062e22060ef5b80f8",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 19,
+      "title": "Angiosperms",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/20Angiosperms.tif",
+      "sourceSha256": "7da90de8f2448459212077b50350fe38822fa8215c1a771275b367ac434f4956",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 20,
+      "title": "Cod",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/21torsk_lognorm_v2.tif",
+      "sourceSha256": "e603b7530247c96a44866fa9698bee881e4eaff38943b9b7798e5a649ff9e9b7",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 21,
+      "title": "Herring",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/22sill_lognorm_v2.tif",
+      "sourceSha256": "725aa58cd92e8727feb0eee066e9dd565f5e31ca177036fdcc80ee5ddc135166",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 22,
+      "title": "Sprat",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/23skarpsill_lognorm_v2.tif",
+      "sourceSha256": "88ffdab19037bf431006be448b8f3399ae6b7123b164faf788d84592be1f9c3d",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 23,
+      "title": "Fish spawning",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/24Spawning_Areas_Commercial_Fish.tif",
+      "sourceSha256": "842bcced4da13474d0928ba239a144168ee435f30e5cb8a37c2f76409702d24e",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 24,
+      "title": "Rivermouth fish",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/25Rivermouth_Fish.tif",
+      "sourceSha256": "45678ef9f10f6defcf2a81c1f64d340665525650770ad450e34bb59a02643507",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 25,
+      "title": "Eel migration",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/26Eel_Migration.tif",
+      "sourceSha256": "a63913d5716fcc2927be6ecf8e4cc7e1cf5d5e163ecfdb8de6f1b79c97f24d44",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 26,
+      "title": "Coastal birds",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/27Birds_Coastal.tif",
+      "sourceSha256": "b154cd1b75557c8a9aa8d03655c3b94e6f97551bf8449eedb3ff479252e593ac",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 27,
+      "title": "Seabird coastal wintering",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/28Seabird_Winter_Coastal.tif",
+      "sourceSha256": "fa6db17a48251a91f927764ba70f0c2ba772968d0100984130768be61d47acdc",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 28,
+      "title": "Seabird offshore wintering",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/29Seabird_Winter_Offshore.tif",
+      "sourceSha256": "98e09b2b4a05834374d7f45e2b37bd140f8428fb295a979837b5e9d9ecbfebe8",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 29,
+      "title": "Rough bottom photic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/30Komplexitet_Fotisk_v2_250m-normhårdbotten.tif",
+      "sourceSha256": "c57974e3a225606acf48fd07a716bf275919ae1c3f3cef8211130307fb6544bf",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 30,
+      "title": "Rough bottom aphotic",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/31Komplexitet_AfotiskMixad_v2_250m-normhårdbotten.tif",
+      "sourceSha256": "1b70a2b0f0eaab0b65d9afeff5f6b70c99d00a9b1b57e28c4e84309383cf4e3a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "ECOSYSTEM",
+      "bandNumber": 31,
+      "title": "Rough bottom deep",
+      "sourcePath": "regional/vasterhavet/National_eco_W_2018/32Komplexitet_Djup_v2_250m-normhårdbotten.tif",
+      "sourceSha256": "207881db8296b2aa26bf93a6466e09d6faa98adca448830aaf87f968c196c07c",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 0,
+      "title": "Bird hunt",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/01Birdhunt.tif",
+      "sourceSha256": "e67b9730a95ebde1ee1215fb0bd75933e89a850c5997926c0b189d953a0d2935",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 1,
+      "title": "Catch gillnet",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/02Catch_Gillnet.tif",
+      "sourceSha256": "14a8fbee5077fbb1659cb498f9d92b2ca170cf1d6f2f885b28ad431a43330363",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 2,
+      "title": "Catch pelagic trawl",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/03Catch_Pelagic_trawl.tif",
+      "sourceSha256": "ba2255914b6f7ac6a2272432981367125383e899d7c7a46f9be2910e7146ae9c",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 3,
+      "title": "Catch bottom trawl",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/04Catch_Bottom_trawl.tif",
+      "sourceSha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 4,
+      "title": "Turbidity bottom trawl",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/05Catch_Bottom_trawlCopy.tif",
+      "sourceSha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 5,
+      "title": "Turbidity shipping",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/06Turbidity_Shipping.tif",
+      "sourceSha256": "389093746d5b949173b8c79dfc31c611143890c72cb785425c94773dcc7074e5",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 6,
+      "title": "Turbidity sand extraction",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/07Turbidity_Mining.tif",
+      "sourceSha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 7,
+      "title": "Abrasion bottom trawl",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/08Abrasion_Bottomtrawl.tif",
+      "sourceSha256": "2dc0d0c3ce0d10f86043f75f85d41912aab87c2f65ededcd15a386dd808810ce",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 8,
+      "title": "Habitat loss dumping",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/09Habitatloss_Dumping.tif",
+      "sourceSha256": "8b39d8bbc6ce122639125ac55b364c945becc04b54787af2c9f8986dff9169ab",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 9,
+      "title": "Habitat loss mussel farm",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/10Habitatloss_Musselfarming.tif",
+      "sourceSha256": "91ab9c383379bee534cef97b0c6a56d265c8380ff96486c5fae6ed95badfe050",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 10,
+      "title": "Habitat loss coastal exploitation",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/11Habitatloss_Coastal_Exploitation.tif",
+      "sourceSha256": "e461d08ebe59d8a52ed490d7a14b4cbc2a0de7fa5e87a25ad36f3c72dbaae82a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 11,
+      "title": "Habitat loss infrastructure",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/12Infrastructure.tif",
+      "sourceSha256": "df8428c6d0bdc40d67f22a27813e780331265d02ab953f4858d060a5c50924c9",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 12,
+      "title": "Habitat loss sand extraction",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/13Turbidity_MiningCopy.tif",
+      "sourceSha256": "c2c157de31d7f9863eda0b06cdf5dc8d9ac205e5484d96a3b8a68283d3041f22",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 13,
+      "title": "Noise 125Hz shipping",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/14Noise_125Hz_Shipping_20181122.tif",
+      "sourceSha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 14,
+      "title": "Noise 125Hz wind power",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/15Noise_125Hz_Windpower.tif",
+      "sourceSha256": "a4eba6372ed3989e64d8badb403a3b7dab366061e6b8ed559132301e4166dcad",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 15,
+      "title": "Noise 2000Hz shipping",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/16Noise_2000Hz_Shipping_20181122.tif",
+      "sourceSha256": "99e6ea0fd4d57d90727aa4b18049348cba24b7eda965a78155f32b778fc8f223",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 16,
+      "title": "Noise boating",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/17Boating.tif",
+      "sourceSha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 17,
+      "title": "Explosions peak",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/18Explosions_PM.tif",
+      "sourceSha256": "667b0ac1aa4a0d15718fad4db4c2984ac2f92568009013239b4f30fc18b4f8ec",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 18,
+      "title": "Explosions SEL",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/19Explosions_SPL.tif",
+      "sourceSha256": "6dde963590205fda0baf6022dc844b0c3cd679ef07d24c257ea6a187bb758664",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 19,
+      "title": "Oilspill shipping",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/20Oilspill_2knots_Shipping.tif",
+      "sourceSha256": "c7a86fee7559c60e3c874560f1fc614061144cf811e7c1d8c5a3cb047be486ea",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 20,
+      "title": "Oilspill wreck",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/21Oilspill_2knots_Wreck.tif",
+      "sourceSha256": "c7c518e35194387c076f10adc7ef6795a37c723a3ed0d7b8cf21eba5d90ed97d",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 21,
+      "title": "Heavy metals background",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/22Tox_Metal_Background.tif",
+      "sourceSha256": "c4662df8250e7ba7791de9c2acef5b31cc0d56b12d4b19e7dcc03dc20e6834e7",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 22,
+      "title": "Heavy metals military area",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/23Tox_Metal_Military.tif",
+      "sourceSha256": "41d0ef286d0f51a403552f645e24d84f453517a9d139d0500e32307f57c809ee",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 23,
+      "title": "Heavy metals mine dump",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/24Tox_Mine_Risk.tif",
+      "sourceSha256": "be3920e2679aefca15a390d0733217f02b3f464320293f8e136711f2e2670123",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 24,
+      "title": "Toxic munition dump",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/25Tox_Munition.tif",
+      "sourceSha256": "6be368b23471fa1e8d8a6f058cf606ba1cf707b0705b8e2d7b74be7b311781b3",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 25,
+      "title": "Synthetic toxins background",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/26Tox_Synthetic_Background.tif",
+      "sourceSha256": "ded78651f29147032eaa1f9c43ca8affa886cd9e98e04777b0272a8e0f21e268",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 26,
+      "title": "Synthetic toxins harbor",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/27Tox_Synthetic_Harbor.tif",
+      "sourceSha256": "2f3ea06608ff9ce38ed6d39d1d5b73a063f3874d681d7c49f09c8418be049978",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 27,
+      "title": "Synthetic toxins industry",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/28Tox_Synthetic_Industry.tif",
+      "sourceSha256": "884f82b022a19c1842af03c195006d44ded204e232d73f7982c653e5f29fb36e",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 28,
+      "title": "Synthetic toxins treatment plant",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/29Tox_Synthetic_Treatmentplants.tif",
+      "sourceSha256": "0c789f071647521925ea32acb5f208e7adf365174855aa8ec6fe59ded9cd00b3",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 29,
+      "title": "Pollution boating",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/30BoatingCopy.tif",
+      "sourceSha256": "3724e7670ba8eb5957245d8cf9853f940ba8b68e19bc1f36e94ef1a9f8c4448a",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 30,
+      "title": "Nitrogen background",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/31Nitrogen_Background.tif",
+      "sourceSha256": "1e4a3eab5ad059c019b444a1cb891023bf993d22788489c213eef650238caa35",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 31,
+      "title": "Phosphorous background",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/32Phosphorous_Background.tif",
+      "sourceSha256": "62f0e15f6e9d36955dfb167263c165e12131cea25ab3d881538efdf133ed29f6",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 32,
+      "title": "Anoxia background",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/33Anoxia_Background.tif",
+      "sourceSha256": "2c6d2df5014ed1dda8841bd1e191ee206bf64bdac5ec75acc1fc4d0b8deb47e8",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 33,
+      "title": "Electromagnetic field",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/34EMF.tif",
+      "sourceSha256": "a329ce2062b1bb59321583c28ce7ebcc019443bb1bae6eee7fb63725885c3a78",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 34,
+      "title": "Climate change temperature",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/35TempIncrease_Summer_2050.tif",
+      "sourceSha256": "2e5bb9f0a2b56f7b26b8c7bf1197a113d66a429ab968d9f24a8ceb78b75609b5",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 35,
+      "title": "Climate change acidification",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/36OA_2050.tif",
+      "sourceSha256": "fdee06fee1848adecae92c02e481305a30b7a395927d3a7b780993680723ea05",
+      "units": "relative index 0–100"
+    },
+    {
+      "category": "PRESSURE",
+      "bandNumber": 36,
+      "title": "Disturbance wind power",
+      "sourcePath": "regional/vasterhavet/National_press_W_2018/37Avoidance_Windpower.tif",
+      "sourceSha256": "32d3938bc0b5bec192572d6e1ba47750847104b8eddbb5751bac1468995d061a",
+      "units": "relative index 0–100"
+    }
+  ],
+  "domainFile": "calculation-domain.tif",
+  "domainSha256": "30e64ef5de578fa5635e4d59184604ee293e00d3e2be7c7c9b1e5a65bc7351dd"
+}

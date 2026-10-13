@@ -238,7 +238,8 @@
     padding: 0;
     box-shadow: none;
     width: 210mm;
-    height: 297mm;
+    min-height: 297mm;
+    height: auto;
 
       app-highest-impacts {
         position: relative;

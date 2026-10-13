@@ -33,13 +33,15 @@ with special emphasis on the building and comparison of different scenarios. Thi
 - Compare two scenario analyses result side-by-side, including relative differences in graphical and tabular form 
 - Ability to make use of user-drawn custom polygons, or upload a polygon definition created in another GIS tool
 
-## Local MARELD proof of concept
+## Optional EcoTwin simulation
 
-The optional **MARELD** sidebar captures Symphony map areas and displays ecosystem biomass
-frames on the existing map. All simulations use the live Eco-evo API at
-`http://localhost:8000` by default. It is enabled in development
-and disabled in production.
-See the [review and startup guide](docs/MARELD-POC.md) for usage, verification, limitations and removal.
+The **EcoTwin** tab runs an optional ecosystem simulation for a completed saved
+Symphony calculation. Normal scenario editing and calculation stay unchanged.
+Successful runs are stored separately and appear automatically as appendices in
+the calculation report, including after refresh and in print.
+
+See the [review and startup guide](docs/MARELD-POC.md) for the Poseidon fixture,
+database migration, supported inputs and experimental model assumptions.
 
 ## Architectural overview
 

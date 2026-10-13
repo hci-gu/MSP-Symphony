@@ -5,8 +5,6 @@ import { FormBuilder, FormsModule } from '@angular/forms';
 import { MainViewComponent } from './main-view.component';
 import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
 import { MareldApiClient } from '../features/mareld-poc/mareld-api.client';
-import { MareldLayersComponent } from '../features/mareld-layers/mareld-layers.component';
-import { MareldLayerLegendComponent } from '../features/mareld-layers/mareld-layer-legend.component';
 import { environment } from '@src/environments/environment';
 import { SharedModule } from '@shared/shared.module';
 import { MapComponent } from './map/map.component';
@@ -55,8 +53,6 @@ describe('MainViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        MareldLayersComponent,
-        MareldLayerLegendComponent,
         MareldPocModule,
         SharedModule,
         CoreModule,
@@ -121,6 +117,17 @@ describe('MainViewComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('keeps simulation services dormant and removes supplemental content from native tabs', () => {
+    const api = TestBed.inject(MareldApiClient);
+    const discover = spyOn(api, 'models').and.callThrough();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-mareld-panel')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-mareld-layers')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-mareld-pressure-layer')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-mareld-layer-legend')).toBeNull();
+    expect(discover).not.toHaveBeenCalled();
   });
 
   it('omits the MARELD tab when the feature is disabled', () => {

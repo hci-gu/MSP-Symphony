@@ -29,6 +29,7 @@ export class CalculationReportComponent extends AbstractReport<Report> {
   private readonly reportService = inject(ReportService);
 
   area?: number;
+  calculationId?: number;
   areaDict: Map<number, string> = new Map<number, string>();
   isDomainNormalization = false;
 
@@ -42,6 +43,7 @@ export class CalculationReportComponent extends AbstractReport<Report> {
         switchMap((paramMap: ParamMap) => of(paramMap.get('calcId'))),
         filter((calcId) => calcId !== null),
         tap((calcId) => {
+          this.calculationId = +calcId!;
           this.imageUrl = `${env.apiBaseUrl}/calculation/${calcId}/image`;
           reportService.getReport(calcId as string).subscribe({
             next: (report) => {

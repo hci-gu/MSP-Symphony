@@ -1,4 +1,3 @@
-import type { LayerRaster } from '../mareld-layers/mareld-layer-data';
 import type { PreparedInput } from './mareld-input';
 
 export type ImpactKind = 'noise' | 'trawling';
@@ -14,12 +13,6 @@ export function defaultImpactSettings(): ImpactSettings {
   return { noise: { enabled: false, strength: 1 }, trawling: { enabled: false, strength: 1 } };
 }
 
-export interface ImpactSource {
-  grid: PreparedInput['grid'];
-  raster: LayerRaster;
-  file: string;
-  sha256: string;
-}
 export interface ImpactBand {
   id: string;
   level: number;
@@ -43,7 +36,7 @@ export interface PreparedImpact {
 export interface PreparedImpacts {
   id: string;
   inputId: string;
-  version: 'symphony-demo-impacts-v1';
+  version: 'hav-west-native-v1';
   settings: ImpactSettings;
   layers: PreparedImpact[];
 }
@@ -62,92 +55,6 @@ export function impactIntensity(kind: ImpactKind, level: number, strength: numbe
   return kind === 'noise'
     ? Math.min(140, 60 + 60 * fraction * strength)
     : 0.2 * fraction * strength;
-}
-
-/** Area-weighted mean over each entire target cell. Unknown area contributes zero.
- * Both shipped inputs are relative indices, so arithmetic aggregation is intentional.
- * Rows run north to south. Polygon access is already captured in input.water.
- */
-export function prepareImpact(
-  input: PreparedInput,
-  kind: ImpactKind,
-  strength: number,
-  source: ImpactSource
-): PreparedImpact {
-  if (!Number.isFinite(strength) || strength < 0 || strength > 2)
-    throw new Error('Choose an impact strength between 0 and 2.');
-  const target = input.grid,
-    grid = source.grid;
-  if (grid.crs !== target.crs) throw new Error('Impact data must use the simulation projection.');
-  const values = new Float32Array(input.water.length);
-  const masks = new Map<number, Uint8Array>();
-  let knownArea = 0,
-    affectedCells = 0;
-  for (let row = 0; row < target.height; row++) {
-    const top = target.extent[3] - row * target.cellMetres;
-    const bottom = top - target.cellMetres;
-    for (let col = 0; col < target.width; col++) {
-      const i = row * target.width + col;
-      if (!input.water[i]) continue;
-      const left = target.extent[0] + col * target.cellMetres;
-      const right = left + target.cellMetres;
-      const r0 = Math.max(0, Math.floor((grid.extent[3] - top) / grid.cellMetres));
-      const r1 = Math.min(grid.height, Math.ceil((grid.extent[3] - bottom) / grid.cellMetres));
-      const c0 = Math.max(0, Math.floor((left - grid.extent[0]) / grid.cellMetres));
-      const c1 = Math.min(grid.width, Math.ceil((right - grid.extent[0]) / grid.cellMetres));
-      let weighted = 0;
-      for (let r = r0; r < r1; r++) {
-        const sourceTop = grid.extent[3] - r * grid.cellMetres;
-        const dy = Math.max(
-          0,
-          Math.min(top, sourceTop) - Math.max(bottom, sourceTop - grid.cellMetres)
-        );
-        for (let c = c0; c < c1; c++) {
-          const j = r * grid.width + c;
-          // Use original/recovered source only; never inferred values.
-          if (![1, 2].includes(source.raster.provenance[j])) continue;
-          const sourceLeft = grid.extent[0] + c * grid.cellMetres;
-          const dx = Math.max(
-            0,
-            Math.min(right, sourceLeft + grid.cellMetres) - Math.max(left, sourceLeft)
-          );
-          const area = dx * dy;
-          weighted += source.raster.values[j] * area;
-          knownArea += area;
-        }
-      }
-      const mean = weighted / target.cellMetres ** 2;
-      // Keep exact zeros; positive values have at least the first nonzero band.
-      const level =
-        mean > 0 && strength > 0
-          ? Math.max(1, Math.min(IMPACT_BANDS, Math.round((mean / 100) * IMPACT_BANDS)))
-          : 0;
-      if (!level) continue;
-      values[i] = impactIntensity(kind, level, strength);
-      if (!masks.has(level)) masks.set(level, new Uint8Array(values.length));
-      masks.get(level)![i] = 1;
-      affectedCells++;
-    }
-  }
-  return {
-    kind,
-    sourceId: IMPACT_DEFINITIONS[kind].sourceId,
-    sourceFile: source.file,
-    sourceSha256: source.sha256,
-    sourceGrid: { ...grid, extent: [...grid.extent] },
-    strength,
-    coverage: Math.min(1, knownArea / (input.waterCells * target.cellMetres ** 2)),
-    affectedCells,
-    values,
-    bands: [...masks]
-      .sort(([a], [b]) => a - b)
-      .map(([level, mask]) => ({
-        id: `${kind}-${level.toString().padStart(2, '0')}`,
-        level,
-        intensity: impactIntensity(kind, level, strength),
-        mask
-      }))
-  };
 }
 
 export function impactRequest(

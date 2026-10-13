@@ -1,8 +1,9 @@
+import { exampleArea } from './testing/example-area.fixture';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MareldApiClient, apiError } from './mareld-api.client';
-import { exampleArea, prepareInput } from './mareld-input';
+import { prepareInput } from './mareld-input';
 import { impactFixture } from './testing/impact.fixture';
 
 describe('MARELD multipart API contract', () => {
@@ -154,12 +155,12 @@ describe('MARELD multipart API contract', () => {
     expect(json.pressures.map((p: { id: string }) => p.id)).toEqual([
       'noise-reset',
       'trawling-reset',
-      'noise-08',
-      'trawling-08'
+      'trawling-08',
+      'noise-08'
     ]);
     expect(
       json.pressures.map((p: { parameters: { intensity: number } }) => p.parameters.intensity)
-    ).toEqual([0, 0, 90, 0.1]);
+    ).toEqual([0, 0, 0.1, 90]);
     const files = form.getAll('mask') as File[];
     expect(files.length).toBe(2);
     for (const file of files) {
@@ -222,7 +223,7 @@ describe('MARELD multipart API contract', () => {
       });
     expect(
       apiError(error('Missing uploaded mask file referenced by request: noise-08.png'))
-    ).toContain('server needs the Symphony demo impact setup');
+    ).toContain('Start the model server with the Symphony impact configuration');
     expect(apiError(error('Missing required file field: texture'))).toContain('texture');
   });
 

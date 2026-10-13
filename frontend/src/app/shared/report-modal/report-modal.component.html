@@ -13,7 +13,7 @@
   <button mat-flat-button (click)="downloadGeotiff()" [ngClass]="'secondary'">
     {{ 'report.toolbar.export-geotiff' | translate }}
   </button>
-  <button mat-flat-button (click)="print()">
+  <button mat-flat-button (click)="print()" [disabled]="!printReady">
     {{ 'report.toolbar.print' | translate }}
   </button>
 </div>

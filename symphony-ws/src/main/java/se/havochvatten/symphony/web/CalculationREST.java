@@ -219,12 +219,14 @@ public class CalculationREST {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Gets all previous computations for the user")
     @RolesAllowed("GRP_SYMPHONY")
-    public List<CalculationResultSlice> getAllCalculations(@Context HttpServletRequest req)
+    public List<CalculationResultSlice> getAllCalculations(@Context HttpServletRequest req,
+                                                          @DefaultValue("false") @QueryParam("all-baselines") boolean allBaselines)
             throws SymphonyStandardAppException, IOException {
         if (req.getUserPrincipal() == null)
             throw new NotAuthorizedException(noPrincipalStr);
         else
-            return calcService.findAllByUser(req.getUserPrincipal());
+            return allBaselines ? calcService.findAllBaselinesByUser(req.getUserPrincipal()) :
+                calcService.findAllByUser(req.getUserPrincipal());
     }
 
     @GET
