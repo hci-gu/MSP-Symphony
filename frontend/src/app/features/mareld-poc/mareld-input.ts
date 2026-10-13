@@ -3,6 +3,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import type { Polygon as OlPolygon, MultiPolygon as OlMultiPolygon } from 'ol/geom';
 import { transform } from 'ol/proj';
 import { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
+import type { PreparedImpacts } from './mareld-impacts';
 export { GRID_CRS, registerGridProjection } from '../mareld-shared/map-raster';
 
 export const CELL_METRES = 1000;
@@ -22,6 +23,8 @@ export interface PreparedInput {
   /** Row zero is the northern row. One means accessible synthetic water. */
   water: Uint8Array;
   waterCells: number;
+  /** Immutable-by-convention snapshot of the demo inputs submitted with this run. */
+  impacts?: PreparedImpacts;
 }
 
 export function prepareInput(feature: StudyArea, name: string): PreparedInput {

@@ -4,15 +4,21 @@ import { MareldSession } from './mareld-session.service';
 import { MareldModel, MareldResult } from './mareld-result';
 import { SymphonySelectionAdapter } from './symphony-selection.adapter';
 import { biomassFixture } from './testing/biomass.fixture';
+import { MareldImpactData } from './mareld-impact-data.service';
+import { impactSourceFixture } from './testing/impact.fixture';
+import { ImpactSource } from './mareld-impacts';
 
 describe('MARELD session lifecycle', () => {
   let session: MareldSession;
   let api: jasmine.SpyObj<MareldApiClient>;
+  let impactData: jasmine.SpyObj<MareldImpactData>;
   beforeEach(() => {
     api = jasmine.createSpyObj('API', ['models', 'run']);
+    impactData = jasmine.createSpyObj('Impact data', ['load']);
     TestBed.configureTestingModule({
       providers: [
         { provide: MareldApiClient, useValue: api },
+        { provide: MareldImpactData, useValue: impactData },
         {
           provide: SymphonySelectionAdapter,
           useValue: { capture: () => Promise.reject(new Error('Select one area')) }
@@ -110,6 +116,61 @@ describe('MARELD session lifecycle', () => {
     await pending;
     expect(session.modelId()).toBe('new');
     expect(session.models().map((model) => model.id)).toEqual(['new']);
+  });
+
+  it('waits for impact preparation, captures both inputs, and keeps past run settings', async () => {
+    session.useExample();
+    impactData.load.and.resolveTo(impactSourceFixture(session.input()!));
+    api.models.and.resolveTo([{ id: 'test', name: 'Test', species: ['codfish'] }]);
+    api.run.and.callFake(async (input) => ({ ...biomassFixture(), input }));
+    await session.discover();
+    session.setImpactEnabled('noise', true);
+    session.setImpactEnabled('trawling', true);
+    expect(session.canRun()).toBeFalse();
+    await session.prepareImpacts();
+    expect(session.canRun()).toBeTrue();
+    session.showImpact('noise');
+    await session.run();
+    expect(session.previewImpact()).toBeNull();
+    const snapshot = session.result()!.input.impacts!;
+    expect(snapshot.layers.map((layer) => layer.kind)).toEqual(['noise', 'trawling']);
+    session.setImpactStrength('noise', 2);
+    await session.prepareImpacts();
+    expect(snapshot.settings.noise.strength).toBe(1);
+    expect(session.preparedImpacts()!.settings.noise.strength).toBe(2);
+  });
+
+  it('discards late impact loads after resetting or changing areas', async () => {
+    session.useExample();
+    const source = impactSourceFixture(session.input()!);
+    let resolve!: (value: ImpactSource) => void;
+    impactData.load.and.returnValue(new Promise((r) => (resolve = r)));
+    session.setImpactEnabled('noise', true);
+    const pending = session.prepareImpacts();
+    session.reset();
+    resolve(source);
+    await pending;
+    expect(session.preparedImpacts()).toBeNull();
+    expect(session.preparingImpacts()).toBeFalse();
+    expect(session.impactsEnabled()).toBeFalse();
+  });
+
+  it('blocks an enabled input without coverage and recovers when disabled', async () => {
+    session.useExample();
+    const source = impactSourceFixture(session.input()!);
+    source.raster.provenance.fill(0);
+    source.raster.values.fill(NaN);
+    impactData.load.and.resolveTo(source);
+    api.models.and.resolveTo([{ id: 'test', name: 'Test', species: ['codfish'] }]);
+    await session.discover();
+    session.setImpactEnabled('noise', true);
+    await session.prepareImpacts();
+    expect(session.impactError()).toContain('No shipping noise source data');
+    expect(session.canRun()).toBeFalse();
+    await session.run();
+    expect(api.run).not.toHaveBeenCalled();
+    session.setImpactEnabled('noise', false);
+    expect(session.canRun()).toBeTrue();
   });
 
   describe('simulation replay', () => {

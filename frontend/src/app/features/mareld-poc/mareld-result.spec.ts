@@ -42,7 +42,7 @@ describe('MARELD API result boundary', () => {
     expect(Array.from(result.values)).toEqual(f.values);
     expect(result.maxima).toEqual([58, 59]);
     expect(Array.from(framePixels(result, 1, 1).slice(14 * 4, 15 * 4))).toEqual([
-      245, 221, 108, 255
+      255, 235, 80, 255
     ]);
     expect(framePixels(result, 0, 0)[3]).toBe(255); // Zero biomass remains visible.
     expect(framePixels(result, 0, 0)[7]).toBe(0); // Excluded cells remain transparent.

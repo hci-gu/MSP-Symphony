@@ -38,8 +38,8 @@
       </div>
     }
     <div class="notice">
-      Synthetic domain: the selected shape acts as enclosed water. Coastlines, depth and
-      environmental layers are not connected.
+      Synthetic domain: the selected shape acts as enclosed water. Coastlines and depth are not
+      connected. Optional noise and trawling inputs are configured below.
     </div>
   </section>
 
@@ -73,13 +73,21 @@
       </button>
     }
     <p class="hint">
-      Choose the Eco-evo model to use for your area. Current model settings are experimental;
-      pressure effects are not included.
+      Choose the Eco-evo model to use for your area. Model settings and demo impact strengths are
+      experimental.
     </p>
   </section>
 
+  <section aria-labelledby="mareld-impacts-heading">
+    <h3 id="mareld-impacts-heading"><span class="step">3</span> Demo impacts</h3>
+    <app-mareld-impact-controls />
+    @if (!session.result()) {
+      <app-mareld-impact-outlines />
+    }
+  </section>
+
   <section aria-labelledby="mareld-run-heading">
-    <h3 id="mareld-run-heading"><span class="step">3</span> Simulation</h3>
+    <h3 id="mareld-run-heading"><span class="step">4</span> Simulation</h3>
     <div class="run-settings">
       <label for="mareld-steps">Simulation steps</label>
       <input
@@ -121,6 +129,21 @@
       <h3 id="mareld-result-heading">Explore the result</h3>
       <span class="source-badge">LIVE MODEL RESULT</span>
       <p class="hint">{{ result.input.name }} · {{ result.model }}</p>
+      <div class="notice">
+        Inputs used for this result:
+        @if (result.input.impacts; as impacts) {
+          @for (layer of impacts.layers; track layer.kind) {
+            <div>
+              {{ layer.kind === 'noise' ? 'Shipping noise' : 'Bottom trawling' }} ·
+              {{ layer.strength | number: '1.1-1' }}× · {{ layer.affectedCells }} cells
+            </div>
+          }
+        } @else {
+          no added impacts.
+        }
+        <div>Changes to the controls apply to the next run.</div>
+      </div>
+      <app-mareld-impact-outlines />
       <label for="mareld-species">Species</label>
       <select
         id="mareld-species"

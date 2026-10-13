@@ -31,7 +31,7 @@ export class MareldLayers {
     scope: 'square' as LayerScope,
     opacity: 0.85,
     showProvenance: false,
-    hatch: true
+    hatch: false
   });
   readonly variant = computed(() => this.display().variant);
   readonly effectiveVariant = computed<LayerVariant>(() =>

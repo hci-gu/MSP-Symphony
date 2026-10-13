@@ -3,6 +3,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { MareldApiClient, apiError } from './mareld-api.client';
 import { exampleArea, prepareInput } from './mareld-input';
+import { impactFixture } from './testing/impact.fixture';
 
 describe('MARELD multipart API contract', () => {
   let client: MareldApiClient;
@@ -58,7 +59,7 @@ describe('MARELD multipart API contract', () => {
     });
     const pending = client.run(input, model, 5000, new AbortController().signal);
     await encoded;
-    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve, 0));
     const request = http.expectOne('/mareld-api/v1/runs');
     expect(request.request.method).toBe('POST');
     expect(request.request.headers.has('Content-Type')).toBeFalse(); // Browser supplies multipart boundary.
@@ -116,10 +117,113 @@ describe('MARELD multipart API contract', () => {
     http.expectNone('/mareld-api/v1/runs');
   });
 
+  it('uploads both pressure fields as referenced binary PNG masks and retains the input snapshot', async () => {
+    const input = prepareInput(exampleArea(), 'Impacts');
+    input.water[0] = 0;
+    input.waterCells--;
+    input.impacts = impactFixture(input);
+    const original = HTMLCanvasElement.prototype.toBlob;
+    let encodedCount = 0;
+    const encoded = new Promise<void>((resolve) => {
+      spyOn(HTMLCanvasElement.prototype, 'toBlob').and.callFake(function (
+        this: HTMLCanvasElement,
+        callback,
+        type
+      ) {
+        original.call(
+          this,
+          (blob) => {
+            callback(blob);
+            if (++encodedCount === 4) resolve();
+          },
+          type
+        );
+      });
+    });
+    const pending = client.run(
+      input,
+      { id: 'demo', name: 'Demo', species: ['porpoises'] },
+      4,
+      new AbortController().signal
+    );
+    await encoded;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const request = http.expectOne('/mareld-api/v1/runs');
+    const form = request.request.body as FormData;
+    const json = JSON.parse(form.get('request') as string);
+    expect(json.pressures.map((p: { id: string }) => p.id)).toEqual([
+      'noise-reset',
+      'trawling-reset',
+      'noise-08',
+      'trawling-08'
+    ]);
+    expect(
+      json.pressures.map((p: { parameters: { intensity: number } }) => p.parameters.intensity)
+    ).toEqual([0, 0, 90, 0.1]);
+    const files = form.getAll('mask') as File[];
+    expect(files.length).toBe(2);
+    for (const file of files) {
+      expect(json.masks).toContain({ id: file.name.replace('.png', ''), file: file.name });
+      const bitmap = await createImageBitmap(file);
+      expect([bitmap.width, bitmap.height]).toEqual([60, 60]);
+      const canvas = document.createElement('canvas');
+      canvas.width = 60;
+      canvas.height = 60;
+      const context = canvas.getContext('2d')!;
+      context.drawImage(bitmap, 0, 0);
+      const pixels = context.getImageData(0, 0, 60, 60).data;
+      expect(Array.from(pixels.slice(0, 8))).toEqual([0, 0, 0, 255, 255, 255, 255, 255]);
+      expect(Array.from(pixels).every((v) => v === 0 || v === 255)).toBeTrue();
+      bitmap.close();
+    }
+    request.flush(
+      JSON.stringify({
+        status: 'completed',
+        run_id: json.run_id,
+        result: {
+          dtype: 'float32',
+          shape: [2, 60, 60, 1],
+          species: ['porpoises'],
+          steps: [0, 4],
+          biomass_b64: btoa('\0'.repeat(2 * 3600 * 4))
+        }
+      })
+    );
+    const result = await pending;
+    expect(result.input.impacts).toBe(input.impacts);
+  });
+
+  it('rejects impact maps prepared for a different captured area before uploading', async () => {
+    const input = prepareInput(exampleArea(), 'Example');
+    input.impacts = impactFixture(input);
+    input.impacts.inputId = 'old-area';
+    await expectAsync(
+      client.run(
+        input,
+        { id: 'demo', name: 'Demo', species: ['porpoises'] },
+        4,
+        new AbortController().signal
+      )
+    ).toBeRejectedWithError(/different area/);
+    http.expectNone('/mareld-api/v1/runs');
+  });
+
   it('does not imply a timed out model has stopped', () => {
     const error = new Error();
     error.name = 'TimeoutError';
     expect(apiError(error)).toContain('may still be computing');
+  });
+
+  it('explains the existing server mask-parser limitation without hiding other missing files', () => {
+    const error = (message: string) =>
+      new HttpErrorResponse({
+        status: 400,
+        error: JSON.stringify({ error: 'MISSING_FILE', message })
+      });
+    expect(
+      apiError(error('Missing uploaded mask file referenced by request: noise-08.png'))
+    ).toContain('server needs the Symphony demo impact setup');
+    expect(apiError(error('Missing required file field: texture'))).toContain('texture');
   });
 
   it('offers browser recovery for checkpoint mismatches from text and JSON responses', () => {

@@ -9,6 +9,51 @@ real Eco-evo inference; the Demo mode and source toggle have been removed. The
 default API target is `http://localhost:8000`. The earlier Tailscale verification
 is recorded below.
 
+## Demo noise and trawling inputs (2026-10-12)
+
+The **Demo impacts** section optionally connects the shipped shipping-noise and
+bottom-trawl source rasters to simulation requests. Both default to off. Select
+and capture **MARELD POC review area**, enable either impact, inspect its coverage
+and preview, and choose **Show input on map** to see the exact banded field.
+The example area is outside this dataset; enabling impacts there reports missing
+coverage instead of silently simulating an empty pressure field.
+
+Each source is aggregated from 250 m cells to the captured 1 km grid and encoded
+as up to 16 binary masks with scalar intensities. Unknown source portions contribute
+zero added pressure, explicitly labelled in the UI. Noise and trawling strength
+controls range from 0 to 2. These are demo conversions, not measured dB or validated
+fishing mortality. Map display selection/opacity does not change simulation inputs.
+Prepared inputs and source metadata are retained with the result in memory; later
+control changes apply only to the next run.
+
+Use **Mask outlines** to toggle **Shipping noise outline** (solid cyan) and
+**Bottom trawling outline** (dashed green) independently. Before a run, the controls
+appear below Demo impacts; afterward, they appear under Explore the result.
+They trace the combined footprint of cells with positive pressure, retaining
+holes and disconnected patches without drawing internal band or cell boundaries.
+Both can remain visible above biomass during playback, alongside the wind-park
+outline. These toggles only change map display. Result outlines use the masks
+saved with that run; **Show input on map** instead previews the prepared inputs
+and their corresponding outlines. Zero-pressure inputs have no outline.
+
+**Server integration is implemented in Eco-evo.** Start its API with
+`--project mareld_symphony_demo.yaml` to enable both effects. The multipart parser
+accepts the existing mask contract, and nonzero pressures without an active model
+response are rejected. The original project remains the server's default.
+[ECO-EVO-DEMO-IMPACTS-HANDOFF.md](ECO-EVO-DEMO-IMPACTS-HANDOFF.md) retains the exact
+contract, scaling and implementation checklist; Eco-evo's `SYMPHONY_DEMO.md` is its
+operating guide. Baseline runs with both impacts off retain the previous request
+format and have zero pressure in the demo profile.
+
+**Direct benthos response:** Eco-evo now applies bottom-trawling mortality to the
+benthic community as well as the existing pelagic-fish proxy. In the demo range,
+the benthic loss is `biomass * 0.02 * intensity` per library tick (six hours),
+capped at 0.8% per tick: intensity 0.1 removes 0.2% locally. Existing benthic
+regrowth and recolonisation still apply. This is an illustrative response, not
+a calibrated estimate. It uses the same masks and request format. Restart the
+Eco-evo API after updating its code and submit a new simulation; saved results
+retain the old behavior.
+
 ## Review in the running app
 
 Open <http://127.0.0.1:4200/map> and select the grid icon, **MARELD**, at the bottom
@@ -86,7 +131,15 @@ frontend dependencies installed:
 This starts `msp-symphony-db` and `msp-symphony-wildfly`, then serves the frontend on
 loopback port 4200.
 
-Run Eco-evo locally on port 8000. Both the normal frontend proxy
+From the Eco-evo repository, start the impact-capable demo on port 8000:
+
+```sh
+uv run --locked python -u api.py --host 127.0.0.1 --port 8000 \
+  --project mareld_symphony_demo.yaml
+```
+
+Omit `--project` to use its original `mareld2.yaml` configuration, which does not
+enable the demo effects. Both the normal frontend proxy
 and the local startup script forward `/mareld-api` to `http://localhost:8000`,
 removing the prefix. Both use `frontend/proxy.conf.js`; the startup script chooses
 the existing HTTP Symphony backend through `SYMPHONY_API_URL`. Normal frontend
@@ -103,13 +156,14 @@ Check API access before running a simulation:
 curl --connect-timeout 10 --max-time 20 http://localhost:8000/v1/models
 ```
 
-The server needs trained checkpoints compatible with its `mareld2.yaml` and
+The server needs trained checkpoints compatible with its selected project and
 biological library under `eco-evo/results/<model-id>/policy_<species>.pth`. The API
 discovers directory names as model IDs. Discovery alone does not guarantee that
 checkpoint loading will succeed.
 
 Development prefers `allminussb` when available and otherwise selects the first
-discovered model, currently `test` on the local server. Discovered folders can
+discovered model, currently `2026-10-08` on the local server. This checkpoint has
+been verified with `mareld_symphony_demo.yaml`. Discovered folders can
 belong to different training projects. During the earlier Tailscale verification,
 `codex_api_smoke_20261006` contained only `policy_pelagic_fish.pth`, while that
 server's project required policies for `gadoids`, `pelagic_fish`, `porpoises` and
@@ -132,9 +186,10 @@ is not an authenticated shared-service deployment.
 
 Simulation code and focused tests live under
 [`frontend/src/app/features/mareld-poc/`](../frontend/src/app/features/mareld-poc/).
-Map-only environmental layers live under `features/mareld-layers/`. Both use
+Environmental layer display code lives under `features/mareld-layers/`. Both use
 `features/mareld-shared/` for projection/raster rendering, review-area recognition
-and configuration. Environmental layers do not depend on the simulation session.
+and configuration. Layer display remains independent of the simulation session;
+the impact loader reads the original noise/trawling assets directly.
 
 | Component | Responsibility |
 | --- | --- |
@@ -142,6 +197,8 @@ and configuration. Environmental layers do not depend on the simulation session.
 | `symphony-selection.adapter.ts` | Captures one selected record for simulation; shared review-area recognition has its own selector adapter |
 | `mareld-input.ts` | Geometry snapshot, EPSG:3035 grid, cell-center mask, texture/depth PNGs and example geometry |
 | `mareld-api.client.ts` | Model discovery and multipart submission to the existing Eco-evo API |
+| `mareld-impacts.ts`, `mareld-impact-data.service.ts` | Source loading, area aggregation, demo scaling, disjoint bands and API mask metadata |
+| `mareld-impact-controls.component.*` | Independent toggles/strength, coverage, exact input previews |
 | `mareld-result.ts` | Response validation, little-endian float32 decoding, fixed scales and image generation |
 | `mareld-biomass.ts`, `mareld-biomass-chart.component.*` | Per-species water-cell totals, Ecotwin colors, interactive biomass graph, relative view and expanded dialog |
 | `mareld-session.service.ts` | Local state and protection against stale responses; no global result arrays in NgRx |
@@ -149,8 +206,10 @@ and configuration. Environmental layers do not depend on the simulation session.
 | `mareld-pressure-layer.*` | Supplemental wind-park pressure data, search/visibility controls and automatic review-area visibility |
 
 The HTTP request uses exactly `POST /v1/runs`, with JSON in the `request` field and
-both `texture.png` and `depth.png`. It supplies the seed in JSON, an empty pressure
-list and one replicate. No explicit multipart Content-Type is set: the browser
+both `texture.png` and `depth.png`. It supplies the seed in JSON and one replicate.
+Baseline requests have an empty pressure list. Enabled demo impacts add two
+whole-grid zero resets followed by ordered mask/scalar pressure entries and
+repeated `mask` PNG file parts; see the handoff for the exact contract. No explicit multipart Content-Type is set: the browser
 must provide the boundary. Responses must match the requested species, dimensions,
 sampling schedule, float32 dtype, exact byte count and finite nonnegative values.
 
@@ -211,13 +270,16 @@ are calculated once per result; moving the map time does not rescan the tensor.
   float32 data. The default 60×60, six-species run uses about 4.2 MiB. The UI holds
   the tensor in memory.
 - Depth is an all-zero PNG because this API requires the file but does not currently
-  use it ecologically. Environmental layers and pressure effects remain disconnected.
+  use it ecologically. Only the explicitly enabled noise and trawling demo inputs
+  are connected; species initialization and other environmental layers remain synthetic.
 - Model discovery times out after 15 seconds; a run after 30 minutes. The proxy
   allows 30 minutes and 10 seconds. A timed-out or discarded browser request may still be computing
   on the server. There is no automatic retry or server cancellation.
-- The inspected API disables natural mortality and uses mass balance off, unlike
-  current CLI defaults. It also lacks complete seed isolation. A live result is an
-  experimental model output, not a validated forecast for the captured geography.
+- The API profile is controlled in Eco-evo. In the 2026-10-12 checkout it enables
+  natural mortality, migration and currents, and inherits mass-balanced growth.
+  Verify the selected profile/checkpoint together; concurrent requests can share
+  global RNG state. A live result remains an experimental model output, not a
+  validated forecast for the captured geography.
 - The native Symphony calculation toolbar continues to manage native calculations;
   use the POC panel's **Clear result** for the MARELD overlay.
 
@@ -358,3 +420,103 @@ ESLINT_USE_FLAT_CONFIG=false npx eslint 'src/app/features/mareld-poc/*.{ts,html}
 
 Local browser screenshots are in ignored `output/playwright/`; test/build logs are
 in ignored `.local/symphony/mareld-{tests,build}.log`.
+
+### Demo impact verification — 2026-10-12
+
+- All 51 focused MARELD tests passed, including spatial aggregation, source coverage,
+  disjoint-band reconstruction, real PNG multipart encoding, saved input snapshots,
+  stale preparation/reset handling and input/result map switching.
+- Changed feature files passed ESLint. Repository-wide lint still reports 30 errors
+  and two warnings in untouched files.
+- Production build passed (2.35 MB initial bundle; existing 2 MB warning threshold).
+- Full frontend suite: 237/238 passed. `AddScenarioAreasComponent should create`
+  failed with a missing icon-button label in the combined run, then passed alone;
+  its files were not changed in this task.
+- Browser verification on the 39 × 39 review grid: noise covered 100% of accessible
+  area with 1,447 positive cells; bottom trawling covered 48.9% with 754 positive cells.
+  Both prepared overlays were inspected on the map.
+- Before the Eco-evo changes, a four-step baseline run completed successfully. A request
+  with both impacts reached the existing mask-parser failure, which now produces
+  explicit setup guidance in Symphony. The subsequent Eco-evo implementation and
+  verification are recorded below.
+
+### Eco-evo implementation and end-to-end verification — 2026-10-12
+
+- Patched Eco-evo's multipart mask parser, rejected invalid intensities and
+  nonzero pressures without an active model response, and added optional server
+  `--project` selection. The HTTP request and result formats are unchanged.
+- Added `mareld_symphony_demo.yaml`, which enables non-observable noise and
+  bottom-trawling effects with zero baseline maps. The original project and
+  existing policy observation widths are preserved. Noise uses the porpoise
+  energy-cost response; bottom trawling uses an illustrative pelagic-fish
+  mortality response in `fgconfig/fg_library.yaml`.
+- All 31 focused API tests passed, including repeated RGBA masks, exact field
+  reconstruction, direct ecological effects and four real-engine HTTP scenarios.
+  Full Eco-evo suite: 896 passed, 100 skipped, one unchanged Pygame tooltip test
+  failure that also reproduces in isolation. A one-generation training smoke
+  test completed for all four decision makers, with output outside the repository.
+- Existing checkpoint `2026-10-08` passed sequential HTTP comparisons: baseline,
+  noise-only, trawling-only and both had identical initial tensors and distinct
+  final tensors. Direct terms were independently checked: porpoise metabolic
+  multiplier 1.275 at noise 90, fish mortality `biomass * 0.0001` at trawling 0.1.
+- Restarted local Eco-evo at port 8000 with the demo project. All four combinations
+  also completed from Symphony's browser UI on the actual 39 x 39 review area,
+  with 48 steps, 13 frames and six species (`[13, 39, 39, 6]`). Result input labels
+  correctly reflected the toggles, including the no-added-impacts baseline.
+- The running browser is left with a combined demo result. Demo scalings remain
+  illustrative, and the existing policies do not have learned impact avoidance.
+
+### Mask causality audit — 2026-10-12
+
+Captured the exact multipart upload and response from a real browser run using
+the review area, checkpoint `2026-10-08`, seed 42, strength 1.0, 1,000 steps
+(250 days) and six species. Temporary observational wrappers recorded the maps
+after `apply_uploaded_inputs`, the first actual impact-mortality call, and the
+energy settlement returned before movement. Production source was not altered.
+
+- Independently averaged aligned 4 x 4 source blocks and compared every band mask
+  and Float32 engine-map cell: zero mismatches. The request contained four noise
+  masks (1,447 positive cells; intensities 63.75-75) and ten trawling masks
+  (754 positive cells; intensities 0.0125-0.125).
+- Repeated baseline and an otherwise identical request with all masks black
+  produced bitwise-identical complete tensors. All scenarios began identically.
+- Browser baseline and combined results matched their HTTP replays bit for bit.
+  Horizontally flipping only the uploaded masks flipped both reconstructed fields
+  exactly and changed the final result.
+- The first actual trawling mortality operation removed 0.251923 tonnes of pelagic
+  fish across 327 occupied cells; loss outside its mask was exactly zero. Other
+  decision makers had no direct trawling mortality.
+- Noise increased porpoise metabolic multipliers up to 1.1125. Its first actual
+  energy settlement consumed an additional 47.973 MJ across three occupied cells,
+  with no additional cost outside its mask and no direct change to other species.
+- At day 250, relative to the matched baseline, noise-only changed total porpoise
+  biomass by -35.705% and trawling-only changed pelagic-fish biomass by -3.468%.
+  With both inputs, the changes were +11.269% and -2.436%, respectively. These are
+  single-seed experimental food-web outcomes, not calibrated forecasts; combined
+  effects need not add or have the same sign. Movement and interactions propagate
+  later differences outside the directly affected cells.
+
+Local audit artifacts (ignored) are in `.local/symphony/mask-audit-20261012/`:
+`audit_server.py`, `verify_masks.py`, original requests/masks, intermediate arrays,
+result tensors, `audit-results.json`, and `mask-effects.png`. The regular demo API
+is restored after capture; a fresh browser run without diagnostics was also
+bitwise-identical to the audited combined result. This audit verifies the noise/trawling pressure masks;
+the orange wind-park outline is still visual context, and the review domain is
+synthetic water rather than a coastline/depth-derived habitat mask.
+
+### Impact outline display — 2026-10-12
+
+- `mareld-impact-outline.ts` traces and merges exposed cell edges; adjacent
+  intensity bands share one footprint, while holes and separate patches remain.
+- `mareld-impact-outlines.component.ts` provides the two independent display
+  toggles and their line-style legend. Both default to off and reset with the session.
+- `mareld-session.service.ts` selects saved result masks or prepared preview masks.
+  `mareld-map.bridge.ts` projects and caches separate vector layers above the
+  biomass image. Visibility/frame changes do not rebuild the outlines or call the API.
+- All 55 focused MARELD tests passed, including footprint geometry, simultaneous
+  overlays, input snapshots, preview switching, independent toggles and cleanup.
+  Changed files passed ESLint; production build passed with the existing 2 MB
+  bundle-budget warning (2.35 MB actual).
+- Browser verification: enabled both prepared outlines, ran the real 1,000-step
+  simulation, then checked each outline separately and together over the final
+  biomass frame. The map retains the wind-park outline and result controls.

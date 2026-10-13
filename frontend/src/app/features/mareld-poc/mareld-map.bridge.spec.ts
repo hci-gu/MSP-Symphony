@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -16,12 +17,94 @@ import { MareldApiClient } from './mareld-api.client';
 import { SymphonySelectionAdapter } from './symphony-selection.adapter';
 import { MareldPressureLayer } from './mareld-pressure-layer.service';
 import { biomassFixture } from './testing/biomass.fixture';
+import { MareldImpactData } from './mareld-impact-data.service';
+import { impactSourceFixture } from './testing/impact.fixture';
 
 describe('MARELD map layer lifecycle', () => {
+  it('toggles both footprints above biomass, keeps run snapshots and clears them with the session', async () => {
+    const result = biomassFixture();
+    const api = jasmine.createSpyObj('API', ['models', 'run']);
+    api.models.and.resolveTo([{ id: 'test', name: 'Test', species: result.species }]);
+    api.run.and.callFake(async (input: typeof result.input) => ({ ...result, input }));
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
+        { provide: MareldApiClient, useValue: api },
+        { provide: SymphonySelectionAdapter, useValue: { capture: async () => result.input } },
+        {
+          provide: MareldImpactData,
+          useValue: { load: async () => impactSourceFixture(result.input) }
+        }
+      ]
+    });
+    const session = TestBed.inject(MareldSession),
+      bridge = TestBed.inject(MareldMapBridge);
+    const map = new Map({ view: new View({ center: [0, 0], zoom: 5 }) });
+    map.setSize([1200, 800]);
+    bridge.attach(map);
+    await session.capture();
+    await session.discover();
+    session.setImpactEnabled('noise', true);
+    session.setImpactEnabled('trawling', true);
+    await session.prepareImpacts();
+    await session.run();
+    const vector = (kind: string) =>
+      map
+        .getLayers()
+        .getArray()
+        .find((layer) => layer.get('id') === `mareld-${kind}-outline`) as VectorLayer<VectorSource>;
+    const group = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
+    TestBed.tick();
+    const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
+    const imageSource = image.getSource();
+    expect(vector('noise').getVisible()).toBeFalse();
+    session.setImpactOutline('noise', true);
+    session.setImpactOutline('trawling', true);
+    TestBed.tick();
+    for (const kind of ['noise', 'trawling']) {
+      expect(vector(kind).getVisible()).toBeTrue();
+      expect(vector(kind).getZIndex()).toBe(21);
+      expect(vector(kind).getSource()!.getFeatures().length).toBe(1);
+    }
+    expect(image.getSource()).toBe(imageSource);
+    expect(api.run).toHaveBeenCalledTimes(1);
+    const snapshotFeature = vector('noise').getSource()!.getFeatures()[0];
+    session.setImpactStrength('noise', 0);
+    await session.prepareImpacts();
+    session.seekFrame(1);
+    TestBed.tick();
+    expect(vector('noise').getSource()!.getFeatures()[0]).toBe(snapshotFeature);
+    expect(session.mapImpacts().fromResult).toBeTrue();
+    session.showImpact('noise');
+    TestBed.tick();
+    expect(vector('noise').getVisible()).toBeFalse();
+    expect(vector('noise').getSource()!.getFeatures()).toEqual([]);
+    session.showImpact('noise');
+    TestBed.tick();
+    expect(vector('noise').getVisible()).toBeTrue();
+    session.setImpactOutline('noise', false);
+    TestBed.tick();
+    expect(vector('noise').getVisible()).toBeFalse();
+    expect(vector('trawling').getVisible()).toBeTrue();
+    bridge.reset();
+    TestBed.tick();
+    expect(vector('trawling').getVisible()).toBeFalse();
+    expect(vector('trawling').getSource()!.getFeatures()).toEqual([]);
+    expect(session.impactOutlines()).toEqual({ noise: false, trawling: false });
+    bridge.detach();
+    expect(map.getLayers().getLength()).toBe(0);
+    map.dispose();
+  });
+
   it('adds a separate projected layer and removes it without disturbing Symphony layers', async () => {
     const result = biomassFixture();
     TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
         provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
         {
           provide: MareldApiClient,
@@ -53,6 +136,19 @@ describe('MARELD map layer lifecycle', () => {
     session.setOpacity(0.35);
     TestBed.tick();
     expect(image.getOpacity()).toBe(0.35);
+    const resultUrl = image.getSource()!.getUrl();
+    spyOn(TestBed.inject(MareldImpactData), 'load').and.resolveTo(
+      impactSourceFixture(session.input()!)
+    );
+    session.setImpactEnabled('noise', true);
+    await session.prepareImpacts();
+    session.showImpact('noise');
+    TestBed.tick();
+    expect(image.getSource()!.getUrl()).not.toBe(resultUrl);
+    expect(image.getSource()!.getImageExtent()).toEqual(session.input()!.grid.extent);
+    session.showImpact('noise');
+    TestBed.tick();
+    expect(image.getSource()!.getUrl()).toBe(resultUrl);
     session.clearResult();
     TestBed.tick();
     expect(image.getSource()).toBeNull();
@@ -68,6 +164,7 @@ describe('MARELD map layer lifecycle', () => {
   it('shows the pressure before input capture, above results, and cleans up on reset and detach', () => {
     TestBed.configureTestingModule({
       providers: [
+        provideHttpClient(),
         provideMockStore({ selectors: [{ selector: selectSelectedAreaData, value: [] }] }),
         { provide: MareldApiClient, useValue: {} },
         { provide: SymphonySelectionAdapter, useValue: {} }

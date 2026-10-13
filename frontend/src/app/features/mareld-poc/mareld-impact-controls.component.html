@@ -1,0 +1,91 @@
+<p class="hint">
+  Use Symphony’s historical pressure patterns for an illustrative demo. Both impacts stay constant
+  throughout the run.
+</p>
+@for (card of cards(); track card.kind) {
+  <div class="impact-card">
+    <label class="toggle" [for]="'mareld-impact-' + card.kind">
+      <input
+        type="checkbox"
+        [id]="'mareld-impact-' + card.kind"
+        [ngModel]="card.settings.enabled"
+        (ngModelChange)="session.setImpactEnabled(card.kind, $event)"
+        [disabled]="session.busy()"
+      />
+      <strong>{{ card.title }}</strong>
+    </label>
+    @if (card.settings.enabled) {
+      <div class="strength-label">
+        <label [for]="'mareld-strength-' + card.kind">Demo strength</label>
+        <span>{{ card.settings.strength | number: '1.1-1' }}×</span>
+      </div>
+      <input
+        type="range"
+        [id]="'mareld-strength-' + card.kind"
+        min="0"
+        max="2"
+        step="0.1"
+        [ngModel]="card.settings.strength"
+        (ngModelChange)="session.setImpactStrength(card.kind, +$event)"
+        [disabled]="session.busy()"
+      />
+      @if (card.layer; as layer) {
+        <div class="preview">
+          <img
+            [src]="card.preview"
+            [alt]="card.title + ' input on the simulation grid. Pale cells have no added pressure.'"
+            width="88"
+            height="88"
+          />
+          <div>
+            <div>{{ layer.affectedCells }} cells with added pressure</div>
+            <div>{{ layer.coverage * 100 | number: '1.0-1' }}% source coverage</div>
+            <button
+              type="button"
+              (click)="session.showImpact(card.kind)"
+              [attr.aria-pressed]="session.previewImpact() === card.kind"
+            >
+              {{ session.previewImpact() === card.kind ? 'Hide input map' : 'Show input on map' }}
+            </button>
+          </div>
+        </div>
+        <div class="legend">
+          <span class="swatch" [class.noise]="card.kind === 'noise'"></span>Low → high · pale = no
+          added pressure
+        </div>
+        @if (layer.coverage < 0.9999) {
+          <p class="hint">
+            Uncovered portions contribute zero added pressure in this demo; this does not mean the
+            pressure is absent there.
+          </p>
+        }
+        @if (!layer.affectedCells) {
+          <p class="hint">This input adds no pressure at the current strength and area.</p>
+        }
+      }
+    }
+  </div>
+}
+@if (!session.input() && session.impactsEnabled()) {
+  <p class="hint">
+    Capture the MARELD review area to prepare the input maps. The example area is outside this
+    dataset.
+  </p>
+}
+@if (session.preparingImpacts()) {
+  <p class="hint" role="status">Preparing impact maps…</p>
+}
+@if (session.impactError()) {
+  <p class="error" role="alert">{{ session.impactError() }}</p>
+  <button type="button" (click)="session.prepareImpacts()" [disabled]="session.busy()">
+    Retry preparing inputs
+  </button>
+}
+@if (session.impactsEnabled()) {
+  <p class="notice">
+    Demo scaling: shipping noise is a relative index, not measured dB; trawling is a swept-area
+    proxy. Impact runs require the Eco-evo demo configuration.
+  </p>
+} @else {
+  <p class="hint">No added impacts. Enable either input to compare a pressure scenario.</p>
+}

@@ -111,14 +111,17 @@ export function decodeResult(
   };
 }
 
-// The same scale and colors are used in the map and legend.
+// Warm, saturated colors separate biomass from the blue sea and green land.
+// The map and legend share the same evenly spaced stops and linear biomass scale.
 export const BIOMASS_COLORS = [
-  [30, 65, 104],
-  [31, 150, 157],
-  [245, 221, 108]
+  [63, 0, 125],
+  [145, 30, 180],
+  [225, 56, 100],
+  [250, 133, 28],
+  [255, 235, 80]
 ];
 export const BIOMASS_GRADIENT =
-  'linear-gradient(90deg, rgb(30,65,104), rgb(31,150,157), rgb(245,221,108))';
+  `linear-gradient(90deg, ${BIOMASS_COLORS.map((color) => `rgb(${color.join(',')})`).join(', ')})`;
 export function framePixels(
   result: MareldResult,
   frame: number,
@@ -141,8 +144,9 @@ export function framePixels(
     if (!result.input.water[i]) continue;
     const value = result.values[frame * cells * stride + i * stride + species];
     const fraction = maximum > 0 ? Math.min(1, value / maximum) : 0;
-    const segment = fraction < 0.5 ? 0 : 1,
-      t = fraction * 2 - segment;
+    const scaled = fraction * (BIOMASS_COLORS.length - 1);
+    const segment = Math.min(BIOMASS_COLORS.length - 2, Math.floor(scaled)),
+      t = scaled - segment;
     for (let channel = 0; channel < 3; channel++)
       pixels[i * 4 + channel] = Math.round(
         BIOMASS_COLORS[segment][channel] * (1 - t) + BIOMASS_COLORS[segment + 1][channel] * t

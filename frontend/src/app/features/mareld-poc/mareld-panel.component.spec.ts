@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MareldApiClient } from './mareld-api.client';
@@ -18,6 +19,7 @@ describe('MARELD automatic model selection', () => {
     TestBed.configureTestingModule({
       imports: [MareldPocModule],
       providers: [
+        provideHttpClient(),
         provideZonelessChangeDetection(),
         { provide: MareldApiClient, useValue: api },
         { provide: MareldMapBridge, useValue: { fit: () => undefined } },
@@ -37,7 +39,8 @@ describe('MARELD automatic model selection', () => {
     expect(Array.from(host.querySelectorAll('h3')).map((el) => el.textContent?.trim())).toEqual([
       '1 Area',
       '2 Select model',
-      '3 Simulation'
+      '3 Demo impacts',
+      '4 Simulation'
     ]);
     const button = host.querySelector('.primary') as HTMLButtonElement;
     expect(button.disabled).toBeTrue();

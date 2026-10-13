@@ -11,6 +11,7 @@ export interface Coverage {
 }
 export interface LayerAsset {
   file: string;
+  sha256: string;
   geotiff: string;
   coverage: Record<LayerScope, Coverage>;
 }

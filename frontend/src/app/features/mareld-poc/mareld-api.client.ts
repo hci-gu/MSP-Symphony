@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, fromEvent, takeUntil, timeout } from 'rxjs';
 import { environment } from '@src/environments/environment';
 import { pngBlob, PreparedInput, rasterCanvas } from './mareld-input';
+import { impactMaskCanvas, impactRequest } from './mareld-impacts';
 import {
   checkBudget,
   decodeResult,
@@ -31,6 +32,8 @@ export function apiError(error: unknown): string {
         : `The API request failed (HTTP ${error.status}).`;
     if (body?.error === 'MODEL_CHECKPOINT_MISMATCH')
       return `This model is incompatible with the server's current project. Choose another model in the Model list and run again. ${message}`;
+    if (body?.error === 'MISSING_FILE' && /(?:noise|trawling)-\d+\.png/.test(message))
+      return 'Eco-evo could not read the impact masks. The server needs the Symphony demo impact setup before running with noise or trawling. Runs with both impacts off are still available.';
     return message;
   }
   if (error instanceof Error && error.name === 'TimeoutError')
@@ -71,10 +74,22 @@ export class MareldApiClient {
     signal: AbortSignal
   ): Promise<MareldResult> {
     checkBudget(input, model.species.length, maxSteps);
+    if (input.impacts && input.impacts.inputId !== input.id)
+      throw new Error('Impact inputs belong to a different area. Prepare the impacts again.');
     const [texture, depth] = await Promise.all([
       pngBlob(rasterCanvas(input, 'texture')),
       pngBlob(rasterCanvas(input, 'depth'))
     ]);
+    if (signal.aborted) throw new Error('Request discarded.');
+    const impactFields = impactRequest(input.impacts, maxSteps);
+    const maskFiles = await Promise.all(
+      (input.impacts?.layers ?? []).flatMap((layer) =>
+        layer.bands.map(async (band) => ({
+          name: `${band.id}.png`,
+          blob: await pngBlob(impactMaskCanvas(input, band.mask))
+        }))
+      )
+    );
     if (signal.aborted) throw new Error('Request discarded.');
     const form = new FormData();
     form.append(
@@ -91,7 +106,8 @@ export class MareldApiClient {
           tick_duration_days: MARELD_RUN.tickDurationDays
         },
         species: model.species,
-        pressures: [],
+        pressures: impactFields.pressures,
+        ...(impactFields.masks.length ? { masks: impactFields.masks } : {}),
         output: {
           dtype: 'float32',
           tensor_order: 'frame,row,column,species',
@@ -102,6 +118,7 @@ export class MareldApiClient {
     );
     form.append('texture', texture, 'texture.png');
     form.append('depth', depth, 'depth.png');
+    for (const file of maskFiles) form.append('mask', file.blob, file.name);
     const text = await firstValueFrom(
       this.http
         .post(`${this.base}/v1/runs`, form, { responseType: 'text' })
