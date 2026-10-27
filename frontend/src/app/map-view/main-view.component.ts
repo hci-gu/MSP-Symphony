@@ -8,6 +8,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, skip, take } from 'rxjs/operators';
 
@@ -38,6 +39,7 @@ import { MapViewModule } from '@src/app/map-view/map-view.module';
   standalone: false
 })
 export class MainViewComponent implements OnInit, AfterViewInit {
+  readonly initialTabId = inject(ActivatedRoute).snapshot.queryParamMap.get('tab');
   private readonly store = inject<Store<State>>(Store);
   private readonly cd = inject(ChangeDetectorRef);
   private readonly dialogService = inject(DialogService);

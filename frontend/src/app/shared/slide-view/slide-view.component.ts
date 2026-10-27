@@ -50,6 +50,7 @@ export class SlideViewComponent implements OnChanges, AfterViewInit {
   @Output() openCCList = new EventEmitter<void>();
   @ContentChildren(SlideViewTabComponent) tabs!: QueryList<SlideViewTabComponent>;
   @Input() routeTabIdIsAvailable = false;
+  @Input() initialTabId: string | null = null;
 
   constructor(
   ) {}
@@ -59,7 +60,12 @@ export class SlideViewComponent implements OnChanges, AfterViewInit {
       // Needs to be here because of the change detection lifecycle.
       // It will wait to run until the next event loop.
       setTimeout(() => {
-        this.tabs.toArray()[DEFAULT_TAB].active = true; // FIXME revert to 0 when merging branch
+        const tab = this.tabs.find(candidate => candidate.id === this.initialTabId)
+          ?? this.tabs.toArray()[DEFAULT_TAB];
+        if (tab) {
+          tab.active = true;
+          this.navigate.emit(tab.id);
+        }
       }, 0);
     }
   }

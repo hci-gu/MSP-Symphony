@@ -1,6 +1,7 @@
 <div class="result-info-panel"></div>
 <!--TODO Migrate to use routerLinks instead-->
 <app-slide-view position="left"
+  [initialTabId]="initialTabId"
   [open]="leftSidebarIsOpen"
   [compoundComparisonCount$]="compoundComparisonCount$"
   (toggleTab)="toggleLeftSidebar()"
@@ -33,7 +34,7 @@
     >
     </app-band-selection>
   </app-slide-view-tab>
-  <app-slide-view-tab [title]="'map.compare.title' | translate" icon="compare">
+  <app-slide-view-tab id="comparison" [title]="'map.compare.title' | translate" icon="compare">
     <app-comparison></app-comparison>
   </app-slide-view-tab>
   <app-slide-view-tab [title]="'map.history.title' | translate" icon="report">
@@ -110,6 +111,9 @@
   (resultLayerGroupChange)="setVisibleImpact($event)"
   (resultLayerGroupChangeCmp)="setVisibleComparison($event)">
 </app-map>
+@if (mareldPocEnabled && mareldActive && leftSidebarIsOpen) {
+  <app-mareld-results />
+}
 @if (scenarioAreaSelection && ((activeScenarioArea$ | async) === undefined)) {
   <div id="scenario-area-selection-hint" class="mouse-interface-hint">
     <span>

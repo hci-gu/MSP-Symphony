@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -6,10 +7,12 @@ import { CalculationActions } from '@data/calculation';
 import { environment } from '@src/environments/environment';
 import { apiError, MareldApiClient } from './mareld-api.client';
 import { prepareInput, PreparedInput } from './mareld-input';
-import { DEFAULT_STEPS, MareldModel, MareldResult } from './mareld-result';
+import { DEFAULT_STEPS, MareldModel, MareldResult, sampleEvery } from './mareld-result';
+import { MARELD_RUN } from '../mareld-shared/run-config';
 import { SymphonyCalculationAdapter } from './symphony-calculation.adapter';
 import { CalculationInput } from './calculation-input';
 import { compatibility, mapCalculation } from './simulation-input-mapping';
+import { fullRunRequest, SimulationJob, SimulationJobsClient } from './simulation-jobs.client';
 import { ImpactKind } from './mareld-impacts';
 import { SimulationPersistenceClient } from './simulation-persistence.client';
 import {
@@ -23,11 +26,33 @@ interface CachedCalculation {
   saved: boolean;
   modelId: string;
   maxSteps: number;
+  previewSteps: number;
+  seed: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class MareldSession {
   private readonly api = inject(MareldApiClient);
+  private readonly jobsClient = inject(SimulationJobsClient);
+  readonly jobs = signal<SimulationJob[]>([]);
+  readonly jobsError = signal('');
+  readonly jobsLoading = signal(false);
+  private jobRequest = 0;
+  readonly submitting = signal(false);
+  readonly activeJob = computed(() =>
+    this.jobs().find((job) => job.status === 'queued' || job.status === 'running')
+  );
+  readonly previewSteps = signal(200);
+  readonly seed = signal(42);
+  readonly playbackSpeed = signal(1);
+  readonly previewOutdated = computed(
+    () => this.result()?.kind === 'preview' && this.result()?.draftKey !== this.draftKey()
+  );
+  private jobTimer?: ReturnType<typeof setTimeout>;
+  private watchedRunId?: string;
+  private submissionRevision = 0;
+  private pendingSubmission?: ReturnType<typeof fullRunRequest>;
+  readonly submissionUncertain = signal(false);
   readonly calculations = inject(SymphonyCalculationAdapter);
   private readonly persistence = inject(SimulationPersistenceClient);
   private readonly reports = inject(SimulationReportData);
@@ -47,9 +72,14 @@ export class MareldSession {
   private readonly modelIdState = signal(environment.mareldPoc.modelId);
   readonly modelId = this.modelIdState.asReadonly();
   private readonly busyState = signal(false);
-  readonly busy = this.busyState.asReadonly();
+  readonly previewBusy = this.busyState.asReadonly();
+  readonly busy = computed(() => this.previewBusy() || this.submitting() || !!this.activeJob());
   private readonly discoveringState = signal(false);
   readonly discovering = this.discoveringState.asReadonly();
+  readonly preparingComparison = signal(false);
+  readonly preparationNote = signal('');
+  private preparationRevision = 0;
+  private discoveryPromise?: Promise<void>;
   private readonly errorState = signal('');
   readonly error = this.errorState.asReadonly();
   private readonly modelErrorState = signal('');
@@ -59,6 +89,12 @@ export class MareldSession {
   readonly saveError = signal('');
   readonly history = signal<SimulationSummary[]>([]);
   readonly historyError = signal('');
+  readonly deletingRunId = signal<string | null>(null);
+  readonly deleteError = signal('');
+  readonly selectedRunId = computed(() => (this.saved() ? (this.result()?.id ?? null) : null));
+  private deletionRevision = 0;
+  private readonly deletedRuns = new Set<string>();
+  private historyRequest = 0;
   private readonly frameState = signal(0);
   readonly frame = this.frameState.asReadonly();
   private readonly playingState = signal(false);
@@ -92,10 +128,23 @@ export class MareldSession {
       !this.busy() &&
       !this.loading() &&
       !this.saving() &&
+      !this.deletingRunId() &&
       !this.discovering() &&
+      !this.preparingComparison() &&
       !this.modelError() &&
       !this.compatibilityErrors().length &&
-      (!this.result() || this.saved()) &&
+      !this.submissionUncertain() &&
+      !this.jobsLoading() &&
+      !this.jobsError() &&
+      Number.isInteger(this.seed()) &&
+      this.seed() >= 0 &&
+      this.seed() <= 2147483637 &&
+      Number.isInteger(this.maxSteps()) &&
+      this.maxSteps() >= 1 &&
+      this.maxSteps() <= 10000 &&
+      Number.isInteger(this.previewSteps()) &&
+      this.previewSteps() >= 1 &&
+      this.previewSteps() <= this.maxSteps() &&
       this.models().some((model) => model.id === this.modelId())
   );
 
@@ -129,6 +178,8 @@ export class MareldSession {
   }
   setMaxSteps(steps: number): void {
     this.maxStepsState.set(steps);
+    if (Number.isInteger(steps) && steps > 0 && this.previewSteps() > steps)
+      this.previewSteps.set(steps);
   }
   selectSpecies(species: number): void {
     this.speciesState.set(species);
@@ -154,7 +205,9 @@ export class MareldSession {
       result: this.result(),
       saved: this.saved(),
       modelId: this.modelId(),
-      maxSteps: this.maxSteps()
+      maxSteps: this.maxSteps(),
+      previewSteps: this.previewSteps(),
+      seed: this.seed()
     });
   }
   private trimCache(keep: number): void {
@@ -165,15 +218,21 @@ export class MareldSession {
       );
     for (const [id, item] of this.cache) {
       if (this.cache.size <= 3 && bytes() <= 16 * 1024 * 1024) break;
-      if (id !== keep && (!item.result || item.saved)) this.cache.delete(id);
+      if (id !== keep && (!item.result || item.saved || item.result.kind === 'preview'))
+        this.cache.delete(id);
     }
   }
 
   async selectCalculation(id: number): Promise<void> {
-    if (!Number.isInteger(id) || id < 1) return;
+    if (!Number.isInteger(id) || id < 1 || this.submitting() || this.submissionUncertain()) return;
+    this.preparationRevision++;
+    this.preparingComparison.set(false);
+    this.preparationNote.set('');
     this.remember();
     // Unsaved output remains available for retry; never evict it to satisfy a memory limit.
-    const unsaved = [...this.cache.values()].filter((c) => c.result && !c.saved);
+    const unsaved = [...this.cache.values()].filter(
+      (c) => c.result && !c.saved && c.result.kind !== 'preview'
+    );
     if (unsaved.length >= 2 && !this.cache.has(id)) {
       this.errorState.set(
         'Save or explicitly clear an unsaved result before opening another calculation.'
@@ -191,6 +250,10 @@ export class MareldSession {
     this.errorState.set('');
     this.history.set([]);
     this.historyError.set('');
+    this.deleteError.set('');
+    this.jobs.set([]);
+    this.jobsError.set('');
+    this.watchedRunId = undefined;
     this.previewImpactState.set(null);
     this.frameState.set(0);
     this.speciesState.set(0);
@@ -207,6 +270,8 @@ export class MareldSession {
         this.saved.set(cached.saved);
         this.modelIdState.set(cached.modelId);
         this.maxStepsState.set(cached.maxSteps);
+        this.previewSteps.set(cached.previewSteps);
+        this.seed.set(cached.seed);
       } else if (!compatibility(source).length) {
         if (!source.suggestedGrid)
           throw new Error('This calculation has no supported native grid.');
@@ -222,6 +287,7 @@ export class MareldSession {
       }
       this.remember();
       this.trimCache(id);
+      void this.loadJobs();
     } catch (error) {
       if (revision === this.revision) {
         this.errorState.set(apiError(error));
@@ -234,18 +300,67 @@ export class MareldSession {
 
   async loadHistory(id = this.selectedId(), revision = this.revision): Promise<void> {
     if (!id) return;
+    const request = ++this.historyRequest;
     this.historyError.set('');
     try {
       const history = await this.reports.list(id);
-      if (revision === this.revision) this.history.set(history);
+      if (revision === this.revision && request === this.historyRequest)
+        this.history.set(history.filter((run) => !this.deletedRuns.has(run.runId)));
     } catch (error) {
-      if (revision === this.revision) this.historyError.set(apiError(error));
+      if (revision === this.revision && request === this.historyRequest)
+        this.historyError.set(apiError(error));
+    }
+  }
+
+  async deleteSaved(runId: string): Promise<void> {
+    const id = this.selectedId();
+    if (
+      !id ||
+      this.deletingRunId() ||
+      this.loading() ||
+      this.previewBusy() ||
+      this.submitting() ||
+      this.saving()
+    )
+      return;
+    if (!this.history().some((run) => run.runId === runId)) return;
+    const revision = ++this.deletionRevision;
+    this.deletingRunId.set(runId);
+    this.deleteError.set('');
+    try {
+      await this.persistence.delete(id, runId);
+      if (revision !== this.deletionRevision) return;
+      this.deletedRuns.add(runId);
+      const cached = this.cache.get(id);
+      if (cached?.result?.id === runId) {
+        cached.result = null;
+        cached.saved = false;
+      }
+      if (this.selectedId() === id) {
+        this.history.update((runs) => runs.filter((run) => run.runId !== runId));
+        this.jobs.update((jobs) => jobs.filter((job) => job.runId !== runId));
+        if (this.watchedRunId === runId) this.watchedRunId = undefined;
+        if (this.result()?.id === runId) this.clearResult();
+      }
+    } catch (error) {
+      if (revision === this.deletionRevision && this.selectedId() === id)
+        this.deleteError.set(apiError(error));
+    } finally {
+      if (revision === this.deletionRevision) this.deletingRunId.set(null);
     }
   }
 
   async openSaved(runId: string): Promise<void> {
     const id = this.selectedId();
-    if (!id || this.busy() || this.saving() || (this.result() && !this.saved())) return;
+    if (
+      !id ||
+      this.previewBusy() ||
+      this.submitting() ||
+      this.saving() ||
+      this.deletingRunId() ||
+      this.deletedRuns.has(runId)
+    )
+      return;
     this.suspend();
     const revision = this.revision;
     this.loading.set(true);
@@ -263,12 +378,20 @@ export class MareldSession {
     } catch (error) {
       if (revision === this.revision) this.errorState.set(apiError(error));
     } finally {
-      if (revision === this.revision) this.loading.set(false);
+      if (revision === this.revision) {
+        this.loading.set(false);
+        void this.loadJobs();
+      }
     }
   }
 
-  async discover(): Promise<void> {
-    if (this.discovering()) return;
+  discover(): Promise<void> {
+    if (this.discovering() && this.discoveryPromise) return this.discoveryPromise;
+    this.discoveryPromise = this.discoverModels();
+    return this.discoveryPromise;
+  }
+
+  private async discoverModels(): Promise<void> {
     const revision = ++this.discoveryRevision;
     this.discoveringState.set(true);
     this.modelErrorState.set('');
@@ -276,7 +399,8 @@ export class MareldSession {
       const models = await this.api.models();
       if (revision !== this.discoveryRevision) return;
       this.modelsState.set(models);
-      if (!models.some((m) => m.id === this.modelId())) this.modelIdState.set(models[0].id);
+      if (models.length && !models.some((m) => m.id === this.modelId()))
+        this.modelIdState.set(models[0].id);
     } catch (error) {
       if (revision === this.discoveryRevision) {
         this.modelsState.set([]);
@@ -287,10 +411,65 @@ export class MareldSession {
     }
   }
 
+  async prepareComparison(id: number, matchCalculation?: number, matchRun?: string): Promise<void> {
+    const selection = this.selectCalculation(id);
+    const revision = ++this.preparationRevision;
+    this.preparingComparison.set(true);
+    const current = () => revision === this.preparationRevision && this.selectedId() === id;
+    try {
+      await selection;
+      if (!current() || !this.input()) return;
+      if (!matchCalculation || !matchRun) return;
+      const [runs] = await Promise.all([this.reports.list(matchCalculation), this.discover()]);
+      if (!current()) return;
+      const match = runs.find(
+        (run) => run.runId === matchRun && run.calculationId === matchCalculation
+      );
+      if (!match)
+        throw new Error(
+          'The simulation to match is no longer available. Return to Compare calculations and choose another run.'
+        );
+      if (!this.models().some((model) => model.id === match.model.id))
+        throw new Error(
+          'The model version used by the selected simulation is no longer available.'
+        );
+      if (
+        match.config.sampleEvery !== sampleEvery(match.config.maxSteps) ||
+        match.config.tickDurationDays !== MARELD_RUN.tickDurationDays ||
+        match.config.mappingVersion !== this.input()?.impacts?.version
+      )
+        throw new Error(
+          'The selected simulation uses different sampling or input mapping settings. Create a new matching pair.'
+        );
+      if (
+        match.ensemble &&
+        (match.ensemble.seeds.length !== 10 ||
+          match.ensemble.seeds.some((seed, index) => seed !== match.config.seed + index))
+      )
+        throw new Error(
+          'The selected simulation does not use the supported ten consecutive seeds.'
+        );
+      this.selectModel(match.model.id);
+      this.setMaxSteps(match.config.maxSteps);
+      this.seed.set(match.config.seed);
+      this.preparationNote.set(
+        `Settings copied from calculation #${matchCalculation}, simulation ${matchRun}. Review the inputs, then start a full run. ${match.ensemble ? 'The same ten seeds will be used.' : 'This is a legacy single-seed run; create a full ensemble for both calculations to compare confidence intervals.'}`
+      );
+    } catch (error) {
+      if (current()) this.errorState.set(apiError(error));
+    } finally {
+      if (revision === this.preparationRevision) this.preparingComparison.set(false);
+    }
+  }
+
   async run(): Promise<void> {
     const input = this.input();
     if (!input || !this.canRun()) return;
-    if ([...this.cache.values()].filter((item) => item.result && !item.saved).length >= 2) {
+    if (
+      [...this.cache.values()].filter(
+        (item) => item.result && !item.saved && item.result.kind !== 'preview'
+      ).length >= 2
+    ) {
       this.errorState.set('Save or clear an unsaved result before starting another run.');
       return;
     }
@@ -303,7 +482,16 @@ export class MareldSession {
       const model = structuredClone(this.models().find((m) => m.id === this.modelId())!);
       const runInput = structuredClone(input);
       this.previewImpactState.set(null);
-      const result = await this.api.run(runInput, model, this.maxSteps(), this.controller.signal);
+      const draftKey = this.draftKey();
+      const result = await this.api.run(
+        runInput,
+        model,
+        this.previewSteps(),
+        this.controller.signal,
+        this.seed()
+      );
+      result.kind = 'preview';
+      result.draftKey = draftKey;
       if (revision !== this.revision) return;
       this.frameState.set(0);
       this.speciesState.set(0);
@@ -311,17 +499,19 @@ export class MareldSession {
       this.saved.set(false);
       this.remember();
       this.trimCache(input.source!.calculationId);
-      await this.saveResult();
     } catch (error) {
       if (revision === this.revision) this.errorState.set(apiError(error));
     } finally {
-      if (revision === this.revision) this.busyState.set(false);
+      if (revision === this.revision) {
+        this.busyState.set(false);
+        void this.loadJobs();
+      }
     }
   }
 
   async saveResult(): Promise<void> {
     const result = this.result();
-    if (!result || this.saved() || this.saving()) return;
+    if (!result || result.kind === 'preview' || this.saved() || this.saving()) return;
     const revision = this.revision;
     this.saving.set(true);
     this.saveError.set('');
@@ -339,6 +529,118 @@ export class MareldSession {
       if (revision === this.revision) this.saveError.set(apiError(error));
     } finally {
       if (revision === this.revision) this.saving.set(false);
+    }
+  }
+
+  private draftKey(): string {
+    return JSON.stringify([this.modelId(), this.seed(), this.previewSteps(), this.maxSteps()]);
+  }
+  setPlaybackSpeed(speed: number): void {
+    if (![0.5, 1, 2, 4].includes(speed)) return;
+    const playing = this.playing();
+    this.pausePlayback();
+    this.playbackSpeed.set(speed);
+    if (playing) this.togglePlayback();
+  }
+  async runFull(): Promise<void> {
+    if (!this.canRun() || !this.input()) return;
+    this.pendingSubmission = fullRunRequest(
+      this.input()!,
+      this.models().find((m) => m.id === this.modelId())!,
+      this.maxSteps(),
+      this.seed()
+    );
+    await this.submitFull();
+  }
+  /** An uncertain HTTP outcome is retried with the exact frozen request/identity. */
+  async submitFull(): Promise<void> {
+    const request = this.pendingSubmission;
+    if (!request || this.submitting()) return;
+    const revision = ++this.submissionRevision;
+    this.submitting.set(true);
+    this.errorState.set('');
+    this.pausePlayback();
+    try {
+      const job = await this.jobsClient.submit(request);
+      if (revision !== this.submissionRevision) return;
+      this.jobs.update((jobs) => [job, ...jobs.filter((item) => item.runId !== job.runId)]);
+      this.watchedRunId = job.runId;
+      this.pendingSubmission = undefined;
+      this.submissionUncertain.set(false);
+      void this.loadJobs();
+    } catch (error) {
+      if (revision === this.submissionRevision) {
+        const uncertain =
+          !(error instanceof HttpErrorResponse) ||
+          error.status === 0 ||
+          (error.status >= 500 && error.status !== 503);
+        this.submissionUncertain.set(uncertain);
+        if (!uncertain) this.pendingSubmission = undefined;
+        this.errorState.set(apiError(error));
+        void this.loadJobs();
+      }
+    } finally {
+      if (revision === this.submissionRevision) this.submitting.set(false);
+    }
+  }
+  async retryJob(runId: string): Promise<void> {
+    const id = this.selectedId(),
+      revision = this.revision;
+    if (!id || this.busy()) return;
+    try {
+      const job = await this.jobsClient.retry(id, runId);
+      if (revision !== this.revision) return;
+      this.watchedRunId = runId;
+      this.jobs.update((jobs) => jobs.map((item) => (item.runId === runId ? job : item)));
+      void this.loadJobs();
+    } catch (error) {
+      if (revision === this.revision) this.jobsError.set(apiError(error));
+    }
+  }
+  async loadJobs(): Promise<void> {
+    if (this.jobTimer) clearTimeout(this.jobTimer);
+    const id = this.selectedId(),
+      revision = this.revision,
+      request = ++this.jobRequest;
+    if (!id) return;
+    this.jobsLoading.set(true);
+    try {
+      const jobs = (await this.jobsClient.list(id)).filter(
+        (job) => !this.deletedRuns.has(job.runId)
+      );
+      if (revision !== this.revision || request !== this.jobRequest) return;
+      this.jobs.set(jobs);
+      this.jobsError.set('');
+      const submitted = jobs.find((job) => job.runId === this.pendingSubmission?.runId);
+      if (submitted) {
+        this.watchedRunId = submitted.runId;
+        this.pendingSubmission = undefined;
+        this.submissionUncertain.set(false);
+      }
+      const active = this.activeJob();
+      if (active) this.watchedRunId = active.runId;
+      const finished = jobs.find(
+        (job) => job.runId === this.watchedRunId && job.status === 'completed'
+      );
+      if (finished) {
+        this.jobsLoading.set(false);
+        this.watchedRunId = undefined;
+        await this.loadHistory();
+        if (revision !== this.revision) return;
+        await this.openSaved(finished.runId);
+        const channel = new BroadcastChannel('symphony-simulation-reports');
+        channel.postMessage({ calculationId: id });
+        channel.close();
+        window.dispatchEvent(new CustomEvent('simulation-saved', { detail: id }));
+        return;
+      }
+    } catch (error) {
+      if (revision === this.revision) this.jobsError.set(apiError(error));
+    }
+    if (revision === this.revision && request === this.jobRequest) {
+      this.jobsLoading.set(false);
+      if (this.activeJob() || this.submissionUncertain() || this.jobsError())
+        this.jobTimer = setTimeout(() => void this.loadJobs(), 5000);
     }
   }
 
@@ -360,7 +662,7 @@ export class MareldSession {
       const next = Math.min(this.frame() + 1, lastFrame);
       this.frameState.set(next);
       if (next === lastFrame) this.pausePlayback();
-    }, 500);
+    }, 500 / this.playbackSpeed());
   }
   pausePlayback(): void {
     if (this.playbackTimer !== undefined) clearInterval(this.playbackTimer);
@@ -381,11 +683,16 @@ export class MareldSession {
     this.frameState.set(0);
     this.speciesState.set(0);
     this.remember();
+    void this.loadJobs();
   }
   /** Selection changes invalidate input/run work, without interrupting model discovery. */
   suspend(): void {
     this.pausePlayback();
     this.revision++;
+    if (this.jobTimer) clearTimeout(this.jobTimer);
+    this.jobTimer = undefined;
+    this.jobRequest++;
+    this.jobsLoading.set(false);
     this.controller?.abort();
     this.controller = undefined;
     this.busyState.set(false);
@@ -399,6 +706,7 @@ export class MareldSession {
     this.discoveringState.set(false);
   }
   resume(): void {
+    if (this.selectedId() && this.input()) void this.loadJobs();
     const id = this.selectedId();
     if (
       id &&
@@ -410,8 +718,22 @@ export class MareldSession {
       void this.selectCalculation(id);
   }
   reset(): void {
+    this.preparationRevision++;
+    this.preparingComparison.set(false);
+    this.preparationNote.set('');
     this.detach();
     this.cache.clear();
+    this.deletionRevision++;
+    this.deletingRunId.set(null);
+    this.deleteError.set('');
+    this.deletedRuns.clear();
+    this.jobs.set([]);
+    this.jobsError.set('');
+    this.submissionRevision++;
+    this.pendingSubmission = undefined;
+    this.submissionUncertain.set(false);
+    this.submitting.set(false);
+    this.watchedRunId = undefined;
     this.inputState.set(null);
     this.resultState.set(null);
     this.contextState.set(null);

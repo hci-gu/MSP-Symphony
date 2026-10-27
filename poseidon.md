@@ -279,3 +279,56 @@ absolute accuracy. Preserve the permit's EPSG:3006 values for future processing.
 [project]: https://projekt.vattenfall.se/vindprojekt/projekt/hav/poseidon
 [map]: https://projekt.vattenfall.se/siteassets/vindkraft/havsbaserad/poseidon/oversiktskarta-poseidon.pdf
 [sweref]: https://www.lantmateriet.se/sv/geodata/gps-geodesi-och-swepos/Referenssystem/Tredimensionella-system/SWEREF-99/
+
+
+## Saved Symphony test calculation (2026-10-13)
+
+The geographic specification above is now represented by ordinary saved Symphony
+calculations in the local West 2019 installation. IDs are local to that database:
+
+- **#7, Poseidon — EcoTwin reference:** unchanged native pressure inputs. The native
+  result is preserved. Two legacy single-seed runs and two completed ten-seed
+  ensembles are attached to its report.
+- **#9, Poseidon — 50% bottom trawling:** a separate normal calculation after halving
+  native pressure 3, retaining shipping noise. Its earlier single-seed appendix is
+  kept for backward-compatibility review.
+- **#8, Poseidon — native regression (no simulation):** matching native output,
+  without an EcoTwin appendix.
+
+For the preview/full-run workflow, select #7 in EcoTwin. The saved 40-step ensemble
+uses seeds 100–109 (`24ef3e58-5b3c-40f0-a8ce-dab663aa872f`); the 80-step ensemble
+uses seeds 200–209 (`c27cacf7-1de0-4120-8704-b14020728497`). Both use model
+`2026-10-08`, show mean map frames and 95% Student t confidence bands, and remain
+available after reload. These short runs verify the software workflow; they are
+not a calibrated environmental assessment.
+
+The actual native export needs a 40 × 40 grid to include raster edge pixels around
+the 39 km vector area. Its domain is 1,143.875 km² in 1,227 model water cells.
+See [the fixture manifest](data/poseidon/reference-calculation.json) for native
+inputs, source fingerprints, all run IDs and the exact grid. See
+[the workflow guide](docs/MARELD-POC.md) for current settings and assumptions.
+
+## Simulation comparison fixture (2026-10-13)
+
+Use **Compare calculations → Select a calculation** with #7 as baseline and #9 as
+scenario, then enable **Include simulation comparison**. The matching full pair is:
+
+| Calculation | Run ID | Settings |
+|---|---|---|
+| #7 reference | `c27cacf7-1de0-4120-8704-b14020728497` | Model `2026-10-08`, 80 steps / 20 days, seeds 200–209 |
+| #9 50% bottom trawling | `80b59185-0f81-4467-8c60-05235d710374` | Same model, duration, sampling, domain and seeds |
+| #18 saved implied baseline for #9 | `6ec6ec1c-d827-43a0-a9d4-b6b820b4c813` | Same settings; reproduces #7's ensemble exactly |
+
+Alternatively choose **Implied baseline** and scenario #9: the explicit baseline
+creation action has already saved counterpart #18 in this local database. Repeating
+creation reuses #18. Native scenario #6 still has latest calculation #9. The native
+comparison report statistics match whether using the transient implied baseline
+or saved #18. The simulation baseline's per-seed totals and confidence intervals
+also match #7 exactly; #9 has distinct results from its pressure change.
+
+The report shows six species pairs with common axes and biomass as a percentage
+of each seed's own initial value. Confidence bands are 95% Student t intervals.
+The live checks covered modal print readiness, reversed implicit order, pinned
+new-tab URLs and the A4 export. The reviewed PDF is
+`output/playwright/poseidon-simulation-comparison.pdf` (7 pages, appendix on 5–7).
+This is software verification with short runs, not an environmental impact claim.

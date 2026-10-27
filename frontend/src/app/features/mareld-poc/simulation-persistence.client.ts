@@ -2,7 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, timeout } from 'rxjs';
 import { environment } from '@src/environments/environment';
-import { decodeResult, MareldModel, MareldResult, sampleEvery } from './mareld-result';
+import {
+  decodeResult,
+  EnsembleResult,
+  MareldModel,
+  MareldResult,
+  sampleEvery
+} from './mareld-result';
 import { PreparedInput } from './mareld-input';
 import { MARELD_RUN } from '../mareld-shared/run-config';
 import {
@@ -11,7 +17,8 @@ import {
 } from '../simulation-reports/simulation-report-data.service';
 
 export interface SavedSimulation {
-  version: 'ecotwin-run-v1';
+  version: 'ecotwin-run-v1' | 'ecotwin-run-v2';
+  ensemble?: EnsembleResult;
   runId: string;
   completedAt: number;
   model: MareldModel;
@@ -37,6 +44,7 @@ export function encodeFloats(values: Float32Array): string {
 }
 
 export function savedSimulation(result: MareldResult): SavedSimulation {
+  if (result.kind === 'preview') throw new Error('Previews are not saved to calculation reports.');
   if (!result.input.source || !result.modelId || !result.completedAt || !result.input.impacts)
     throw new Error('This result has no saved calculation provenance.');
   const maxSteps = result.steps[result.steps.length - 1];
@@ -96,7 +104,15 @@ export function restoreSimulation(saved: SavedSimulation): MareldResult {
     saved.config.maxSteps,
     saved.model.name
   );
-  return { ...result, source: 'saved', modelId: saved.model.id, completedAt: saved.completedAt };
+  return {
+    ...result,
+    source: 'saved',
+    modelId: saved.model.id,
+    completedAt: saved.completedAt,
+    kind: saved.version === 'ecotwin-run-v2' ? 'ensemble' : 'legacy',
+    seed: saved.config.seed,
+    ensemble: saved.ensemble
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -126,5 +142,12 @@ export class SimulationPersistenceClient {
     if (payload.runId !== runId || payload.input.source?.calculationId !== id)
       throw new Error('Saved simulation belongs to another calculation.');
     return restoreSimulation(payload);
+  }
+  async delete(id: number, runId: string): Promise<void> {
+    await firstValueFrom(this.http.delete<void>(this.url(id, runId)).pipe(timeout(60000)));
+    const channel = new BroadcastChannel('symphony-simulation-reports');
+    channel.postMessage({ calculationId: id });
+    channel.close();
+    window.dispatchEvent(new CustomEvent('simulation-deleted', { detail: id }));
   }
 }

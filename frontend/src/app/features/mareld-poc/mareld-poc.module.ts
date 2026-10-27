@@ -1,3 +1,4 @@
+import { MareldResultsComponent } from './mareld-results.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,8 +7,13 @@ import { MareldBiomassChartComponent } from './mareld-biomass-chart.component';
 import { MareldImpactOutlinesComponent } from './mareld-impact-outlines.component';
 
 @NgModule({
-  declarations: [MareldPanelComponent, MareldBiomassChartComponent, MareldImpactOutlinesComponent],
+  declarations: [
+    MareldResultsComponent,
+    MareldPanelComponent,
+    MareldBiomassChartComponent,
+    MareldImpactOutlinesComponent
+  ],
   imports: [CommonModule, FormsModule],
-  exports: [MareldPanelComponent]
+  exports: [MareldPanelComponent, MareldResultsComponent]
 })
 export class MareldPocModule {}

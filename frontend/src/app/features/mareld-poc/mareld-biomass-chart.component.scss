@@ -203,3 +203,14 @@ thead th:last-child {
     padding: 16px;
   }
 }
+
+.chart-header.compact {
+  justify-content: flex-end;
+}
+.chart-header.compact > div {
+  display: none;
+}
+.chart-header.compact + .chart-toolbar {
+  margin-top: -28px;
+  padding-right: 80px;
+}

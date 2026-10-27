@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 public class SimulationRunValidationTest {
     private static final String ID = "5db496cc-f539-4a1e-b045-3f870596731b";
     private final ObjectMapper json = new ObjectMapper();
-    private ObjectNode fixture() throws Exception {
+    ObjectNode fixture() throws Exception {
         ObjectNode payload = (ObjectNode) json.readTree("""
           {"version":"ecotwin-run-v1","runId":"5db496cc-f539-4a1e-b045-3f870596731b","completedAt":1000,
            "model":{"id":"test","name":"Test model","species":["codfish","plankton"]},

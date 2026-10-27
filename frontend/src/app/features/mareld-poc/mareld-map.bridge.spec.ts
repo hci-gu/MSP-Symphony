@@ -126,4 +126,30 @@ describe('simulation map isolation', () => {
     bridge.detach();
     map.dispose();
   });
+  it('hides cleared result pixels during map animation and can display the next saved run', () => {
+    const { bridge, session, native, map } = setup();
+    const fixture = biomassFixture();
+    session.input.set(fixture.input);
+    session.result.set(fixture);
+    bridge.setActive(true);
+    TestBed.tick();
+    const group = map
+      .getLayers()
+      .getArray()
+      .find((layer) => layer.get('id') === 'mareld-poc') as LayerGroup;
+    const image = group.getLayers().item(0) as ImageLayer<ImageStatic>;
+    expect(image.getVisible()).toBeTrue();
+    map.getView().animate({ zoom: 7, duration: 500 });
+    session.result.set(null);
+    TestBed.tick();
+    expect(image.getVisible()).toBeFalse();
+    expect(image.getSource()).toBeNull();
+    expect(native.getVisible()).toBeTrue();
+    session.result.set({ ...fixture, id: 'another-run' });
+    TestBed.tick();
+    expect(image.getVisible()).toBeTrue();
+    expect(image.getSource()).not.toBeNull();
+    bridge.detach();
+    map.dispose();
+  });
 });

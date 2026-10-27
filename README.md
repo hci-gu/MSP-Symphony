@@ -35,13 +35,20 @@ with special emphasis on the building and comparison of different scenarios. Thi
 
 ## Optional EcoTwin simulation
 
-The **EcoTwin** tab runs an optional ecosystem simulation for a completed saved
+The **EcoTwin** tab previews and runs optional ecosystem simulations for a completed saved
 Symphony calculation. Normal scenario editing and calculation stay unchanged.
-Successful runs are stored separately and appear automatically as appendices in
+Completed full runs are stored separately and appear automatically as appendices in
 the calculation report, including after refresh and in print.
 
 See the [review and startup guide](docs/MARELD-POC.md) for the Poseidon fixture,
 database migration, supported inputs and experimental model assumptions.
+
+Use **Run preview** for an unsaved single-seed map result, then **Run full simulation**
+for ten seeds with mean maps and 95% confidence bands. Full runs continue on the
+server after closing the browser; completed ensembles appear in report appendices.
+Configuration stays on the left, playback floats below the map, and graphs open
+on the right. Apply `SimulationRuns.sql`, `SimulationJobs.sql`, and `SimulationBaselines.sql`, and set
+`ECOTWIN_API_URL` on the backend as described in the workflow guide.
 
 ## Architectural overview
 

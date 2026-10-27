@@ -1,0 +1,93 @@
+<section aria-label="Simulation comparison" class="simulation-picker">
+  <label class="include"
+    ><input type="checkbox" [ngModel]="enabled()" (ngModelChange)="setEnabled($event)" /> Include
+    simulation comparison</label
+  >
+  @if (enabled()) {
+    <p>Compare completed simulations alongside the native impact report.</p>
+    <button
+      type="button"
+      (click)="load()"
+      [disabled]="loading() || creating() || !scenarioCalculationId"
+    >
+      Refresh saved simulations
+    </button>
+    @if (!scenarioCalculationId) {
+      <p>Choose a scenario calculation above.</p>
+    } @else {
+      @if (loading()) {
+        <p role="status">Loading saved simulations…</p>
+      }
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+        <button type="button" (click)="load()">Retry</button>
+      }
+      @if (implicit && !baselineId() && !loading() && !error()) {
+        <p>The automatic baseline needs a saved calculation before it can have a simulation.</p>
+        <button type="button" (click)="createBaseline()" [disabled]="creating()">
+          {{ creating() ? 'Creating baseline…' : 'Create baseline calculation' }}
+        </button>
+      }
+      @for (side of ['baseline', 'scenario']; track side) {
+        <div class="run-picker">
+          <label [for]="'simulation-' + side">{{
+            side === 'baseline' ? 'Baseline simulation' : 'Scenario simulation'
+          }}</label>
+          <select
+            [id]="'simulation-' + side"
+            [ngModel]="side === 'baseline' ? baselineRunId() : scenarioRunId()"
+            (ngModelChange)="choose(side === 'baseline' ? 'baseline' : 'scenario', $event)"
+            [disabled]="loading() || creating()"
+          >
+            <option value="">Choose a saved run</option>
+            @if (
+              side === 'baseline'
+                ? baselineRunId() && !baselineRun()
+                : scenarioRunId() && !scenarioRun()
+            ) {
+              <option [value]="side === 'baseline' ? baselineRunId() : scenarioRunId()" disabled>
+                Selected run is no longer available
+              </option>
+            }
+            @for (run of side === 'baseline' ? baselineRuns() : scenarioRuns(); track run.runId) {
+              <option [value]="run.runId">
+                {{ run.completedAt | date: 'short' }} · {{ run.model.name }} ·
+                {{ run.config.maxSteps }} steps ·
+                {{ run.ensemble ? '10 seeds' : 'Legacy single seed' }}
+                ({{ run.config.seed }}{{ run.ensemble ? '–' + (run.config.seed + 9) : '' }}) ·
+                {{ run.runId.slice(0, 8) }}
+              </option>
+            }
+          </select>
+          @if (
+            !(side === 'baseline' ? baselineRuns().length : scenarioRuns().length) && !loading()
+          ) {
+            <p>No saved simulation available.</p>
+          }
+          @if (preparation(side === 'baseline' ? 'baseline' : 'scenario'); as url) {
+            <a [href]="url" target="_blank" rel="noopener"
+              >Prepare {{ side }} simulation in EcoTwin ↗</a
+            >
+          }
+        </div>
+      }
+      @if (issues().length) {
+        <div class="error" role="status">
+          <strong>These runs need matching settings:</strong>
+          <ul>
+            @for (issue of issues(); track issue) {
+              <li>{{ issue }}</li>
+            }
+          </ul>
+        </div>
+      }
+      @if (baselineRun() && scenarioRun() && !issues().length && !loading()) {
+        <p class="ready">Compatible saved runs selected. Graphs use % of initial biomass.</p>
+      }
+      <p class="hint">
+        Preparation links copy the other selected run's model, duration and seeds. Simulations run
+        only when you start them in EcoTwin.
+      </p>
+    }
+  }
+</section>

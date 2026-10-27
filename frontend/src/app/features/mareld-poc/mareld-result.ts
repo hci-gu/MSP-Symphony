@@ -15,7 +15,21 @@ export interface MareldModel {
   name: string;
   species: string[];
 }
+export interface EnsembleResult {
+  seeds: number[];
+  /** [seed][species][frame], summed over the frozen water mask. */
+  totals: number[][][];
+  confidenceLevel: number;
+  ciMethod: 'student-t';
+  mean: number[][];
+  ciLow: number[][];
+  ciHigh: number[][];
+}
 export interface MareldResult {
+  kind?: 'preview' | 'ensemble' | 'legacy';
+  seed?: number;
+  draftKey?: string;
+  ensemble?: EnsembleResult;
   id: string;
   source: 'live' | 'saved';
   modelId?: string;

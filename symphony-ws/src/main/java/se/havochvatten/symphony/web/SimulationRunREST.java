@@ -30,11 +30,18 @@ public class SimulationRunREST {
         try { payload = new ObjectMapper().readTree(bytes); }
         catch (Exception e) { throw new CalculationInputException(400, "Invalid simulation JSON."); }
         if (payload == null) throw new CalculationInputException(400, "Simulation data is required.");
+        if ("ecotwin-run-v2".equals(payload.path("version").asText()))
+            throw new CalculationInputException(400, "Full simulation results are saved by the server worker.");
         return runs.save(id, runId, req.getUserPrincipal(), payload);
     }
     @GET @Path("{runId}")
     public JsonNode detail(@Context HttpServletRequest req, @PathParam("id") int id,
                            @PathParam("runId") String runId, @QueryParam("view") String view) {
         return runs.detail(id, runId, req.getUserPrincipal(), "report".equals(view));
+    }
+    @DELETE @Path("{runId}")
+    public void delete(@Context HttpServletRequest req, @PathParam("id") int id,
+                       @PathParam("runId") String runId) {
+        runs.delete(id, runId, req.getUserPrincipal());
     }
 }

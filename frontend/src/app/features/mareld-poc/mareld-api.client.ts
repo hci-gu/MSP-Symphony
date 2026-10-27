@@ -3,15 +3,14 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, fromEvent, takeUntil, timeout } from 'rxjs';
 import { environment } from '@src/environments/environment';
-import { pngBlob, PreparedInput, rasterCanvas } from './mareld-input';
-import { impactMaskCanvas, impactRequest } from './mareld-impacts';
+import { PreparedInput } from './mareld-input';
+import { fullRunRequest } from './simulation-jobs.client';
 import {
   checkBudget,
   decodeResult,
   MareldModel,
   MareldResult,
-  MAX_TENSOR_BYTES,
-  sampleEvery
+  MAX_TENSOR_BYTES
 } from './mareld-result';
 
 export function apiError(error: unknown): string {
@@ -71,58 +70,25 @@ export class MareldApiClient {
     input: PreparedInput,
     model: MareldModel,
     maxSteps: number,
-    signal: AbortSignal
+    signal: AbortSignal,
+    seed = 42
   ): Promise<MareldResult> {
     checkBudget(input, model.species.length, maxSteps);
     if (input.impacts && input.impacts.inputId !== input.id)
       throw new Error('Impact inputs belong to a different area. Prepare the impacts again.');
-    const [texture, depth] = await Promise.all([
-      pngBlob(rasterCanvas(input, 'texture')),
-      pngBlob(rasterCanvas(input, 'depth'))
-    ]);
+    if (!input.source) throw new Error('Choose a saved calculation for the preview.');
     if (signal.aborted) throw new Error('Request discarded.');
-    const impactFields = impactRequest(input.impacts, maxSteps);
-    const maskFiles = await Promise.all(
-      (input.impacts?.layers ?? []).flatMap((layer) =>
-        layer.bands.map(async (band) => ({
-          name: `${band.id}.png`,
-          blob: await pngBlob(impactMaskCanvas(input, band.mask))
-        }))
-      )
-    );
-    if (signal.aborted) throw new Error('Request discarded.');
-    const form = new FormData();
-    const runId = crypto.randomUUID();
-    form.append(
-      'request',
-      JSON.stringify({
-        run_id: runId,
-        seed: 42,
-        model: { id: model.id },
-        grid: { width: input.grid.width, height: input.grid.height },
-        time: {
-          max_steps: maxSteps,
-          sample_every: sampleEvery(maxSteps),
-          include_final: true,
-          tick_duration_days: MARELD_RUN.tickDurationDays
-        },
-        species: model.species,
-        pressures: impactFields.pressures,
-        ...(impactFields.masks.length ? { masks: impactFields.masks } : {}),
-        output: {
-          dtype: 'float32',
-          tensor_order: 'frame,row,column,species',
-          replicates: 1,
-          include_summary: false
-        }
-      })
-    );
-    form.append('texture', texture, 'texture.png');
-    form.append('depth', depth, 'depth.png');
-    for (const file of maskFiles) form.append('mask', file.blob, file.name);
+    const request = fullRunRequest(input, model, maxSteps, seed);
+    request.version = 'ecotwin-preview-v1';
+    request.config.replicates = 1;
+    const runId = request.runId;
     const text = await firstValueFrom(
       this.http
-        .post(`${this.base}/v1/runs`, form, { responseType: 'text' })
+        .post(
+          `${environment.apiBaseUrl}/calculation/${input.source.calculationId}/simulation-jobs/preview`,
+          request,
+          { responseType: 'text' }
+        )
         .pipe(timeout(MARELD_RUN.runTimeoutMs), takeUntil(fromEvent(signal, 'abort')))
     );
     if (text.length > MAX_TENSOR_BYTES * 1.4 + 65536)
@@ -135,6 +101,8 @@ export class MareldApiClient {
     }
     return {
       ...decodeResult(payload, input, model.species, maxSteps, model.name),
+      kind: 'preview',
+      seed,
       id: runId,
       modelId: model.id,
       completedAt: Date.now()

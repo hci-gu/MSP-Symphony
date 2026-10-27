@@ -1,3 +1,4 @@
+import { SimulationComparisonPickerComponent } from '@src/app/features/simulation-comparison/simulation-comparison-picker.component';
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ComparisonComponent } from "@src/app/map-view/comparison/comparison.component";
 import { StoreModule } from "@ngrx/store";
@@ -22,6 +23,7 @@ describe('ComparisonComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        SimulationComparisonPickerComponent,
         MatSelectModule,
         MatRadioModule,
         MatCheckboxModule,

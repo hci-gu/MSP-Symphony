@@ -10,7 +10,7 @@
   "scenarioId": 6,
   "calculation": {
     "id": 7,
-    "name": "Poseidon — EcoTwin reference",
+    "name": "Poseidon \u2014 EcoTwin reference",
     "timestamp": 1791887208406,
     "owner": "hav-local",
     "isPurged": false,
@@ -39,7 +39,7 @@
   "operation": 0,
   "operationOptions": null,
   "nativeReport": {
-    "name": "Poseidon — EcoTwin reference",
+    "name": "Poseidon \u2014 EcoTwin reference",
     "baselineName": "HAV_2019_WEST_LOCAL",
     "operationName": "CumulativeImpact",
     "operationOptions": {},
@@ -156,7 +156,7 @@
     "areaMatrices": [
       {
         "areaName": "Poseidon POC review area",
-        "matrix": "Published May 2019 – Västerhavet"
+        "matrix": "Published May 2019 \u2013 V\u00e4sterhavet"
       }
     ],
     "normalization": {
@@ -303,7 +303,9 @@
   "nativeGeoTiffSha256": "4bc77fcdd04452ba33d1b937c250b97fcb16577be8031a16ede9529241fd7c9f",
   "simulationRunIds": [
     "9b43465e-77ec-4bbb-a566-04eeda448787",
-    "69b26222-0eda-4235-ba7c-bf39142f67a4"
+    "69b26222-0eda-4235-ba7c-bf39142f67a4",
+    "24ef3e58-5b3c-40f0-a8ce-dab663aa872f",
+    "c27cacf7-1de0-4120-8704-b14020728497"
   ],
   "inputFingerprint": "be517ca5956e626c83a11353179ab43bba0885818895dfd3277ef5f505049c3c",
   "sourceFingerprints": {
@@ -334,7 +336,7 @@
   },
   "modifiedCalculation": {
     "id": 9,
-    "name": "Poseidon — 50% bottom trawling",
+    "name": "Poseidon \u2014 50% bottom trawling",
     "timestamp": 1791888383034,
     "hasChanges": false,
     "purged": false
@@ -469,6 +471,114 @@
       },
       "waterCells": 1227,
       "nativeAreaKm2": 1143.875
+    },
+    {
+      "runId": "24ef3e58-5b3c-40f0-a8ce-dab663aa872f",
+      "calculationId": 7,
+      "completedAt": 1791893125432,
+      "model": {
+        "id": "2026-10-08",
+        "name": "2026 10 08",
+        "species": [
+          "codfish",
+          "pelagicFish",
+          "porpoises",
+          "benthic_community",
+          "phytoplankton",
+          "zooplankton"
+        ]
+      },
+      "config": {
+        "seed": 100,
+        "maxSteps": 40,
+        "replicates": 10,
+        "sampleEvery": 4,
+        "mappingVersion": "hav-west-native-v1",
+        "tickDurationDays": 0.25
+      },
+      "grid": {
+        "crs": "EPSG:3035",
+        "width": 40,
+        "extent": [
+          4357000,
+          3858000,
+          4397000,
+          3898000
+        ],
+        "height": 40,
+        "cellMetres": 1000
+      },
+      "waterCells": 1227,
+      "nativeAreaKm2": 1143.875,
+      "version": "ecotwin-report-v2",
+      "seeds": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109
+      ],
+      "confidenceLevel": 0.95,
+      "ciMethod": "student-t"
+    },
+    {
+      "runId": "c27cacf7-1de0-4120-8704-b14020728497",
+      "calculationId": 7,
+      "completedAt": 1791893375660,
+      "model": {
+        "id": "2026-10-08",
+        "name": "2026 10 08",
+        "species": [
+          "codfish",
+          "pelagicFish",
+          "porpoises",
+          "benthic_community",
+          "phytoplankton",
+          "zooplankton"
+        ]
+      },
+      "config": {
+        "seed": 200,
+        "maxSteps": 80,
+        "replicates": 10,
+        "sampleEvery": 4,
+        "mappingVersion": "hav-west-native-v1",
+        "tickDurationDays": 0.25
+      },
+      "grid": {
+        "crs": "EPSG:3035",
+        "width": 40,
+        "extent": [
+          4357000,
+          3858000,
+          4397000,
+          3898000
+        ],
+        "height": 40,
+        "cellMetres": 1000
+      },
+      "waterCells": 1227,
+      "nativeAreaKm2": 1143.875,
+      "version": "ecotwin-report-v2",
+      "seeds": [
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209
+      ],
+      "confidenceLevel": 0.95,
+      "ciMethod": "student-t"
     }
   ],
   "savedChanges": {
@@ -525,5 +635,70 @@
     "frontendProductionBuild": true,
     "changedFrontendLint": true,
     "fixtureRecreationScript": true
+  },
+  "ensembleVerification": {
+    "date": "2026-10-13",
+    "previewSteps": 12,
+    "previewPersisted": false,
+    "browserReloadDuringRun": "c27cacf7-1de0-4120-8704-b14020728497",
+    "completedSeeds": 10,
+    "confidenceIntervalsIndependentlyRecomputed": true,
+    "reportPdf": "output/playwright/poseidon-ensemble-report.pdf",
+    "reportPages": 17,
+    "frontendTestsPassed": 236,
+    "backendTests": {
+      "passed": 115,
+      "skipped": 1,
+      "failed": 0
+    }
+  },
+  "comparisonVerification": {
+    "date": "2026-10-13",
+    "referenceCalculationId": 7,
+    "scenarioCalculationId": 9,
+    "savedImplicitBaselineCalculationId": 18,
+    "runs": {
+      "reference": "c27cacf7-1de0-4120-8704-b14020728497",
+      "scenario": "80b59185-0f81-4467-8c60-05235d710374",
+      "savedImplicitBaseline": "6ec6ec1c-d827-43a0-a9d4-b6b820b4c813"
+    },
+    "modelId": "2026-10-08",
+    "maxSteps": 80,
+    "seeds": [
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209
+    ],
+    "nativeImplicitAndPersistedBaselineStatisticsIdentical": true,
+    "referenceAndImplicitBaselineEnsemblesIdentical": true,
+    "originalScenarioLatestCalculationUnchanged": 9,
+    "baselineCreationRetryReusesCounterpart": true,
+    "baselineJobResumedAfterNineSeeds": true,
+    "iframePrintReadiness": true,
+    "pinnedNewTabLink": true,
+    "reversedImplicitColumns": true,
+    "reportPdf": "output/playwright/poseidon-simulation-comparison.pdf",
+    "reportPages": 7,
+    "appendixPagesVisuallyReviewed": [
+      5,
+      6,
+      7
+    ],
+    "frontendTestsPassed": 261,
+    "backendTests": {
+      "passed": 126,
+      "skipped": 1,
+      "failed": 0
+    },
+    "productionBuild": true,
+    "changedFrontendLint": true,
+    "repeatableCheck": "python3 scripts/verify-simulation-comparison.py --credentials .local/symphony/hav-local-credentials.json"
   }
 }

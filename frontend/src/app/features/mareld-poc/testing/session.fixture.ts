@@ -1,3 +1,4 @@
+import { SimulationJobsClient } from '../simulation-jobs.client';
 import { signal } from '@angular/core';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
@@ -24,17 +25,21 @@ export function sessionProviders() {
   adapter.grid.and.callFake(
     async (source: { calculationId: number }) => calculationFixture(source.calculationId).grid
   );
-  const persistence = jasmine.createSpyObj('Persistence', ['save', 'load']);
+  const persistence = jasmine.createSpyObj('Persistence', ['save', 'load', 'delete']);
   persistence.save.and.resolveTo({});
+  persistence.delete.and.resolveTo();
   const reports = jasmine.createSpyObj('Reports', ['list']);
   reports.list.and.resolveTo([]);
+  const jobs = jasmine.createSpyObj('Jobs', ['list', 'submit', 'retry']);
+  jobs.list.and.resolveTo([]);
   const actions = new Subject<ReturnType<typeof UserActions.logoutUser>>();
   const providers = [
+    { provide: SimulationJobsClient, useValue: jobs },
     { provide: MareldApiClient, useValue: api },
     { provide: SymphonyCalculationAdapter, useValue: adapter },
     { provide: SimulationPersistenceClient, useValue: persistence },
     { provide: SimulationReportData, useValue: reports },
     { provide: Actions, useValue: new Actions(actions) }
   ];
-  return { api, adapter, persistence, reports, actions, providers };
+  return { api, jobs, adapter, persistence, reports, actions, providers };
 }

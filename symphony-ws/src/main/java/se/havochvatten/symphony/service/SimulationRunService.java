@@ -37,6 +37,17 @@ public class SimulationRunService {
             return existing.summary;
         }
         var validated = SimulationRunValidation.validate(payload, id, runId);
+        verifyInput(calculation, payload);
+        var run = new SimulationRun();
+        run.id = runId; run.calculationId = id; run.completedAt = payload.path("completedAt").asLong();
+        run.contentHash = validated.hash(); run.summary = validated.summary();
+        var artifact = new SimulationArtifact();
+        artifact.id = runId; artifact.metadata = validated.metadata(); artifact.tensor = validated.tensor();
+        em.persist(run); em.flush(); em.persist(artifact); em.flush();
+        return run.summary;
+    }
+
+    public void verifyInput(CalculationResult calculation, JsonNode payload) throws Exception {
         var manifest = inputs.manifest(calculation);
         if (!manifest.fingerprint().equals(payload.path("input").path("source").path("fingerprint").asText()))
             throw new CalculationInputException(409, "Calculation sources changed since simulation preparation. The result was not attached.");
@@ -52,13 +63,6 @@ public class SimulationRunService {
             manifest.bands().stream().map(b -> new BandKey(b.category(), b.bandNumber())).toList()));
         if (!InputFingerprint.hash(json.valueToTree(verifiedGrid)).equals(InputFingerprint.hash(payload.path("input").path("nativeGrid"))))
             throw new CalculationInputException(400, "Saved native inputs do not match this calculation's effective input grid.");
-        var run = new SimulationRun();
-        run.id = runId; run.calculationId = id; run.completedAt = payload.path("completedAt").asLong();
-        run.contentHash = validated.hash(); run.summary = validated.summary();
-        var artifact = new SimulationArtifact();
-        artifact.id = runId; artifact.metadata = validated.metadata(); artifact.tensor = validated.tensor();
-        em.persist(run); em.flush(); em.persist(artifact); em.flush();
-        return run.summary;
     }
 
     public JsonNode detail(int id, String runId, Principal principal, boolean reportOnly) {
@@ -75,5 +79,26 @@ public class SimulationRunService {
         ObjectNode payload = ((ObjectNode) artifact.metadata).deepCopy();
         ((ObjectNode) payload.path("result")).put("biomassB64", Base64.getEncoder().encodeToString(artifact.tensor));
         return payload;
+    }
+
+    public void delete(int id, String runId, Principal principal) {
+        var calculation = inputs.authorize(id, principal);
+        if (!principal.getName().equals(calculation.getOwner()))
+            throw new CalculationInputException(403, "Only the calculation owner can delete a simulation.");
+        // Match submission/finalization lock order and keep all deletion in one transaction.
+        em.lock(calculation, LockModeType.PESSIMISTIC_WRITE);
+        var run = em.find(SimulationRun.class, runId);
+        if (run == null) return; // A retry after a successful deletion is harmless.
+        if (run.calculationId != id)
+            throw new CalculationInputException(404, "Saved simulation not found.");
+        var job = em.find(SimulationJob.class, runId, LockModeType.PESSIMISTIC_WRITE);
+        if (job != null) {
+            if (job.calculationId != id || !"completed".equals(job.status))
+                throw new CalculationInputException(409, "This simulation still has unfinished work.");
+            em.remove(job);
+        }
+        // simulation_artifact references this row with ON DELETE CASCADE.
+        em.remove(run);
+        em.flush();
     }
 }

@@ -1,0 +1,130 @@
+<section class="simulation-comparison" aria-label="Simulation comparison appendix">
+  <h2>Appendix — Simulation comparison</h2>
+  @if (loading()) {
+    <p role="status">Loading the selected saved simulations…</p>
+  }
+  @if (error()) {
+    <div class="error" role="alert">
+      <p>{{ error() }}</p>
+      <p>The native comparison above remains available.</p>
+      <button type="button" (click)="load()">Retry simulation comparison</button>
+    </div>
+  }
+  @if (runs().length) {
+    <p>
+      Each species is shown as a percentage of its own initial biomass. Both sides use the same time
+      and biomass scales within each row. The dashed line marks 100%.
+    </p>
+    @if (runs()[0].ensemble) {
+      <p>
+        Mean of 10 seeds with pointwise 95% Student t confidence intervals (9 degrees of freedom).
+        Each seed is normalized before calculating the mean and interval. Bands describe random-seed
+        variability, not uncertainty in the model or its inputs.
+      </p>
+    } @else {
+      <p>Legacy single-seed simulations. Confidence intervals are unavailable.</p>
+    }
+    <div class="pair run-metadata">
+      @for (run of runs(); track run.runId) {
+        <div>
+          <h3>
+            {{ ($index === 0) !== reverse ? 'Baseline' : 'Scenario' }} · {{ run.source.name }}
+          </h3>
+          <p>
+            Calculation #{{ run.calculationId }} · {{ run.completedAt | date: 'yyyy-MM-dd HH:mm' }}
+          </p>
+          <dl>
+            <dt>Model</dt>
+            <dd>{{ run.model.name }} · {{ run.model.id }}</dd>
+            <dt>Duration</dt>
+            <dd>
+              {{ run.config.maxSteps * run.config.tickDurationDays | number: '1.0-2' }} days ·
+              {{ run.config.maxSteps }} steps
+            </dd>
+            <dt>Seeds</dt>
+            <dd>{{ run.ensemble ? run.ensemble.seeds.join(', ') : run.config.seed }}</dd>
+            <dt>Grid</dt>
+            <dd>
+              {{ run.grid.width }} × {{ run.grid.height }} · {{ run.grid.cellMetres }} m ·
+              {{ run.grid.crs }}
+            </dd>
+            <dt>Mapping</dt>
+            <dd>{{ run.config.mappingVersion }}</dd>
+            <dt>Saved run</dt>
+            <dd class="identity">{{ run.runId }}</dd>
+            <dt>Input fingerprint</dt>
+            <dd class="identity">{{ run.source.fingerprint }}</dd>
+          </dl>
+        </div>
+      }
+    </div>
+    @for (row of rows(); track row.id) {
+      <section class="species-pair">
+        <h3>{{ row.name }} · % of initial biomass</h3>
+        <div class="pair">
+          @for (curve of row.curves; track $index) {
+            <figure>
+              <figcaption>
+                {{ ($index === 0) !== reverse ? 'Baseline' : 'Scenario' }} · #{{
+                  runs()[$index].calculationId
+                }}
+              </figcaption>
+              @if (curve.path) {
+                <svg
+                  viewBox="0 0 440 215"
+                  role="img"
+                  [attr.aria-label]="
+                    row.name +
+                    ' — ' +
+                    runs()[$index].source.name +
+                    ', percentage of initial biomass'
+                  "
+                >
+                  <line x1="45" y1="25" x2="45" y2="175" stroke="#8798a1" />
+                  <line x1="45" y1="175" x2="410" y2="175" stroke="#8798a1" />
+                  <line
+                    x1="45"
+                    [attr.y1]="row.initialY"
+                    x2="410"
+                    [attr.y2]="row.initialY"
+                    stroke="#82939b"
+                    stroke-dasharray="5 4"
+                  />
+                  <text x="40" y="29" text-anchor="end">{{ row.maximum | number: '1.0-0' }}%</text>
+                  <text x="40" y="179" text-anchor="end">{{ row.minimum | number: '1.0-0' }}%</text>
+                  <text x="40" [attr.y]="row.initialY + 4" text-anchor="end">100%</text>
+                  <text x="45" y="200">Day 0</text>
+                  <text x="410" y="200" text-anchor="end">
+                    Day {{ row.days | number: '1.0-2' }}
+                  </text>
+                  @if (curve.band) {
+                    <path [attr.d]="curve.band" [attr.fill]="row.color" fill-opacity="0.2" />
+                  }
+                  <path
+                    [attr.d]="curve.path"
+                    [attr.stroke]="row.color"
+                    fill="none"
+                    stroke-width="2"
+                  />
+                </svg>
+                <p class="final">Final: {{ curve.final | number: '1.0-2' }}% of initial biomass</p>
+              } @else {
+                <p class="undefined">
+                  Percentage is undefined: initial biomass is zero in at least one seed.
+                </p>
+              }
+            </figure>
+          }
+        </div>
+      </section>
+    }
+    <section class="assumptions">
+      <h3>Inputs and assumptions</h3>
+      <ul>
+        @for (assumption of assumptions(); track assumption) {
+          <li>{{ assumption }}</li>
+        }
+      </ul>
+    </section>
+  }
+</section>

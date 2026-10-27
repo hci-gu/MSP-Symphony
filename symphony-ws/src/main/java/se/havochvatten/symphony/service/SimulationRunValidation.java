@@ -31,7 +31,15 @@ public final class SimulationRunValidation {
         return node.asText();
     }
     public static Validated validate(JsonNode payload, int calculationId, String runId) throws Exception {
-        require(payload != null && payload.isObject() && "ecotwin-run-v1".equals(payload.path("version").asText()), "Unsupported simulation format.");
+        return validate(payload, calculationId, runId, false);
+    }
+    /** Internal worker validation of a single seed, before adding it to an ensemble. */
+    static Validated validateSeed(JsonNode payload, int calculationId, String runId) throws Exception {
+        return validate(payload, calculationId, runId, true);
+    }
+    private static Validated validate(JsonNode payload, int calculationId, String runId, boolean seedOnly) throws Exception {
+        boolean ensemble = payload != null && "ecotwin-run-v2".equals(payload.path("version").asText());
+        require(payload != null && payload.isObject() && (ensemble || "ecotwin-run-v1".equals(payload.path("version").asText())), "Unsupported simulation format.");
         require(runId.matches("[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}") &&
             runId.equals(payload.path("runId").asText()), "Invalid run identity.");
         var metadata = ((ObjectNode) payload).deepCopy();
@@ -62,8 +70,12 @@ public final class SimulationRunValidation {
         validatePrepared(input, cells);
         int maxSteps = integer(config.path("maxSteps"), 1, 10000, "simulation duration");
         int interval = Math.max(4, (int) Math.ceil(maxSteps / 50.0));
-        require(config.path("sampleEvery").asInt(-1) == interval && config.path("seed").asInt(-1) == 42 &&
+        require(config.path("sampleEvery").asInt(-1) == interval && (ensemble || config.path("seed").asInt(-1) == 42) &&
             config.path("tickDurationDays").asDouble() == 0.25, "Invalid simulation configuration.");
+        if (ensemble) {
+            integer(config.path("seed"), 0, Integer.MAX_VALUE - 10, "base seed");
+            require(config.path("replicates").asInt() == 10, "A full simulation requires ten seeds.");
+        }
         List<Integer> steps = new ArrayList<>();
         for (int i = 0; i <= maxSteps; i += interval) steps.add(i);
         if (steps.get(steps.size() - 1) != maxSteps) steps.add(maxSteps);
@@ -98,7 +110,7 @@ public final class SimulationRunValidation {
                     if (water.get(cell).asInt() == 1) totals[s][frame] += value;
                 }
         ObjectNode summary = JSON.createObjectNode();
-        summary.put("version", "ecotwin-report-v1"); summary.put("runId", runId);
+        summary.put("version", ensemble ? "ecotwin-report-v2" : "ecotwin-report-v1"); summary.put("runId", runId);
         summary.put("calculationId", calculationId); summary.put("completedAt", completed);
         summary.set("source", source); summary.set("model", model); summary.set("config", config);
         summary.set("grid", input.path("grid")); summary.set("steps", result.path("steps"));
@@ -112,6 +124,12 @@ public final class SimulationRunValidation {
         for (JsonNode layer : input.path("impacts").path("layers")) {
             var item = inputs.addObject();
             for (String key : List.of("kind", "sourceId", "sourceSha256", "strength", "coverage", "affectedCells")) item.set(key, layer.path(key));
+        }
+        if (ensemble && !seedOnly) {
+            ObjectNode statistics = SimulationEnsemble.statistics(payload.path("ensemble"), config.path("seed").asInt(), totals);
+            metadata.set("ensemble", statistics);
+            summary.set("ensemble", statistics);
+            summary.set("totals", statistics.path("mean"));
         }
         return new Validated(metadata, tensor, summary, InputFingerprint.hash(payload));
     }

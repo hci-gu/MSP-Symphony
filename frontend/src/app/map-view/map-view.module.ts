@@ -50,6 +50,7 @@ import { SummaryModelControlsComponent } from './band-selection/summary-model-se
 import { SummaryModelDialogComponent } from './band-selection/summary-model-selection/summary-model-dialog/summary-model-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
+import { SimulationComparisonPickerComponent } from '../features/simulation-comparison/simulation-comparison-picker.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
     SummaryModelDialogComponent
   ],
   imports: [
+    SimulationComparisonPickerComponent,
     MareldPocModule,
     SharedModule,
     CoreModule,

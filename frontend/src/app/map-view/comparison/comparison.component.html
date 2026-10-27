@@ -91,6 +91,13 @@
       </mat-radio-button>
     </article>
   </div>
+  @if (simulationsEnabled) {
+    <app-simulation-comparison-picker
+      [baselineCalculationId]="base.value || null"
+      [scenarioCalculationId]="scenarioCalculationId"
+      [implicit]="useImplicit"
+      (choiceChange)="simulationChoice = $event" />
+  }
 </section>
 
 <!--TODO: show some calculation metadata?-->
@@ -99,7 +106,7 @@
     mat-flat-button
     id="compare"
     (click)="submit()"
-    [disabled]="computingComparisonResult || compareForm.invalid"
+    [disabled]="computingComparisonResult || compareForm.invalid || (simulationChoice.enabled && !simulationChoice.selection)"
     class="compare-button"
   >
     <span

@@ -16,6 +16,8 @@ import { MatOption } from "@angular/material/core";
 import { MatRadioChange } from "@angular/material/radio";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MapViewModule } from "@src/app/map-view/map-view.module";
+import { environment } from '@src/environments/environment';
+import { SimulationComparisonChoice } from '../../features/simulation-comparison/simulation-comparison';
 
 enum ComparisonScaleOptions { CONSTANT, DYNAMIC }
 
@@ -49,6 +51,9 @@ export class ComparisonComponent implements AfterViewInit, OnDestroy {
   reverseComparison = false;
   computingComparisonResult = false;
   private baselineSubscription?: Subscription;
+  readonly simulationsEnabled = environment.mareldPoc.enabled;
+  simulationChoice: SimulationComparisonChoice = {enabled: false, selection: null};
+  get scenarioCalculationId(): number | null { return Number(this.compareForm.value.b) || null; }
 
   constructor() {
     this.calculations$ = this.store.select(CalculationSelectors.selectCalculations);
@@ -68,6 +73,7 @@ export class ComparisonComponent implements AfterViewInit, OnDestroy {
   }
 
   private resetForBaselineSwitch() {
+    this.simulationChoice = {enabled: false, selection: null};
     this.useImplicit = true;
     this.includeUnchanged = false;
     this.candidates$ = this.store.select(CalculationSelectors.selectChangedCalculations);
@@ -83,6 +89,7 @@ export class ComparisonComponent implements AfterViewInit, OnDestroy {
   }
 
   submit() {
+    if (this.simulationChoice.enabled && !this.simulationChoice.selection) return;
     this.computingComparisonResult = true;
     const a = this.useImplicit ? null : this.aSelect.value;
     const that = this,
@@ -93,12 +100,13 @@ export class ComparisonComponent implements AfterViewInit, OnDestroy {
       comparisonTitle = aTitle + ' ~ ' + (this.bSelect.selected as MatOption).viewValue,
       dynamic = this.selectedScale === ComparisonScaleOptions.DYNAMIC,
       constantVal = this.constant,
-      reverse = this.reverseComparison
+      reverse = this.useImplicit && this.reverseComparison,
+      simulation = this.simulationChoice.selection;
     this.calcService.addComparisonResult(a, b, dynamic, constantVal, reverse).then(
       (dynamicMax: number | null) => {
         const max = dynamicMax !== null ? Math.ceil(dynamicMax * 100) : this.constant;
         this.dialogService.open(ComparisonReportModalComponent, this.moduleRef, {
-          data: { a, b, max, reverse }
+          data: { a, b, max, reverse, simulation }
         });
         if(dynamic) {
           that.store.dispatch(CalculationActions.fetchComparisonLegend({ maxValue: dynamicMax || 0, comparisonTitle }));

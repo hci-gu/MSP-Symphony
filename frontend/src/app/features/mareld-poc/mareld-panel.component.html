@@ -4,12 +4,19 @@
     <h2>EcoTwin</h2>
     <p>Explore a changing ecosystem<br />on your Symphony map.</p>
   </header>
+  @if (session.preparingComparison()) {
+    <p role="status">Preparing matching simulation settings…</p>
+  }
+  @if (session.preparationNote()) {
+    <p class="notice" role="status">{{ session.preparationNote() }}</p>
+  }
 
   <section aria-labelledby="mareld-calculation-heading">
     <h3 id="mareld-calculation-heading"><span class="step">1</span> Saved calculation</h3>
     <label for="ecotwin-calculation">Calculation</label>
     <select
       id="ecotwin-calculation"
+      [disabled]="session.submitting() || session.submissionUncertain()"
       [ngModel]="session.selectedId()"
       (ngModelChange)="session.selectCalculation(+$event)"
     >
@@ -131,187 +138,178 @@
   </section>
 
   <section aria-labelledby="mareld-run-heading">
-    <h3 id="mareld-run-heading"><span class="step">4</span> Simulation</h3>
-    <div class="run-settings">
-      <label for="mareld-steps">Simulation steps</label>
-      <input
-        id="mareld-steps"
-        type="number"
-        min="1"
-        [max]="maxStepsLimit"
-        step="1"
-        [ngModel]="session.maxSteps()"
-        (ngModelChange)="session.setMaxSteps($event)"
-        [disabled]="session.busy()"
-        aria-describedby="mareld-duration"
-      />
-      <div class="duration" id="mareld-duration">
-        <span>{{ stepsToDays(session.maxSteps()) | number: '1.0-2' }} days</span>
-        <small>6 hours per step</small>
-      </div>
-    </div>
+    <h3 id="mareld-run-heading"><span class="step">4</span> Preview and full run</h3>
+    <label for="mareld-steps">Full simulation steps</label>
+    <input
+      id="mareld-steps"
+      type="number"
+      min="1"
+      [max]="maxStepsLimit"
+      step="1"
+      [ngModel]="session.maxSteps()"
+      (ngModelChange)="session.setMaxSteps($event)"
+      [disabled]="session.busy()"
+    />
     <p class="hint">
-      Map snapshots every {{ sampleInterval() }} steps, including the final state. The model
-      computes every step.
+      {{ stepsToDays(session.maxSteps()) | number: '1.0-2' }} days · 6 hours per step
     </p>
-    <button type="button" class="primary" [disabled]="!canRun()" (click)="session.run()">
-      {{ session.busy() ? 'Running…' : 'Run simulation' }}
-      <span aria-hidden="true">→</span>
+    <label for="mareld-preview-steps">Preview steps</label>
+    <input
+      id="mareld-preview-steps"
+      type="number"
+      min="1"
+      [max]="session.maxSteps()"
+      step="1"
+      [ngModel]="session.previewSteps()"
+      (ngModelChange)="session.previewSteps.set($event)"
+      [disabled]="session.busy()"
+    />
+    <label for="mareld-seed">Starting seed</label>
+    <input
+      id="mareld-seed"
+      type="number"
+      min="0"
+      max="2147483637"
+      step="1"
+      [ngModel]="session.seed()"
+      (ngModelChange)="session.seed.set($event)"
+      [disabled]="session.busy()"
+    />
+    <p class="hint">
+      Preview uses one seed. Full runs use ten consecutive seeds with the same model and calculation
+      inputs.
+    </p>
+    <button type="button" [disabled]="!canRun()" (click)="session.run()">
+      {{ session.previewBusy() ? 'Running preview…' : 'Run preview' }}
     </button>
-    @if (session.busy()) {
-      <p class="hint" role="status">
-        Running the simulation. Longer runs can take several minutes. Keep this page open.
-      </p>
+    <p class="hint">Previews stay in this workspace and do not create report appendices.</p>
+    @if (session.previewOutdated()) {
+      <p class="notice" role="status">Settings changed. Run a new preview to update the map.</p>
+    }
+    <button type="button" class="primary" [disabled]="!canRun()" (click)="session.runFull()">
+      {{ session.submitting() ? 'Submitting…' : 'Run full simulation · 10 seeds' }}
+    </button>
+    @if (session.activeJob(); as job) {
+      <div class="notice" role="status">
+        <strong>{{
+          job.status === 'queued'
+            ? 'Queued'
+            : job.completedSeeds === 10
+              ? 'Saving result…'
+              : 'Running seed ' + (job.completedSeeds + 1) + ' of 10'
+        }}</strong>
+        <p>
+          {{ job.completedSeeds }} of 10 seeds completed · {{ job.config.maxSteps }} steps each.
+        </p>
+        <progress
+          [value]="job.completedSeeds"
+          max="10"
+          aria-label="Completed simulation seeds"
+        ></progress>
+        <p>
+          You can leave this page. The completed result will be added to the calculation report.
+        </p>
+      </div>
     }
     @if (session.error()) {
       <p class="error" role="alert">{{ session.error() }}</p>
     }
-  </section>
-
-  @if (session.result(); as result) {
-    <section aria-labelledby="mareld-result-heading" class="result-section">
-      <h3 id="mareld-result-heading">Explore the result</h3>
-      <span class="source-badge">{{
-        result.source === 'saved' ? 'SAVED MODEL RESULT' : 'LIVE MODEL RESULT'
-      }}</span>
-      @if (session.saved()) {
-        <p role="status">Added to calculation report.</p>
-      }
-      @if (session.saving()) {
-        <p role="status">Saving result and report appendix…</p>
-      }
-      @if (session.saveError()) {
-        <p class="error" role="alert">The appendix has not been saved: {{ session.saveError() }}</p>
-        <button type="button" (click)="session.saveResult()" [disabled]="session.saving()">
-          Retry saving this result
-        </button>
-      }
-      <p class="hint">{{ result.input.name }} · {{ result.model }}</p>
-      <div class="notice">
-        Inputs used for this result:
-        @if (result.input.impacts; as impacts) {
-          @for (layer of impacts.layers; track layer.kind) {
-            <div>
-              {{ layer.kind === 'noise' ? 'Shipping noise' : 'Bottom trawling' }} ·
-              {{ layer.strength | number: '1.1-1' }}× · {{ layer.affectedCells }} cells
-            </div>
-          }
-        } @else {
-          no added impacts.
-        }
-        <div>Changes to the controls apply to the next run.</div>
-      </div>
-      <app-mareld-impact-outlines />
-      <label for="mareld-species">Species</label>
-      <select
-        id="mareld-species"
-        [ngModel]="session.species()"
-        (ngModelChange)="session.selectSpecies(+$event)"
-      >
-        @for (name of result.species; track $index) {
-          <option [ngValue]="$index">{{ speciesLabel(name) }}</option>
-        }
-      </select>
-      <div class="slider-label">
-        <label for="mareld-frame">Time</label
-        ><strong>Day {{ stepsToDays(result.steps[session.frame()]) | number: '1.0-2' }}</strong>
-      </div>
-      <div class="playback-controls">
-        <button
-          type="button"
-          class="playback-button"
-          [attr.aria-label]="
-            session.playing() ? 'Pause simulation replay' : 'Play simulation replay'
-          "
-          [disabled]="session.busy() || result.steps.length < 2"
-          (click)="session.togglePlayback()"
-        >
-          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
-            @if (session.playing()) {
-              <path d="M3 2h4v12H3zM9 2h4v12H9z" />
-            } @else {
-              <path d="M4 2v12l10-6z" />
-            }
-          </svg>
-          {{ session.playing() ? 'Pause' : 'Play' }}
-        </button>
-        <input
-          id="mareld-frame"
-          type="range"
-          min="0"
-          [max]="result.steps.length - 1"
-          step="1"
-          [ngModel]="session.frame()"
-          (ngModelChange)="session.seekFrame(+$event)"
-        />
-      </div>
-      <div class="range-labels">
-        <span>Day 0</span
-        ><span
-          >Step {{ result.steps[session.frame()] }} /
-          {{ result.steps[result.steps.length - 1] }}</span
-        >
-      </div>
-      <div class="slider-label">
-        <label for="mareld-opacity">Map opacity</label
-        ><span>{{ session.opacity() * 100 | number: '1.0-0' }}%</span>
-      </div>
-      <input
-        id="mareld-opacity"
-        type="range"
-        min="0"
-        max="1"
-        step="0.05"
-        [ngModel]="session.opacity()"
-        (ngModelChange)="session.setOpacity(+$event)"
-      />
-      <div class="legend">
-        <div class="legend-title">Modeled biomass · tonnes / cell</div>
-        <div class="color-ramp" [style.background]="gradient"></div>
-        <div class="range-labels">
-          <span>0</span><span>{{ result.maxima[session.species()] | number: '1.0-2' }}</span>
+    @if (session.submissionUncertain()) {
+      <p class="hint">
+        Submission has not been confirmed. Retry checks the same run without creating a duplicate.
+      </p>
+      <button type="button" (click)="session.submitFull()" [disabled]="session.submitting()">
+        Retry submission
+      </button>
+    }
+    @if (session.jobsError()) {
+      <p class="error" role="alert">Could not check full-run progress: {{ session.jobsError() }}</p>
+      <button type="button" (click)="session.loadJobs()">Refresh progress</button>
+    }
+    @for (job of session.jobs(); track job.runId) {
+      @if (job.status === 'failed') {
+        <div class="notice">
+          <strong>Full run stopped after {{ job.completedSeeds }} of 10 seeds</strong>
+          <p>{{ job.error }}</p>
+          <button type="button" [disabled]="session.busy()" (click)="session.retryJob(job.runId)">
+            Resume this run
+          </button>
         </div>
-        <small>Scale stays fixed across all frames.</small>
-      </div>
-      <div class="buttons">
-        <button type="button" (click)="map.fit()">Fit result</button
-        ><button
-          type="button"
-          class="quiet"
-          (click)="session.clearResult()"
-          [disabled]="session.busy() || session.saving()"
-        >
-          Clear result
-        </button>
-      </div>
-    </section>
-  }
-  @if (session.result(); as result) {
-    <section aria-labelledby="mareld-trend-heading">
-      <h3 id="mareld-trend-heading">Population trends</h3>
-      <app-mareld-biomass-chart
-        [result]="result"
-        [frame]="session.frame()"
-        (frameChange)="session.seekFrame($event)"
-      />
-    </section>
-  }
+      }
+    }
+  </section>
   <section aria-label="Saved simulations">
     <h3>Saved simulations</h3>
     @if (session.historyError()) {
       <p class="error" role="alert">{{ session.historyError() }}</p>
       <button type="button" (click)="session.loadHistory()">Retry loading saved runs</button>
     }
-    @for (run of session.history(); track run.runId) {
-      <button
-        type="button"
-        (click)="session.openSaved(run.runId)"
-        [disabled]="session.busy() || session.saving() || (!!session.result() && !session.saved())"
-      >
-        {{ run.completedAt | date: 'medium' }} · {{ run.model.name }} ·
-        {{ run.config.maxSteps }} steps
-      </button>
+    @if (session.deleteError()) {
+      <p class="error" role="alert">Could not delete simulation: {{ session.deleteError() }}</p>
     }
+    <ul class="saved-runs">
+      @for (run of session.history(); track run.runId) {
+        <li class="saved-run" [class.selected]="session.selectedRunId() === run.runId">
+          <button
+            class="open-run"
+            type="button"
+            (click)="session.openSaved(run.runId)"
+            [attr.aria-pressed]="session.selectedRunId() === run.runId"
+            [disabled]="
+              session.previewBusy() ||
+              session.submitting() ||
+              session.saving() ||
+              !!session.deletingRunId()
+            "
+          >
+            <strong>{{ run.completedAt | date: 'medium' }}</strong>
+            <span>{{ run.model.name }} · {{ run.config.maxSteps }} steps</span>
+            <span>{{ run.ensemble ? '10-seed mean + 95% CI' : 'Single seed (legacy)' }}</span>
+            @if (session.selectedRunId() === run.runId) {
+              <span class="selected-label">Selected</span>
+            }
+          </button>
+          @if (pendingDelete() === run.runId) {
+            <div class="delete-confirmation">
+              <p>Delete this simulation and its report appendix? This cannot be undone.</p>
+              <div class="buttons">
+                <button
+                  type="button"
+                  class="delete-run"
+                  (click)="deleteSaved(run.runId)"
+                  [disabled]="
+                    session.loading() ||
+                    session.previewBusy() ||
+                    session.submitting() ||
+                    session.saving() ||
+                    !!session.deletingRunId()
+                  "
+                >
+                  Delete simulation
+                </button>
+                <button type="button" (click)="pendingDelete.set(null)">Cancel</button>
+              </div>
+            </div>
+          } @else {
+            <button
+              type="button"
+              class="delete-run"
+              (click)="pendingDelete.set(run.runId)"
+              [attr.aria-label]="'Delete simulation from ' + (run.completedAt | date: 'medium')"
+              [disabled]="
+                session.loading() ||
+                session.previewBusy() ||
+                session.submitting() ||
+                session.saving() ||
+                !!session.deletingRunId()
+              "
+            >
+              {{ session.deletingRunId() === run.runId ? 'Deleting…' : 'Delete' }}
+            </button>
+          }
+        </li>
+      }
+    </ul>
   </section>
-  <footer>Saved simulations appear as appendices in their calculation report.</footer>
+  <footer>Completed full simulations appear as appendices in their calculation report.</footer>
 </div>

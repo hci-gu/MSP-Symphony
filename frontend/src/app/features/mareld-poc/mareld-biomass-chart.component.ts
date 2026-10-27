@@ -17,6 +17,7 @@ import {
   aggregateBiomass,
   BiomassDisplay,
   biomassLines,
+  ensembleLines,
   nearestBiomassFrame
 } from './mareld-biomass';
 
@@ -30,6 +31,7 @@ export class MareldBiomassChartComponent {
   readonly stepsToDays = stepsToDays;
   readonly result = input.required<MareldResult>();
   readonly frame = input(0);
+  readonly panelCompact = input(false);
   readonly frameChange = output<number>();
   readonly display = signal<BiomassDisplay>('absolute');
   readonly hidden = signal<string[]>([]);
@@ -38,7 +40,9 @@ export class MareldBiomassChartComponent {
   readonly expanded = signal(false);
   readonly totals = computed(() => aggregateBiomass(this.result()));
   readonly lines = computed(() =>
-    biomassLines(this.totals(), this.hidden(), this.display(), this.showTotal())
+    this.result().ensemble
+      ? ensembleLines(this.result(), this.hidden(), this.display(), this.showTotal())
+      : biomassLines(this.totals(), this.hidden(), this.display(), this.showTotal())
   );
   readonly currentFrame = computed(() =>
     Math.max(0, Math.min(this.result().steps.length - 1, Math.floor(this.frame())))
@@ -51,16 +55,24 @@ export class MareldBiomassChartComponent {
   readonly noInitialBiomass = computed(() => this.lines().some((line) => line.values[0] === null));
   readonly layout = computed(() => {
     const width = this.expanded() ? 900 : 360;
-    const height = this.expanded() ? 350 : 260;
+    const height = this.expanded() ? 350 : this.panelCompact() ? 220 : 260;
     return { width, height, left: 48, top: 16, innerWidth: width - 62, innerHeight: height - 60 };
   });
   readonly yMax = computed(() => {
     let max = 0;
     for (const line of this.lines()) {
-      for (const value of line.values) max = Math.max(max, value ?? 0);
+      for (const value of line.high ?? line.values) max = Math.max(max, value ?? 0);
     }
     return max > 0 ? max * 1.08 : 1;
   });
+  readonly yMin = computed(() =>
+    Math.min(
+      0,
+      ...this.lines()
+        .flatMap((line) => line.low ?? [])
+        .map((value) => value ?? 0)
+    )
+  );
   readonly xTicks = computed(() => {
     const steps = this.result().steps;
     return Array.from(
@@ -68,9 +80,15 @@ export class MareldBiomassChartComponent {
       (_, i) => steps[0] + ((steps[steps.length - 1] - steps[0]) * i) / 4
     );
   });
-  readonly yTicks = computed(() => Array.from({ length: 5 }, (_, i) => (this.yMax() * i) / 4));
+  readonly yTicks = computed(() =>
+    Array.from({ length: 5 }, (_, i) => this.yMin() + ((this.yMax() - this.yMin()) * i) / 4)
+  );
   readonly paths = computed(() =>
-    this.lines().map((line) => ({ ...line, path: this.path(line.values) }))
+    this.lines().map((line) => ({
+      ...line,
+      path: this.path(line.values),
+      band: this.band(line.low, line.high)
+    }))
   );
   readonly tooltipX = computed(() => {
     const x = this.xFor(this.activeStep());
@@ -104,7 +122,7 @@ export class MareldBiomassChartComponent {
 
   yFor(value: number): number {
     const { top, innerHeight } = this.layout();
-    return top + (1 - value / this.yMax()) * innerHeight;
+    return top + (1 - (value - this.yMin()) / (this.yMax() - this.yMin())) * innerHeight;
   }
 
   path(values: (number | null)[]): string {
@@ -119,6 +137,23 @@ export class MareldBiomassChartComponent {
       connected = true;
     });
     return path;
+  }
+
+  band(low?: (number | null)[], high?: (number | null)[]): string {
+    if (
+      !low ||
+      !high ||
+      low.some((value) => value === null) ||
+      high.some((value) => value === null)
+    )
+      return '';
+    const upper = high.map(
+      (value, i) => `${i ? 'L' : 'M'}${this.xFor(this.result().steps[i])},${this.yFor(value!)}`
+    );
+    const lower = low
+      .map((value, i) => `L${this.xFor(this.result().steps[i])},${this.yFor(value!)}`)
+      .reverse();
+    return [...upper, ...lower, 'Z'].join(' ');
   }
 
   compact(value: number): string {

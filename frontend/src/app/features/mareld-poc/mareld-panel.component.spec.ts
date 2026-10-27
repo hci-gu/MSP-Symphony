@@ -5,6 +5,8 @@ import { MareldPanelComponent } from './mareld-panel.component';
 import { MareldPocModule } from './mareld-poc.module';
 import { MareldSession } from './mareld-session.service';
 import { sessionProviders } from './testing/session.fixture';
+import { biomassFixture } from './testing/biomass.fixture';
+import { calculationFixture } from './testing/calculation.fixture';
 
 describe('EcoTwin calculation picker', () => {
   let fixture: ComponentFixture<MareldPanelComponent>, setup: ReturnType<typeof sessionProviders>;
@@ -50,5 +52,47 @@ describe('EcoTwin calculation picker', () => {
     await fixture.whenStable();
     expect(host.textContent).not.toContain('Server unavailable');
     expect(setup.api.models).toHaveBeenCalledTimes(2);
+  });
+  it('highlights the opened run and keeps delete/cancel separate from selection', async () => {
+    setup.reports.list.and.resolveTo(
+      ['first', 'second'].map((runId) => ({
+        runId,
+        calculationId: 7,
+        completedAt: 1234,
+        model: { name: 'Test' },
+        config: { maxSteps: 4 }
+      }))
+    );
+    setup.persistence.load.and.callFake(async (_id: number, id: string) => ({
+      ...biomassFixture(),
+      id,
+      input: calculationFixture().input
+    }));
+    fixture = TestBed.createComponent(MareldPanelComponent);
+    const session = TestBed.inject(MareldSession);
+    await session.selectCalculation(7);
+    await fixture.whenStable();
+    const host: HTMLElement = fixture.nativeElement;
+    const open = () => host.querySelectorAll<HTMLButtonElement>('.open-run');
+    open()[1].click();
+    await fixture.whenStable();
+    expect(open()[1].getAttribute('aria-pressed')).toBe('true');
+    expect(host.querySelectorAll('.saved-run.selected').length).toBe(1);
+    expect(host.querySelector('.saved-run.selected')?.textContent).toContain('Selected');
+    host.querySelector<HTMLButtonElement>('.delete-run')!.click();
+    await fixture.whenStable();
+    expect(session.selectedRunId()).toBe('second');
+    expect(setup.persistence.delete).not.toHaveBeenCalled();
+    const buttons = host.querySelectorAll<HTMLButtonElement>('.delete-confirmation button');
+    buttons[1].click(); // Cancel.
+    await fixture.whenStable();
+    expect(host.querySelector('.delete-confirmation')).toBeNull();
+    host.querySelector<HTMLButtonElement>('.delete-run')!.click();
+    await fixture.whenStable();
+    host.querySelector<HTMLButtonElement>('.delete-confirmation .delete-run')!.click();
+    await fixture.whenStable();
+    expect(setup.persistence.delete).toHaveBeenCalledOnceWith(7, 'first');
+    expect(host.querySelectorAll('.saved-run').length).toBe(1);
+    expect(session.selectedRunId()).toBe('second');
   });
 });

@@ -50,7 +50,7 @@ export class MareldMapBridge {
 
   private createLayers(): void {
     const map = this.map!;
-    this.image = new ImageLayer();
+    this.image = new ImageLayer({ visible: false });
     this.outline = new VectorLayer({
       source: new VectorSource(),
       style: new Style({ stroke: new Stroke({ color: '#107f8c', width: 2, lineDash: [6, 4] }) })
@@ -102,14 +102,29 @@ export class MareldMapBridge {
     this.frameKey = '';
   }
 
-  fit(): void {
+  fit(padding = [70, 70, 70, 450]): void {
+    const size = this.map?.getSize();
+    if (size) {
+      padding = [...padding];
+      // Keep a usable map viewport even on small screens.
+      for (const [a, b, limit] of [
+        [1, 3, size[0] - 120],
+        [0, 2, size[1] - 100]
+      ]) {
+        const total = padding[a] + padding[b];
+        if (total > limit) {
+          padding[a] *= Math.max(0, limit) / total;
+          padding[b] *= Math.max(0, limit) / total;
+        }
+      }
+    }
     const input = this.session.result()?.input || this.session.input();
     if (this.map && input)
       this.map
         .getView()
         .fit(
           transformExtent(input.grid.extent, input.grid.crs, this.map.getView().getProjection()),
-          { padding: [70, 70, 70, 450], maxZoom: 11, duration: 450 }
+          { padding, maxZoom: 11, duration: 450 }
         );
   }
 
@@ -129,6 +144,9 @@ export class MareldMapBridge {
     this.renderImpactOutlines();
     if (!this.map || !this.image || !this.outline) return;
     this.image.setOpacity(opacity);
+    // OpenLayers may retain the last frame during view animation. Hide the layer
+    // before clearing its source so the retained renderer cannot dereference null.
+    this.image.setVisible(!!input && !!(preview || result));
     if (!input) {
       this.image.setSource(null);
       this.outline.getSource()!.clear();

@@ -1,6 +1,6 @@
 # Optional EcoTwin simulation of a saved Symphony calculation
 
-Status: implemented on `codex/ecotwin-calculation-rewrite`; final verification recorded below (2026-10-13).
+Status: implemented, including the preview/full-run extension below; final verification recorded on 2026-10-13.
 
 Planning baseline: `e2c6d3a`, 2026-10-13. Paths are relative to the repository root. The pre-rewrite inventory below describes that baseline; proposed contracts and the checked implementation sequence have now been delivered. Implementation differences and test results are recorded at the end. EcoTwin is the user-facing integration discussed here; its current implementation uses `mareld-*` names and calls the Eco-evo API.
 
@@ -405,3 +405,109 @@ historic test fixture/admin credentials. An unconfigured default `mvn test` atte
 reported missing credentials; the explicit unit profile and the new live REST
 lifecycle checks above passed. The listed new contracts are covered by these checks;
 this does not claim every historical REST regression test passed.
+
+
+## Delivered extension: previews, ensembles and map layout (2026-10-13)
+
+This extension supersedes the original single-run/autosave workflow above.
+
+- [x] Make **Run preview** an unsaved single-seed run with separate duration and
+  configurable starting seed. Changing the draft settings marks its output outdated.
+  New previews may replace old previews; only completed full runs create appendices.
+- [x] Keep settings in `MareldPanelComponent`; host feature-owned
+  `MareldResultsComponent` in the map area only while EcoTwin is active. Playback,
+  speed, species, opacity and fit are in a non-blocking bottom tray; the right graph
+  panel is collapsible. Graph/time controls share `MareldSession` state. Fit accounts
+  for the result panels, keeping the mapped domain visible.
+- [x] Add owner-authorized, idempotent full-job submission, progress and resume APIs.
+  `SimulationJobService` freezes settings and native inputs; `SimulationJobWorker`
+  executes ten consecutive seeds and checkpoints after each. Full jobs survive
+  browser closure and reload. Failed jobs retain completed seeds. Request IDs allow
+  recovery of an uncheckpointed model response after a server interruption.
+- [x] Serialize previews through the same server worker, preventing concurrent
+  Symphony requests from interfering with the model's process-global random state.
+  The existing Eco-evo API's ensemble summary omits per-seed totals and uses a normal
+  approximation, so Symphony instead validates each single-seed response and builds
+  the ensemble. No edits to the separate Eco-evo checkout were needed.
+- [x] Store one mean map tensor and ten per-seed biomass series. `SimulationEnsemble`
+  derives 95% Student t intervals (9 degrees of freedom), checks mean-map agreement,
+  and prevents partial ensembles from being published. Grouped/relative graph
+  intervals use per-seed grouping/normalization. Legacy single-seed runs remain readable.
+- [x] Extend report v2 with mean curves, confidence bands, final interval tables,
+  exact seed lists and mean spatial figures. The report still reads persisted data
+  only. The browser cannot submit a v2 result directly.
+- [x] Show report time-series graphs as percentage of initial biomass per species,
+  with a 100% baseline. Normalize each seed before computing the mean and confidence
+  bands; explicitly omit species with zero initial biomass. This also applies to
+  previously saved reports without rerunning simulations.
+- [x] Allow owners to delete saved simulations with confirmation, removing the
+  report artifact and completed job together. Clear selected playback and cached
+  output, refresh open reports, and highlight the open run in the saved list.
+  Verify deletion using disposable legacy/ensemble copies while retaining the
+  original Poseidon fixtures.
+- [x] Add `SimulationJobs.sql` and configure the local worker endpoint. Calculation
+  deletion cascades to jobs; final persistence locks calculation before job to match
+  deletion/submission. Input authorization and source verification remain enforced.
+
+Verification:
+
+| Check | Result |
+| --- | --- |
+| Frontend | 245 passing tests, including temporary previews, stale settings, grouped/relative uncertainty, submission ambiguity across navigation, resumed progress, ensemble reports, deletion/selection and clearing map pixels during animation |
+| Backend | 122 unit/data tests: 121 passed, 1 existing skipped; ensemble math, malformed/partial ensembles, checkpoint accumulation, worker restart/failure recovery, ownership changes and saved-run deletion covered |
+| Live Poseidon | A 12-step preview created no appendix. Two ten-seed ensembles completed: 40 steps, seeds 100–109; 80 steps, seeds 200–209. Run IDs are recorded in the fixture and `poseidon.md`. |
+| Reload | Reloaded during the 80-step run after 2 seeds; returning to #7 recovered progress at 8 seeds, then displayed the saved mean result and bands. |
+| Numerical/API verification | `verify-simulation-ensemble.py` independently recomputed the saved intervals and mean-map totals; nine checks include identity conflicts, malformed/incomplete requests, anonymous writes and rejection of client-generated ensembles. |
+| Native isolation | #7's native GeoTIFF still equals #8's regression copy; #8 still has no simulations, and #9 retains its original legacy run. |
+| Report/print | #7 has four appendix sections (two legacy, two ensemble). The 17-page A4 PDF's six new pages were visually reviewed for chart/table/map clipping. |
+| Build | Backend WAR and frontend production build pass. The existing 2 MB initial-bundle warning remains (2.33 MB). Changed TypeScript files pass ESLint. |
+
+Review artifacts: `output/playwright/ecotwin-ensemble-layout.png` and
+`output/playwright/poseidon-ensemble-report.pdf`. The migration and latest backend
+are installed locally; the model service remains available for review. See
+`docs/MARELD-POC.md` and `docs/ECOTWIN-API.md` for deployment and API contracts.
+
+Operational scope: one enabled Symphony worker per model server; the model's
+existing in-memory run cache and lack of immutable checkpoint identifiers remain
+unchanged. These short Poseidon runs verify integration, not ecological calibration.
+The historical REST suite limitation recorded above still applies.
+
+## Simulation comparison integration — delivered 2026-10-13
+
+- [x] Optional saved-run selection in native Compare calculations, with compatible
+  ensemble suggestions, explicit run choices, actionable mismatch messages and
+  refresh after completion/deletion. Native comparisons work without opting in.
+- [x] Explicit, owner-authorized, idempotent creation of a saved counterpart for the
+  implied baseline. `SimulationBaselineService` calls the native baseline engine;
+  `ScenarioSnapshot.withoutLayerChanges` preserves the domain and calculation
+  settings while removing all layer changes. The original scenario is unchanged.
+  `SimulationBaselines.sql` adds the persistent link and deletion constraints.
+- [x] Preparation links open EcoTwin with the selected calculation and matching
+  model/duration/seeds. Preparation is asynchronous and guarded against stale
+  responses. No model run starts until the user requests it.
+- [x] A separate `features/simulation-comparison` module of standalone components
+  loads persisted summaries, validates model/species/seeds/time/domain/mapping/data
+  compatibility and renders paired per-species graphs. Intentional pressure changes
+  are allowed. Both columns share axes and show percentages of initial biomass.
+  Report math is shared with single-calculation appendices; confidence intervals
+  are computed after normalizing each seed.
+- [x] Report URLs pin exact runs, including new-tab links. Reversed implied reports
+  swap both columns; print readiness verifies the iframe origin/source and pair.
+  Deletion clears stale graphs and makes the selected appendix explicitly unavailable.
+- [x] Poseidon: #7 vs #9 now has matching 80-step, ten-seed ensembles. #9's saved
+  automatic baseline is #18; its ensemble reproduces #7 exactly. Native implicit
+  versus persisted-baseline comparison statistics agree. The scenario still points
+  to #9. A transient model timeout at nine seeds was resumed successfully.
+- [x] Live iframe, new-tab, explicit and reversed implicit reports checked; the
+  seven-page A4 comparison export has three visually reviewed appendix pages.
+
+Implementation entry points: `SimulationBaselineREST`, `SimulationBaselineService`,
+`SimulationComparisonPickerComponent`, `SimulationComparisonReportComponent`,
+`simulation-comparison.ts`, and `MareldSession.prepareComparison`. Setup/API and
+user workflow are documented in `docs/ECOTWIN-API.md` and `docs/MARELD-POC.md`.
+
+Final comparison validation: 261 frontend tests passed; backend package passed
+126 tests with one existing skip; changed TypeScript lint and production build
+passed (the existing initial-bundle warning remains: 2.36 MB against 2 MB).
+`python3 scripts/verify-simulation-comparison.py --credentials .local/symphony/hav-local-credentials.json` repeats the read-only native-statistics,
+matched-settings and identical-baseline-ensemble checks without starting any runs.

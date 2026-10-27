@@ -257,6 +257,29 @@ public class ScenarioSnapshot implements BandChangeEntity, ScenarioCommon {
 
     public ScenarioSnapshot() {}
 
+    /** Independent snapshot matching the implicit baseline: preserve the domain,
+     * selected bands and matrices, but apply no global or area layer changes. */
+    public ScenarioSnapshot withoutLayerChanges(String owner, String name) {
+        var copy = new ScenarioSnapshot();
+        copy.owner = owner;
+        copy.name = name;
+        copy.timestamp = new Date();
+        copy.baselineId = baselineId;
+        copy.polygon = polygon.deepCopy();
+        copy.areas = areas.deepCopy();
+        copy.ecosystemsToInclude = ecosystemsToInclude.clone();
+        copy.pressuresToInclude = pressuresToInclude.clone();
+        copy.normalization = mapper.convertValue(mapper.valueToTree(normalization), NormalizationOptions.class);
+        copy.normalizationValue = normalizationValue == null ? null : normalizationValue.clone();
+        copy.setAreaMatrixMap(getAreaMatrixMap());
+        var changes = mapper.createObjectNode();
+        changes.putObject("baseChanges");
+        var areaChanges = changes.putObject("areaChanges");
+        getAreas().keySet().forEach(id -> areaChanges.putObject(id.toString()));
+        copy.changes = changes;
+        return copy;
+    }
+
     public static ScenarioSnapshot makeSnapshot(Scenario s,
                                                 Geometry polygon,
                                                 Map<Integer, Integer> matrixMap,

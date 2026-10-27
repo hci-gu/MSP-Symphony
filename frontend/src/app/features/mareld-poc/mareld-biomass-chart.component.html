@@ -1,5 +1,5 @@
 <ng-template #chartContent>
-  <header class="chart-header">
+  <header class="chart-header" [class.compact]="panelCompact() && !expanded()">
     <div>
       <h4>Biomass over time</h4>
       <p>Sum across the simulation's model water cells</p>
@@ -107,6 +107,14 @@
         />
       }
       @for (line of paths(); track line.id) {
+        @if (line.band) {
+          <path
+            [attr.d]="line.band"
+            [attr.fill]="line.color"
+            fill-opacity="0.16"
+            class="confidence-band"
+          />
+        }
         <path
           class="species-line"
           [attr.data-series]="line.id"

@@ -34,6 +34,7 @@ export class SimulationReportAppendixComponent implements OnChanges, OnDestroy {
     };
     window.addEventListener('focus', this.focus);
     window.addEventListener('simulation-saved', this.saved);
+    window.addEventListener('simulation-deleted', this.saved);
   }
   ngOnChanges(): void {
     this.figures.set([]);
@@ -90,6 +91,7 @@ export class SimulationReportAppendixComponent implements OnChanges, OnDestroy {
     this.channel.close();
     window.removeEventListener('focus', this.focus);
     window.removeEventListener('simulation-saved', this.saved);
+    window.removeEventListener('simulation-deleted', this.saved);
     delete document.documentElement.dataset['simulationAppendixState'];
   }
 }

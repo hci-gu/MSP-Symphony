@@ -1,3 +1,4 @@
+import { SimulationComparisonPickerComponent } from '@src/app/features/simulation-comparison/simulation-comparison-picker.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
@@ -53,6 +54,7 @@ describe('MainViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        SimulationComparisonPickerComponent,
         MareldPocModule,
         SharedModule,
         CoreModule,

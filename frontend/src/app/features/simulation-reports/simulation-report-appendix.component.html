@@ -33,7 +33,10 @@
           <dt>Simulation</dt>
           <dd>
             {{ figure.days | number: '1.0-2' }} days · {{ figure.run.config.maxSteps }} steps · seed
-            {{ figure.run.config.seed }} · sampled every {{ figure.run.config.sampleEvery }} steps
+            {{
+              figure.run.ensemble ? figure.run.ensemble.seeds.join(', ') : figure.run.config.seed
+            }}
+            · sampled every {{ figure.run.config.sampleEvery }} steps
           </dd>
           <dt>Grid</dt>
           <dd>
@@ -52,6 +55,15 @@
           <dt>Mapping</dt>
           <dd>{{ figure.run.config.mappingVersion }}</dd>
         </dl>
+        @if (figure.run.ensemble) {
+          <p>
+            Mean of {{ figure.run.ensemble.seeds.length }} independent seeds. Shading shows
+            pointwise 95% Student t confidence intervals for the mean (9 degrees of freedom). These
+            describe random-seed variability, not uncertainty in model assumptions or input data.
+          </p>
+        } @else {
+          <p>Legacy single-seed simulation. No confidence interval is available.</p>
+        }
         <h3>Inputs and assumptions</h3>
         @for (pressure of figure.run.pressures; track pressure.kind) {
           <p>
@@ -78,32 +90,64 @@
           immutable baseline rasters.
         </p>
         <section class="biomass-page">
-          <h3>Biomass over time</h3>
+          <h3>Biomass over time (% of initial biomass)</h3>
           <p>
-            Total modeled biomass within model water cells, tonnes. Each species is shown across all
-            saved frames.
+            Each species starts at 100% of its own initial biomass within model water cells.
+            @if (figure.run.ensemble) {
+              Each seed is normalized before calculating the mean and its 95% confidence interval.
+            }
           </p>
-          <svg viewBox="0 0 720 315" role="img" aria-label="Biomass time series for all species">
+          <svg
+            viewBox="0 0 720 315"
+            role="img"
+            aria-label="Biomass as a percentage of initial biomass per species"
+          >
             <line x1="60" y1="30" x2="60" y2="270" stroke="#666" />
             <line x1="60" y1="270" x2="680" y2="270" stroke="#666" />
-            <text x="55" y="35" text-anchor="end">{{ figure.chartMaximum | number: '1.0-1' }}</text>
-            <text x="55" y="273" text-anchor="end">0</text>
+            <text x="55" y="35" text-anchor="end">
+              {{ figure.chartMaximum | number: '1.0-1' }}%
+            </text>
+            <text x="55" y="273" text-anchor="end">
+              {{ figure.chartMinimum | number: '1.0-1' }}%
+            </text>
+            <line
+              x1="60"
+              [attr.y1]="figure.initialY"
+              x2="680"
+              [attr.y2]="figure.initialY"
+              stroke="#999"
+              stroke-dasharray="5 4"
+            />
+            <text x="55" [attr.y]="figure.initialY + 4" text-anchor="end">100%</text>
             <text x="60" y="297">Day 0</text>
             <text x="680" y="297" text-anchor="end">Day {{ figure.days | number: '1.0-2' }}</text>
             @for (species of figure.species; track species.name) {
-              <path
-                [attr.d]="species.path"
-                [attr.stroke]="species.color"
-                fill="none"
-                stroke-width="2"
-              />
+              @if (species.band) {
+                <path [attr.d]="species.band" [attr.fill]="species.color" fill-opacity="0.18" />
+              }
+              @if (species.path) {
+                <path
+                  [attr.d]="species.path"
+                  [attr.stroke]="species.color"
+                  fill="none"
+                  stroke-width="2"
+                />
+              }
             }
           </svg>
           <div class="species-legend">
             @for (species of figure.species; track species.name) {
-              <span><i [style.background]="species.color"></i>{{ species.name }}</span>
+              @if (species.path) {
+                <span><i [style.background]="species.color"></i>{{ species.name }}</span>
+              }
             }
           </div>
+          @if (figure.unplottedSpecies.length) {
+            <p>
+              Percentage not defined for {{ figure.unplottedSpecies.join(', ') }}: initial biomass
+              is zero in at least one seed. These species are omitted from the graph.
+            </p>
+          }
           <table>
             <thead>
               <tr>
@@ -112,6 +156,9 @@
                 <th>Final (t)</th>
                 <th>Change (t)</th>
                 <th>Change (%)</th>
+                @if (figure.run.ensemble) {
+                  <th>Final mean 95% CI (t)</th>
+                }
               </tr>
             </thead>
             <tbody>
@@ -126,13 +173,20 @@
                       species.percent === null ? 'Not defined' : (species.percent | number: '1.0-2')
                     }}
                   </td>
+                  @if (figure.run.ensemble) {
+                    <td>
+                      {{ species.finalLow | number: '1.0-2' }} –
+                      {{ species.finalHigh | number: '1.0-2' }}
+                    </td>
+                  }
                 </tr>
               }
             </tbody>
           </table>
         </section>
         <h3 class="spatial-heading">
-          Final spatial biomass · day {{ figure.days | number: '1.0-2' }}
+          {{ figure.run.ensemble ? 'Mean final spatial biomass' : 'Final spatial biomass' }} · day
+          {{ figure.days | number: '1.0-2' }}
         </h3>
         <p>
           North is up. White cells are outside the model domain. Extent:

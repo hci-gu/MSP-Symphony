@@ -1,5 +1,6 @@
 import { SimulationSummary } from './simulation-report-data.service';
 import { speciesColor, speciesLabel } from '../mareld-poc/mareld-biomass';
+import { biomassPercentSeries, percentageExtent } from './simulation-report-series';
 import { BIOMASS_COLORS } from '../mareld-poc/mareld-result';
 
 export interface ReportSpecies {
@@ -11,12 +12,18 @@ export interface ReportSpecies {
   percent: number | null;
   maximum: number;
   path: string;
+  band: string;
+  finalLow?: number;
+  finalHigh?: number;
   image: string;
 }
 export interface ReportFigure {
   run: SimulationSummary;
   species: ReportSpecies[];
   chartMaximum: number;
+  chartMinimum: number;
+  initialY: number;
+  unplottedSpecies: string[];
   days: number;
 }
 
@@ -26,7 +33,7 @@ export function reportFigures(run: SimulationSummary): ReportFigure {
   const cells = width * height,
     count = run.species.length;
   if (
-    run.version !== 'ecotwin-report-v1' ||
+    !['ecotwin-report-v1', 'ecotwin-report-v2'].includes(run.version) ||
     !run.finalBiomassB64 ||
     cells < 9 ||
     cells > 3600 ||
@@ -40,12 +47,14 @@ export function reportFigures(run: SimulationSummary): ReportFigure {
   if (raw.length !== cells * count * 4) throw new Error('Saved final frame has the wrong size.');
   const bytes = Uint8Array.from(raw, (char) => char.charCodeAt(0));
   const view = new DataView(bytes.buffer);
-  const chartMaximum = Math.max(1, ...run.totals.flat());
+  const lines = biomassPercentSeries(run);
+  const [chartMinimum, chartMaximum] = percentageExtent(lines);
+  const y = (value: number) => 270 - ((value - chartMinimum) / (chartMaximum - chartMinimum)) * 240;
   const lastStep = run.steps[run.steps.length - 1];
   const species = run.species.map((name, s) => {
     const totals = run.totals[s];
-    if (totals.length !== run.steps.length || totals.some((v) => !Number.isFinite(v) || v < 0))
-      throw new Error('Invalid saved biomass summary.');
+    const line = lines[s];
+    const plotted = line.values.every((value) => value !== null);
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -81,13 +90,38 @@ export function reportFigures(run: SimulationSummary): ReportFigure {
       percent: initial > 0 ? ((final - initial) / initial) * 100 : null,
       maximum: run.maxima[s],
       image: canvas.toDataURL(),
-      path: totals
-        .map(
-          (value, frame) =>
-            `${frame ? 'L' : 'M'}${60 + (run.steps[frame] / lastStep) * 620},${270 - (value / chartMaximum) * 240}`
-        )
-        .join(' ')
+      finalLow: run.ensemble?.ciLow[s].at(-1),
+      finalHigh: run.ensemble?.ciHigh[s].at(-1),
+      band:
+        plotted && line.high && line.low
+          ? [
+              ...line.high.map(
+                (value, frame) =>
+                  `${frame ? 'L' : 'M'}${60 + (run.steps[frame] / lastStep) * 620},${y(value!)}`
+              ),
+              ...line.low
+                .map((value, frame) => `L${60 + (run.steps[frame] / lastStep) * 620},${y(value!)}`)
+                .reverse(),
+              'Z'
+            ].join(' ')
+          : '',
+      path: plotted
+        ? line.values
+            .map(
+              (value, frame) =>
+                `${frame ? 'L' : 'M'}${60 + (run.steps[frame] / lastStep) * 620},${y(value!)}`
+            )
+            .join(' ')
+        : ''
     };
   });
-  return { run, species, chartMaximum, days: lastStep * run.config.tickDurationDays };
+  return {
+    run,
+    species,
+    chartMaximum,
+    chartMinimum,
+    initialY: y(100),
+    unplottedSpecies: species.filter((s) => !s.path).map((s) => s.name),
+    days: lastStep * run.config.tickDurationDays
+  };
 }

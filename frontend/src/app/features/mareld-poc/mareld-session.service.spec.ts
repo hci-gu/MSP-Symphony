@@ -1,3 +1,4 @@
+import { SimulationRequest } from './simulation-jobs.client';
 import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 import { Subject } from 'rxjs';
@@ -11,6 +12,7 @@ import { calculationFixture } from './testing/calculation.fixture';
 import { MareldResult } from './mareld-result';
 
 import { sessionProviders } from './testing/session.fixture';
+import { simulationSummary } from '../simulation-comparison/testing/summary.fixture';
 
 describe('calculation-owned simulation session', () => {
   let setup: ReturnType<typeof sessionProviders>, session: MareldSession;
@@ -40,6 +42,118 @@ describe('calculation-owned simulation session', () => {
     expect(session.input()?.source?.calculationId).toBe(7);
     expect(session.canRun()).toBeTrue();
     expect(setup.api.run).not.toHaveBeenCalled();
+  });
+  it('copies matching settings after shared model discovery without starting a run', async () => {
+    const match = simulationSummary();
+    match.config.maxSteps = 80;
+    match.config.seed = 200;
+    setup.reports.list.and.resolveTo([match]);
+    const discovering = session.discover();
+    await session.prepareComparison(9, 7, match.runId);
+    await discovering;
+    expect(session.selectedId()).toBe(9);
+    expect(session.modelId()).toBe('test');
+    expect(session.maxSteps()).toBe(80);
+    expect(session.seed()).toBe(200);
+    expect(session.preparationNote()).toContain('Settings copied');
+    expect(setup.api.run).not.toHaveBeenCalled();
+    expect(setup.jobs.submit).not.toHaveBeenCalled();
+  });
+  it('reports missing matching runs without silently copying different settings', async () => {
+    await session.prepareComparison(9, 7, 'deleted');
+    expect(session.error()).toContain('no longer available');
+    expect(session.preparationNote()).toBe('');
+    expect(setup.jobs.submit).not.toHaveBeenCalled();
+  });
+  it('ignores late matching settings after selecting a different calculation', async () => {
+    const match = simulationSummary();
+    match.config.maxSteps = 80;
+    match.config.seed = 200;
+    let resolve!: (runs: (typeof match)[]) => void;
+    setup.reports.list.and.callFake(async (id: number) =>
+      id === 7 ? new Promise((r) => (resolve = r)) : []
+    );
+    const preparation = session.prepareComparison(9, 7, match.runId);
+    await new Promise((r) => setTimeout(r, 0));
+    await session.selectCalculation(8);
+    resolve([match]);
+    await preparation;
+    expect(session.selectedId()).toBe(8);
+    expect(session.seed()).toBe(42);
+    expect(session.preparationNote()).toBe('');
+    expect(session.preparingComparison()).toBeFalse();
+  });
+  async function openSavedResult() {
+    const result = completed(7);
+    setup.reports.list.and.resolveTo([{ runId: result.id }]);
+    setup.persistence.load.and.resolveTo(result);
+    await session.selectCalculation(7);
+    await session.openSaved(result.id);
+    return result;
+  }
+  it('deletes the selected saved run, stops playback and clears cached output', async () => {
+    const result = await openSavedResult();
+    session.togglePlayback();
+    expect(session.selectedRunId()).toBe(result.id);
+    await session.deleteSaved(result.id);
+    expect(setup.persistence.delete).toHaveBeenCalledOnceWith(7, result.id);
+    expect(session.history()).toEqual([]);
+    expect(session.selectedRunId()).toBeNull();
+    expect(session.result()).toBeNull();
+    expect(session.playing()).toBeFalse();
+    await session.selectCalculation(8);
+    await session.selectCalculation(7);
+    expect(session.result()).toBeNull();
+    expect(session.history()).toEqual([]); // Ignore a stale list response.
+  });
+  it('keeps the currently displayed run when deleting a different saved run', async () => {
+    const result = await openSavedResult();
+    setup.reports.list.and.resolveTo([{ runId: result.id }, { runId: 'other' }]);
+    await session.loadHistory();
+    await session.deleteSaved('other');
+    expect(session.result()).toBe(result);
+    expect(session.selectedRunId()).toBe(result.id);
+    expect(session.history().map((run) => run.runId)).toEqual([result.id]);
+  });
+  it('retains the saved run and selection after failed deletion and allows retry', async () => {
+    const result = await openSavedResult();
+    setup.persistence.delete.and.rejectWith(new Error('Access denied'));
+    await session.deleteSaved(result.id);
+    expect(session.deleteError()).toBe('Access denied');
+    expect(session.result()).toBe(result);
+    expect(session.history().length).toBe(1);
+    expect(session.deletingRunId()).toBeNull();
+    setup.persistence.delete.and.resolveTo();
+    await session.deleteSaved(result.id);
+    expect(session.deleteError()).toBe('');
+    expect(session.history()).toEqual([]);
+  });
+  it('attributes a late deletion to its original calculation without clearing the new selection', async () => {
+    const result = await openSavedResult();
+    let finish!: () => void;
+    setup.persistence.delete.and.returnValue(new Promise<void>((resolve) => (finish = resolve)));
+    const deletion = session.deleteSaved(result.id);
+    await session.deleteSaved(result.id); // Double click must not send a duplicate request.
+    expect(setup.persistence.delete).toHaveBeenCalledTimes(1);
+    await session.selectCalculation(8);
+    finish();
+    await deletion;
+    expect(session.selectedId()).toBe(8);
+    expect(session.input()?.source?.calculationId).toBe(8);
+    await session.selectCalculation(7);
+    expect(session.result()).toBeNull();
+  });
+  it('does not let a late history response resurrect a deleted run', async () => {
+    const result = await openSavedResult();
+    setup.reports.list.and.resolveTo([{ runId: result.id }, { runId: 'other' }]);
+    await session.loadHistory();
+    let finish!: (runs: unknown[]) => void;
+    setup.reports.list.and.returnValue(new Promise((resolve) => (finish = resolve)));
+    const refresh = session.loadHistory();
+    await session.deleteSaved('other');
+    finish([{ runId: result.id }, { runId: 'other' }]);
+    await refresh;
+    expect(session.history().map((run) => run.runId)).toEqual([result.id]);
   });
   it('discards late context A after selecting B', async () => {
     let resolve!: (value: unknown) => void;
@@ -80,24 +194,100 @@ describe('calculation-owned simulation session', () => {
     expect(session.result()).toBeNull();
     expect(setup.persistence.save).not.toHaveBeenCalled();
   });
-  it('retains completed output when saving fails and retries the same identity without another model run', async () => {
+  it('replaces previews freely and never saves them or adds report appendices', async () => {
     await session.discover();
     await session.selectCalculation(7);
-    const result = completed(7);
-    setup.api.run.and.resolveTo(result);
-    setup.persistence.save.and.rejectWith(new Error('Storage unavailable'));
+    setup.api.run.and.resolveTo(completed(7));
     await session.run();
-    expect(session.result()).toBe(result);
+    expect(session.result()?.kind).toBe('preview');
     expect(session.saved()).toBeFalse();
-    expect(session.saveError()).toContain('Storage unavailable');
-    expect(session.canRun()).toBeFalse();
-    setup.persistence.save.and.resolveTo({});
+    expect(session.canRun()).toBeTrue();
     await session.saveResult();
+    expect(setup.persistence.save).not.toHaveBeenCalled();
+    session.seed.set(100);
+    expect(session.previewOutdated()).toBeTrue();
+    setup.api.run.and.resolveTo(completed(7));
+    await session.run();
+    expect(session.previewOutdated()).toBeFalse();
+    expect(setup.api.run).toHaveBeenCalledTimes(2);
+  });
+  it('submits a frozen ten-seed job and leaves execution on the server after detaching', async () => {
+    await session.discover();
+    await session.selectCalculation(7);
+    session.setMaxSteps(40);
+    session.seed.set(123);
+    setup.jobs.submit.and.callFake(async (request: SimulationRequest) => ({
+      runId: request.runId,
+      calculationId: 7,
+      status: 'queued',
+      completedSeeds: 0,
+      replicates: 10,
+      config: request.config
+    }));
+    setup.jobs.list.and.callFake(async () =>
+      setup.jobs.submit.calls.count()
+        ? [await setup.jobs.submit.calls.mostRecent().returnValue]
+        : []
+    );
+    await session.runFull();
+    const request = setup.jobs.submit.calls.mostRecent().args[0];
+    expect(request.config).toEqual(
+      jasmine.objectContaining({ seed: 123, maxSteps: 40, replicates: 10 })
+    );
+    session.seed.set(999);
+    session.setMaxSteps(80);
+    expect(request.config.seed).toBe(123);
+    expect(request.config.maxSteps).toBe(40);
+    session.detach();
+    expect(setup.api.run).not.toHaveBeenCalled();
+    expect(setup.persistence.save).not.toHaveBeenCalled();
+  });
+  it('retries an uncertain submission with the same frozen identity and recovers server progress', async () => {
+    await session.discover();
+    await session.selectCalculation(7);
+    setup.jobs.submit.and.rejectWith(new Error('Connection lost'));
+    await session.runFull();
+    const request = setup.jobs.submit.calls.mostRecent().args[0];
+    expect(session.submissionUncertain()).toBeTrue();
+    expect(session.canRun()).toBeFalse();
+    setup.jobs.submit.and.resolveTo({
+      runId: request.runId,
+      calculationId: 7,
+      status: 'queued',
+      completedSeeds: 0
+    });
+    await session.submitFull();
+    expect(setup.jobs.submit.calls.mostRecent().args[0]).toBe(request);
+    expect(session.submissionUncertain()).toBeFalse();
+  });
+  it('retains an uncertain submission across map destruction without permitting a new identity', async () => {
+    await session.discover();
+    await session.selectCalculation(7);
+    let reject!: (reason: Error) => void;
+    setup.jobs.submit.and.returnValue(new Promise((_, fail) => (reject = fail)));
+    const submission = session.runFull();
+    session.detach();
+    expect(session.submitting()).toBeTrue();
+    reject(new Error('Connection interrupted'));
+    await submission;
+    expect(session.submitting()).toBeFalse();
+    expect(session.submissionUncertain()).toBeTrue();
+    expect(session.error()).toContain('Connection interrupted');
+    expect(session.canRun()).toBeFalse();
+  });
+  it('loads a completed ensemble and history when the watched job finishes', async () => {
+    await session.discover();
+    await session.selectCalculation(7);
+    const job = { runId: 'full', calculationId: 7, status: 'running', completedSeeds: 3 };
+    setup.jobs.list.and.resolveTo([job]);
+    await session.loadJobs();
+    const result = { ...completed(7), kind: 'ensemble' as const, source: 'saved' as const };
+    setup.persistence.load.and.resolveTo(result);
+    setup.jobs.list.and.resolveTo([{ ...job, status: 'completed', completedSeeds: 10 }]);
+    await session.loadJobs();
+    expect(setup.persistence.load).toHaveBeenCalledWith(7, 'full');
+    expect(session.result()).toBe(result);
     expect(session.saved()).toBeTrue();
-    expect(setup.api.run).toHaveBeenCalledTimes(1);
-    expect(
-      setup.persistence.save.calls.allArgs().map((args: [MareldResult]) => args[0].id)
-    ).toEqual([result.id, result.id]);
   });
   it('restores calculation settings and results after switching away, and keeps provenance unchanged', async () => {
     await session.discover();
@@ -167,23 +357,8 @@ describe('calculation-owned simulation session', () => {
       await session.run();
     }
     await session.selectCalculation(7);
-    expect(session.result()).toBeNull(); // The oldest saved run is available from durable history.
+    expect(session.result()).toBeNull(); // Old previews may be discarded to bound memory.
     expect(setup.api.run).toHaveBeenCalledTimes(3);
-  });
-  it('never evicts two unsaved results or starts a third run', async () => {
-    await session.discover();
-    setup.persistence.save.and.rejectWith(new Error('Offline'));
-    for (const id of [7, 8]) {
-      await session.selectCalculation(id);
-      setup.api.run.and.resolveTo(completed(id));
-      await session.run();
-    }
-    await session.selectCalculation(9);
-    expect(session.selectedId()).toBe(8);
-    expect(session.error()).toContain('unsaved');
-    await session.selectCalculation(7);
-    expect(session.result()?.input.source?.calculationId).toBe(7);
-    expect(session.canRun()).toBeFalse();
   });
   it('clears inaccessible cached results when source authorization is lost', async () => {
     await session.discover();

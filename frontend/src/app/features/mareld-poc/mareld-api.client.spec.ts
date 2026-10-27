@@ -1,14 +1,14 @@
-import { exampleArea } from './testing/example-area.fixture';
 import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { environment } from '@src/environments/environment';
 import { MareldApiClient, apiError } from './mareld-api.client';
-import { prepareInput } from './mareld-input';
-import { impactFixture } from './testing/impact.fixture';
+import { calculationFixture } from './testing/calculation.fixture';
+import { runSteps } from './mareld-result';
 
-describe('MARELD multipart API contract', () => {
-  let client: MareldApiClient;
-  let http: HttpTestingController;
+describe('server-serialized EcoTwin preview contract', () => {
+  let client: MareldApiClient, http: HttpTestingController;
+  const model = { id: 'demo', name: 'Demo', species: ['codfish'] };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()]
@@ -17,198 +17,59 @@ describe('MARELD multipart API contract', () => {
     http = TestBed.inject(HttpTestingController);
   });
   afterEach(() => http.verify());
-
-  it('explains missing checkpoints from the actual empty-list response', async () => {
+  it('explains unavailable models', async () => {
     const pending = client.models();
     const assertion = expectAsync(pending).toBeRejectedWithError(/compatible policy checkpoints/);
     http.expectOne('/mareld-api/v1/models').flush([]);
     await assertion;
   });
-
-  it('posts a 60 by 60 world for 5,000 steps and decodes all six species and 51 frames', async () => {
-    const input = prepareInput(exampleArea(), 'Example');
-    const model = {
-      id: 'checkpoint',
-      name: 'Checkpoint',
-      species: [
-        'codfish',
-        'pelagicFish',
-        'porpoises',
-        'benthic_community',
-        'phytoplankton',
-        'zooplankton'
-      ]
-    };
-    // Canvas PNG encoding is asynchronous in real browsers.
-    const encoded = new Promise<void>((resolve) => {
-      const original = HTMLCanvasElement.prototype.toBlob;
-      let count = 0;
-      spyOn(HTMLCanvasElement.prototype, 'toBlob').and.callFake(function (
-        this: HTMLCanvasElement,
-        callback,
-        type
-      ) {
-        original.call(
-          this,
-          (blob) => {
-            callback(blob);
-            if (++count === 2) resolve();
-          },
-          type
-        );
-      });
-    });
-    const pending = client.run(input, model, 5000, new AbortController().signal);
-    await encoded;
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    const request = http.expectOne('/mareld-api/v1/runs');
+  it('submits frozen native inputs and the chosen preview seed, then decodes the map', async () => {
+    const input = calculationFixture().input;
+    const pending = client.run(input, model, 40, new AbortController().signal, 77);
+    const request = http.expectOne(
+      `${environment.apiBaseUrl}/calculation/7/simulation-jobs/preview`
+    );
     expect(request.request.method).toBe('POST');
-    expect(request.request.headers.has('Content-Type')).toBeFalse(); // Browser supplies multipart boundary.
-    const form = request.request.body as FormData;
-    const json = JSON.parse(form.get('request') as string);
-    expect(json.grid).toEqual({ width: 60, height: 60 });
-    expect(json.time).toEqual({
-      max_steps: 5000,
-      sample_every: 100,
-      include_final: true,
-      tick_duration_days: 0.25
-    });
-    expect(json.pressures).toEqual([]);
-    expect(json.output.replicates).toBe(1);
-    expect(json.seed).toBe(42);
-    for (const key of ['texture', 'depth']) {
-      const blob = form.get(key) as Blob;
-      expect(blob.type).toBe('image/png');
-      const bitmap = await createImageBitmap(blob);
-      expect(bitmap.width).toBe(input.grid.width);
-      expect(bitmap.height).toBe(input.grid.height);
-      bitmap.close();
-    }
-    const count = 51 * input.water.length * model.species.length;
+    const body = request.request.body;
+    expect(body.version).toBe('ecotwin-preview-v1');
+    expect(body.config.seed).toBe(77);
+    expect(body.config.replicates).toBe(1);
+    expect(body.config.maxSteps).toBe(40);
+    expect(body.input.source.calculationId).toBe(7);
+    expect(body.input.impacts.layers.length).toBe(2);
+    expect(Array.isArray(body.input.water)).toBeTrue();
     request.flush(
       JSON.stringify({
         status: 'completed',
-        run_id: json.run_id,
+        run_id: body.runId,
         result: {
           dtype: 'float32',
-          shape: [51, 60, 60, 6],
+          shape: [11, 60, 60, 1],
           species: model.species,
-          steps: Array.from({ length: 51 }, (_, i) => i * 100),
-          biomass_b64: btoa('\0'.repeat(count * 4))
+          steps: runSteps(40),
+          biomass_b64: btoa('\0'.repeat(11 * 3600 * 4))
         }
       })
     );
     const result = await pending;
-    expect(result.source).toBe('live');
-    expect(result.values.length).toBe(count);
-    expect(result.maxima).toEqual([0, 0, 0, 0, 0, 0]);
+    expect(result.kind).toBe('preview');
+    expect(result.seed).toBe(77);
+    expect(result.values.length).toBe(11 * 3600);
   });
-
-  it('does not send an already discarded run', async () => {
+  it('rejects stale masks and aborted previews before submitting', async () => {
+    const input = calculationFixture().input;
+    input.impacts!.inputId = 'other';
+    await expectAsync(
+      client.run(input, model, 4, new AbortController().signal)
+    ).toBeRejectedWithError(/different area/);
+    input.impacts!.inputId = input.id;
     const controller = new AbortController();
     controller.abort();
-    await expectAsync(
-      client.run(
-        prepareInput(exampleArea(), 'Example'),
-        { id: 'x', name: 'X', species: ['codfish'] },
-        1,
-        controller.signal
-      )
-    ).toBeRejectedWithError('Request discarded.');
-    http.expectNone('/mareld-api/v1/runs');
-  });
-
-  it('uploads both pressure fields as referenced binary PNG masks and retains the input snapshot', async () => {
-    const input = prepareInput(exampleArea(), 'Impacts');
-    input.water[0] = 0;
-    input.waterCells--;
-    input.impacts = impactFixture(input);
-    const original = HTMLCanvasElement.prototype.toBlob;
-    let encodedCount = 0;
-    const encoded = new Promise<void>((resolve) => {
-      spyOn(HTMLCanvasElement.prototype, 'toBlob').and.callFake(function (
-        this: HTMLCanvasElement,
-        callback,
-        type
-      ) {
-        original.call(
-          this,
-          (blob) => {
-            callback(blob);
-            if (++encodedCount === 4) resolve();
-          },
-          type
-        );
-      });
-    });
-    const pending = client.run(
-      input,
-      { id: 'demo', name: 'Demo', species: ['porpoises'] },
-      4,
-      new AbortController().signal
+    await expectAsync(client.run(input, model, 4, controller.signal)).toBeRejectedWithError(
+      /discarded/
     );
-    await encoded;
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    const request = http.expectOne('/mareld-api/v1/runs');
-    const form = request.request.body as FormData;
-    const json = JSON.parse(form.get('request') as string);
-    expect(json.pressures.map((p: { id: string }) => p.id)).toEqual([
-      'noise-reset',
-      'trawling-reset',
-      'trawling-08',
-      'noise-08'
-    ]);
-    expect(
-      json.pressures.map((p: { parameters: { intensity: number } }) => p.parameters.intensity)
-    ).toEqual([0, 0, 0.1, 90]);
-    const files = form.getAll('mask') as File[];
-    expect(files.length).toBe(2);
-    for (const file of files) {
-      expect(json.masks).toContain({ id: file.name.replace('.png', ''), file: file.name });
-      const bitmap = await createImageBitmap(file);
-      expect([bitmap.width, bitmap.height]).toEqual([60, 60]);
-      const canvas = document.createElement('canvas');
-      canvas.width = 60;
-      canvas.height = 60;
-      const context = canvas.getContext('2d')!;
-      context.drawImage(bitmap, 0, 0);
-      const pixels = context.getImageData(0, 0, 60, 60).data;
-      expect(Array.from(pixels.slice(0, 8))).toEqual([0, 0, 0, 255, 255, 255, 255, 255]);
-      expect(Array.from(pixels).every((v) => v === 0 || v === 255)).toBeTrue();
-      bitmap.close();
-    }
-    request.flush(
-      JSON.stringify({
-        status: 'completed',
-        run_id: json.run_id,
-        result: {
-          dtype: 'float32',
-          shape: [2, 60, 60, 1],
-          species: ['porpoises'],
-          steps: [0, 4],
-          biomass_b64: btoa('\0'.repeat(2 * 3600 * 4))
-        }
-      })
-    );
-    const result = await pending;
-    expect(result.input.impacts).toBe(input.impacts);
+    http.expectNone(`${environment.apiBaseUrl}/calculation/7/simulation-jobs/preview`);
   });
-
-  it('rejects impact maps prepared for a different captured area before uploading', async () => {
-    const input = prepareInput(exampleArea(), 'Example');
-    input.impacts = impactFixture(input);
-    input.impacts.inputId = 'old-area';
-    await expectAsync(
-      client.run(
-        input,
-        { id: 'demo', name: 'Demo', species: ['porpoises'] },
-        4,
-        new AbortController().signal
-      )
-    ).toBeRejectedWithError(/different area/);
-    http.expectNone('/mareld-api/v1/runs');
-  });
-
   it('does not imply a timed out model has stopped', () => {
     const error = new Error();
     error.name = 'TimeoutError';

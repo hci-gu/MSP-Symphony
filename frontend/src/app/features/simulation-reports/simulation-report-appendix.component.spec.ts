@@ -78,10 +78,68 @@ describe('static simulation appendix', () => {
     const host: HTMLElement = fixture.nativeElement;
     expect(host.querySelectorAll('.simulation-run').length).toBe(2);
     expect(host.querySelectorAll('figure img').length).toBe(4);
-    expect(host.querySelectorAll('svg path').length).toBe(4);
+    expect(host.querySelectorAll('svg path').length).toBe(2);
+    expect(host.querySelector('svg')?.getAttribute('aria-label')).toContain(
+      'percentage of initial biomass'
+    );
     expect(host.textContent).toContain('Not defined');
     expect(host.textContent).toContain('Synthetic depth');
     expect(document.documentElement.dataset['simulationAppendixState']).toBe('ready');
+  });
+  it('normalizes each saved seed before plotting the report mean and confidence bands', async () => {
+    const run = summary();
+    run.version = 'ecotwin-report-v2';
+    run.config.replicates = 10;
+    run.ensemble = {
+      seeds: Array.from({ length: 10 }, (_, i) => 42 + i),
+      confidenceLevel: 0.95,
+      ciMethod: 'student-t',
+      totals: Array.from({ length: 10 }, (_, i) => [
+        [i < 5 ? 1 : 2, 2],
+        [0, 8]
+      ]),
+      mean: [
+        [1.5, 2],
+        [0, 8]
+      ],
+      ciLow: [
+        [1.1229738062098347, 2],
+        [0, 7]
+      ],
+      ciHigh: [
+        [1.8770261937901653, 2],
+        [0, 9]
+      ]
+    };
+    run.totals = run.ensemble.mean;
+    data.list.and.resolveTo([run]);
+    data.report.and.resolveTo(run);
+    const fixture = await render();
+    const host: HTMLElement = fixture.nativeElement;
+    expect(host.textContent).toContain('95% Student t confidence intervals');
+    expect(host.textContent).toContain('Final mean 95% CI');
+    expect(host.textContent).toContain('Biomass over time (% of initial biomass)');
+    expect(host.textContent).toContain('Each seed is normalized');
+    expect(host.querySelectorAll('svg path').length).toBe(2);
+    expect(host.textContent).toContain('Mean final spatial biomass');
+    const figures = reportFigures(run);
+    expect(figures.chartMaximum).toBe(200);
+    // Mean of seed percentages = 150%, not the ratio of absolute means (133.33%).
+    expect(figures.species[0].path).toBe('M60,150 L680,90');
+    const upperY = Number(figures.species[0].band.split(' ')[1].split(',')[1]);
+    const lowerY = Number(figures.species[0].band.split(' ')[2].split(',')[1]);
+    expect(((270 - upperY) / 240) * 200).toBeCloseTo(187.702619379, 6);
+    expect(((270 - lowerY) / 240) * 200).toBeCloseTo(112.297380621, 6);
+    expect(figures.species[0].finalLow).toBe(2);
+    expect(figures.species[0].band).not.toMatch(/NaN|Infinity/);
+    expect(figures.species[1].path).toBe('');
+    expect(figures.species[1].band).toBe('');
+    expect(figures.unplottedSpecies).toEqual(['plankton']);
+    run.ensemble.totals[0][0][0] = 0;
+    const zeroSeed = reportFigures(run);
+    expect(zeroSeed.species[0].path).toBe('');
+    expect(zeroSeed.species[0].band).toBe('');
+    expect(zeroSeed.unplottedSpecies).toEqual(['Codfish', 'plankton']);
   });
   it('shows appendix errors and supports retry without representing failure as an empty report', async () => {
     data.list.and.rejectWith(new Error('Offline'));
@@ -100,6 +158,10 @@ describe('static simulation appendix', () => {
     expect(figures.species[1].percent).toBeNull();
     expect(figures.species[0].percent).toBe(100);
     expect(figures.species[0].change).toBe(2);
+    expect(figures.species[0].path).toBe('M60,150 L680,30');
+    expect(figures.species[1].path).toBe('');
+    expect(figures.unplottedSpecies).toEqual(['plankton']);
+    expect(figures.initialY).toBe(150);
     expect(figures.days).toBe(0.25);
     run.finalBiomassB64 = 'AA==';
     expect(() => reportFigures(run)).toThrowError(/wrong size/);
