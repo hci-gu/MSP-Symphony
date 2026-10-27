@@ -219,6 +219,7 @@ public class CalculationREST {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(summary = "Gets all previous computations for the user")
     @RolesAllowed("GRP_SYMPHONY")
+    // Legacy all-baselines query remains a generic history capability; optional modules use their own discovery route.
     public List<CalculationResultSlice> getAllCalculations(@Context HttpServletRequest req,
                                                           @DefaultValue("false") @QueryParam("all-baselines") boolean allBaselines)
             throws SymphonyStandardAppException, IOException {

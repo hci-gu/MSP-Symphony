@@ -1,44 +1,49 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-      "baseUrl": "./",
-      "downlevelIteration": true,
-      "outDir": "./dist/out-tsc",
-      "sourceMap": true,
-      "declaration": false,
-      "module": "es2020",
-      "moduleResolution": "bundler",
-      "resolveJsonModule": true,
-      "experimentalDecorators": true,
-      "importHelpers": true,
-      "allowSyntheticDefaultImports": true,
-      "strict": true,
-      "noImplicitReturns": true,
-      "skipLibCheck": true,
-      "target": "ES2022",
-      "useDefineForClassFields": false,
-      "typeRoots": [
-        "node_modules/@types"
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "downlevelIteration": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2020",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@data/*": [
+        "src/app/data/*"
       ],
-      "paths": {
-        "@data/*": [
-          "src/app/data/*"
-        ],
-        "@src/*": [
-          "src/*"
-        ],
-        "@shared/*": [
-          "src/app/shared/*"
-        ],
-        "@assets/*": [
-          "src/assets/*"
-        ]
-      }
-    },
-    "angularCompilerOptions": {
-        "strictTemplates": false, // We want this to true in the future
-        "strictInjectionParameters": true,
-        "strictInputTypes": true
-        // enable more?
+      "@src/*": [
+        "src/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@ecotwin/*": [
+        "../plugins/ecotwin/frontend/*"
+      ],
+      "@ecotwin-distribution/*": [
+        "../distributions/symphony-ecotwin/frontend/*"
+      ]
     }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": false,
+    "strictInjectionParameters": true,
+    "strictInputTypes": true
+  }
 }

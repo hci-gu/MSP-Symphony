@@ -2,9 +2,8 @@ name: NodeJS with Angular CLI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "develop" ]
 
 jobs:
   build:
@@ -25,6 +24,6 @@ jobs:
     - name: Build
       run: |
         cd frontend
-        npm install --include=optional
-        npm run build
-        npm run test-headless
+        npm ci --include=optional
+        npm run build:base
+        npm run test:base

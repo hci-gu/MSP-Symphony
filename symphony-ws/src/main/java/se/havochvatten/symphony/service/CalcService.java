@@ -141,6 +141,7 @@ public class CalcService {
                 getResultList();
     }
 
+    /** Generic history scope retained for existing all-baselines HTTP callers. */
     public List<CalculationResultSlice> findAllBaselinesByUser(Principal user) {
         return findAllByUsername(user.getName());
     }

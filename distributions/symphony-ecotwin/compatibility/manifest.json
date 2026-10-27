@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "extensionId": "ecotwin",
+  "pluginVersion": "1.0.0-SNAPSHOT",
+  "adapterVersion": 1,
+  "supportedSymphony": {
+    "repository": "https://github.com/havochvatten/MSP-Symphony",
+    "branch": "develop",
+    "commit": "6e9a3f218b5a444ca12daae72fe91204a606c384",
+    "nativePatch": "host.patch",
+    "policy": "Only the adapter and recorded neutral host changes absorb upstream changes. Advance this pin after compatibility verification."
+  },
+  "runtime": {
+    "java": 17,
+    "jakartaEE": "10.0.0",
+    "wildfly": "36.0.1.Final",
+    "angular": "21.2",
+    "openlayers": "10.9",
+    "node": ">=22.13"
+  },
+  "contracts": {
+    "input": [
+      "calculation-input-v1"
+    ],
+    "run": [
+      "ecotwin-run-v1",
+      "ecotwin-run-v2"
+    ],
+    "report": [
+      "ecotwin-report-v1",
+      "ecotwin-report-v2"
+    ],
+    "preview": [
+      "ecotwin-preview-v1"
+    ],
+    "support": [
+      "native-input-support-v1"
+    ],
+    "engine": "Eco-evo /v1/models and /v1/runs"
+  },
+  "profile": "hav-west-native-v1",
+  "migrations": [
+    "SimulationRuns.sql",
+    "SimulationJobs.sql",
+    "SimulationBaselines.sql"
+  ],
+  "modes": [
+    "absent",
+    "reporting-only",
+    "enabled"
+  ],
+  "worker": "One enabled Symphony worker per model server. The EJB lock is local to one deployment.",
+  "limitations": [
+    "Source hashes identify export-time files, not archived calculation-time sources.",
+    "Engine model IDs do not attest immutable checkpoint weights."
+  ],
+  "compatibilityChecks": [
+    "source dependency rules",
+    "base artifact without plugin",
+    "enabled unit and profile contracts",
+    "isolated container lifecycle",
+    "pristine upstream recomposition"
+  ]
+}

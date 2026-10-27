@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "include": [
+    "../../plugins/ecotwin/frontend/core-suite.spec.ts"
+  ]
+}

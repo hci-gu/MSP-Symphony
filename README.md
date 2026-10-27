@@ -33,22 +33,18 @@ with special emphasis on the building and comparison of different scenarios. Thi
 - Compare two scenario analyses result side-by-side, including relative differences in graphical and tabular form 
 - Ability to make use of user-drawn custom polygons, or upload a polygon definition created in another GIS tool
 
-## Optional EcoTwin simulation
+## Optional EcoTwin plugin
 
-The **EcoTwin** tab previews and runs optional ecosystem simulations for a completed saved
-Symphony calculation. Normal scenario editing and calculation stay unchanged.
-Completed full runs are stored separately and appear automatically as appendices in
-the calculation report, including after refresh and in print.
+EcoTwin adds ecosystem previews, ten-seed ensembles and saved simulation appendices
+through an optional distribution. The default frontend and backend builds contain
+only Symphony. EcoTwin owns its Symphony adapters and compatibility checks.
 
-See the [review and startup guide](docs/MARELD-POC.md) for the Poseidon fixture,
-database migration, supported inputs and experimental model assumptions.
-
-Use **Run preview** for an unsaved single-seed map result, then **Run full simulation**
-for ten seeds with mean maps and 95% confidence bands. Full runs continue on the
-server after closing the browser; completed ensembles appear in report appendices.
-Configuration stays on the left, playback floats below the map, and graphs open
-on the right. Apply `SimulationRuns.sql`, `SimulationJobs.sql`, and `SimulationBaselines.sql`, and set
-`ECOTWIN_API_URL` on the backend as described in the workflow guide.
+See the [plugin guide](plugins/ecotwin/README.md) for installation, development and
+verification. [Example datasets and Poseidon](examples/ecotwin/README.md) are an
+optional research bundle. The [architecture review](docs/ECOTWIN-PLUGIN-PLAN.md)
+explains the restructuring and its acceptance criteria. The
+[implementation review guide](docs/ECOTWIN-PLUGIN-IMPLEMENTATION.md) records the
+delivered changes, verification and remaining limits.
 
 ## Architectural overview
 
@@ -159,8 +155,8 @@ See [this section](https://docs.wildfly.org/39/WildFly_Elytron_Security.html#con
 In order for the system to work the database need to be populated with data. Separate instructions for this 
 procedure is provided in [DataImportREADME](database/DataImportREADME.md).
 
-For the public Swedish 2019 data, see the [local HaV data bundle](data/hav-symphony-2019/README.md)
-for downloads and provenance, and the [working regional import](data/hav-symphony-2019/LOCAL-IMPORT.md)
+For the public Swedish 2019 data, see the [local HaV data bundle](examples/ecotwin/data/hav-symphony-2019/README.md)
+for downloads and provenance, and the [working regional import](examples/ecotwin/data/hav-symphony-2019/LOCAL-IMPORT.md)
 for the three populated local baselines, startup instructions, validation and scientific limitations.
 
 #### 3. (Optional) Override the application runtime configuration properties

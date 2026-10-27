@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { MapComponent } from './map.component';
-import { MareldMapBridge } from '../../features/mareld-poc/mareld-map.bridge';
 import { MapToolbarComponent } from './map-toolbar/map-toolbar.component';
 import { MapOpacitySliderComponent } from './map-opacity-slider/map-opacity-slider.component';
 import { CoreModule } from '@src/app/core/core.module';
@@ -20,6 +19,8 @@ import { initialState as calculation } from '@data/calculation/calculation.reduc
 import { ChangeState, ScenarioLayer } from '@src/app/map-view/map/layers/scenario-layer';
 import { BandChange } from '@data/metadata/metadata.interfaces';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { Router } from '@angular/router';
+import { HostExtensions } from '../../extensions/extensions';
 
 describe('MapComponent', () => {
   let fixture: ComponentFixture<MapComponent>, component: MapComponent;
@@ -35,7 +36,6 @@ describe('MapComponent', () => {
         ToolbarButtonComponent
       ],
       providers: [
-        { provide: MareldMapBridge, useValue: jasmine.createSpyObj('MareldMapBridge', ['attach', 'detach']) },
         provideMockStore({
           initialState: {
             metadata: metadata,
@@ -70,6 +70,17 @@ describe('MapComponent', () => {
     const setTargetSpy = spyOn(map, 'setTarget').and.callThrough();
     fixture.destroy(); // triggers ngOnDestroy
     expect(setTargetSpy).toHaveBeenCalledWith(undefined);
+  });
+
+  it('never attaches extension map services on a public URL, including query parameters', () => {
+    fixture.destroy();
+    const attach = spyOn(TestBed.inject(HostExtensions), 'attachMap');
+    spyOnProperty(TestBed.inject(Router), 'url', 'get').and.returnValue('/public?language=en');
+    fixture = TestBed.createComponent(MapComponent);
+    fixture.componentInstance.mapCenter = [0, 0];
+    fixture.detectChanges();
+    // Public configuration has not loaded; route identity still prevents extension construction.
+    expect(attach).not.toHaveBeenCalled();
   });
 
   it('classifyBandChanges should classify correctly', () => {

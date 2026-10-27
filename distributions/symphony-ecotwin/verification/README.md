@@ -1,0 +1,47 @@
+# Disposable distribution acceptance
+
+`run.py` tests the base and EcoTwin-enabled WARs in real WildFly/PostGIS containers. It creates a unique labelled Docker network, a database with temporary memory-backed storage, tiny generated GeoTIFFs, and isolated WildFly instances. It never starts, reads, mounts or changes existing Symphony containers or application data.
+
+Prerequisites: Docker, Python 3, [uv](https://docs.astral.sh/uv/), and the PostgreSQL JDBC jar downloaded by the Maven build. The fixture generator uses uv script dependencies (`rasterio`, `pyproj`, Python 3.12). The runner uses Python's standard library. Images default to WildFly `36.0.1.Final-jdk17`, PostGIS `14-3.4`, and Node `22-bookworm-slim` for the deterministic model protocol stub.
+
+After building both distributions:
+
+```sh
+python3 distributions/symphony-ecotwin/verification/run.py \
+  --base-war symphony-ws/target/base/symphony-ws-1.26.0-SNAPSHOT.war \
+  --enabled-war symphony-ws/target/ecotwin/symphony-ws-1.26.0-SNAPSHOT.war
+```
+
+Use `--jdbc-jar` when the Maven cache is in a different location. `--wildfly-image` and `--database-image` allow deployment-version compatibility runs. `--output` must name a new directory. By default logs and JSON evidence are written under an ignored `.local/ecotwin-acceptance-<id>/` directory, and the containers/network are removed on success or failure.
+
+For browser review, `--keep` retains only the newly created isolated resources. The evidence file lists server URLs and container names. Disposable login: `acceptance` / `disposable-acceptance-only`. The final servers expose base, reporting-only and execution-enabled distributions on separate loopback ports. They retain synthetic legacy and ensemble appendices. Remove retained resources using the printed cleanup command:
+
+```sh
+python3 distributions/symphony-ecotwin/verification/run.py \
+  --cleanup .local/ecotwin-acceptance-<id>/evidence.json
+```
+
+Cleanup checks resource names and labels; it does not delete output files or touch unlabelled containers.
+
+## Coverage
+
+- Base WAR excludes EcoTwin classes/artifacts; plugin routes and tables are absent. It boots without model service or plugin support sidecars.
+- Native authentication/session restoration, user-setting writes, national-area catalogue/boundary, metadata, areas/scenarios, calculation/history, image/CSV/GeoTIFF, and explicit/implied comparison work through real HTTP endpoints.
+- The unchanged plugin migrations run against the core schema; the unmodified enabled WAR must discover its JAX-RS resources, EJBs and JPA entities.
+- Calculation input export, stale fingerprints, ownership, saved baseline creation/idempotency and native-deletion cascade cross actual transaction/resource seams. A database-trigger failure on baseline-link insertion must roll back the already-persisted native calculation/snapshot and preserve the scenario pointer.
+- Backend model discovery and an unsaved preview use a deterministic model protocol stub. A v1 artifact is persisted, reloaded and checked for idempotency/conflicts.
+- A ten-seed job is interrupted after durable checkpoints, resumed after WildFly restart, deliberately fails one seed, then retries without recomputing completed seeds. Final statistics and mean tensors are independently checked.
+- PostgreSQL row/advisory lock barriers establish real concurrent transactions: identical submissions produce one job; native deletion waits for finalization and then removes its committed rows; a deletion already holding the calculation row prevents a late submission. These checks wait for observed database lock dependencies rather than relying on sleep timing.
+- A trigger fails final artifact insertion after the run row has been flushed. No run/artifact/completed transition may commit; the failed job retains ten checkpoints and its accumulator. Retrying after deployment rollback/upgrade must finalize without another model request.
+- The unmodified base WAR is booted against a populated plugin database, then the additive migrations are replayed and the enabled WAR is restored in reporting mode. All four plugin tables must retain exact digests, including legacy v1, v2, completed/failed jobs, a ten-seed checkpoint and saved baseline links. Native reports and the original TIFF remain usable during code rollback.
+- Persisted v1/v2 data remains readable with execution disabled and the model container absent, including after restarting the same container and rerunning its idempotent datasource setup. Deleting a second completed ensemble removes its job/artifact atomically and supports retries; the first ensemble remains as a browser fixture.
+
+## Fixture limits
+
+This is a protocol and transaction test, not scientific evidence. The tiny raster stacks contain artificial constants. The fixture deliberately declares the reviewed baseline name and source-band identities to exercise the unchanged mapping contract, while all actual native-stack/support-file hashes match the generated bytes. It is labelled synthetic in the baseline title, manifest policy, scenario names and persisted assumptions. Stub tensors have no ecological meaning.
+
+Symphony does not yet provide a complete versioned core-schema bootstrap. The harness temporarily enables Hibernate DDL in a **copy of the base WAR** for this disposable database, then installs the native view/spatial/text-column details required by existing entities. It does not modify either build artifact. The enabled WAR is copied unchanged, with automatic schema changes disabled, and uses the real plugin migrations. This verifies plugin deployment and schema integration; it does not replace a production schema-upgrade test.
+
+Rollback means switching between the two artifacts built by the current source while retaining the additive schema. The harness does not execute a historical enabled WAR or downgrade/drop tables. The database faults and lock barriers are test-only triggers installed and removed in the disposable database; no production fault switches or model bypasses are added. Concurrency coverage is limited to the controlled orderings above, and does not validate a deployment with multiple enabled workers. Running-job checkpoint recovery is exercised by the earlier worker restart; the rollback/upgrade phase deliberately preserves completed and failed jobs with execution paused. A queued job with zero completed seeds is not separately carried across the deployment change.
+
+Browser interaction and print-layout checks are separate from this backend harness.

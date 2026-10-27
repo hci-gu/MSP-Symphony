@@ -1,0 +1,135 @@
+@if (session.result(); as result) {
+  <aside #graphPanel class="graph-panel" aria-label="EcoTwin results">
+    <header>
+      <div>
+        <span class="eyebrow">{{
+          result.ensemble
+            ? 'FULL SIMULATION'
+            : result.kind === 'preview'
+              ? 'PREVIEW'
+              : 'SINGLE SEED · LEGACY'
+        }}</span>
+        <h2>Population trends</h2>
+      </div>
+      <button
+        type="button"
+        (click)="collapsed.set(!collapsed())"
+        [attr.aria-expanded]="!collapsed()"
+        aria-controls="ecotwin-graphs"
+      >
+        {{ collapsed() ? 'Show graphs' : 'Collapse' }}
+      </button>
+    </header>
+    <div id="ecotwin-graphs" [hidden]="collapsed()">
+      <p class="source">
+        {{ result.input.name }} · {{ result.model }} ·
+        {{ result.steps[result.steps.length - 1] }} steps
+      </p>
+      @if (result.ensemble) {
+        <p class="status">Mean of 10 seeds · 95% confidence bands</p>
+        <p class="hint">
+          Bands show uncertainty in the mean from random seeds, not uncertainty in model assumptions
+          or inputs.
+        </p>
+      } @else if (result.kind === 'preview') {
+        <p class="status">Unsaved single-seed preview</p>
+      } @else {
+        <p class="hint">Saved single-seed result. No confidence interval.</p>
+      }
+      @if (session.previewOutdated()) {
+        <p class="outdated" role="status">Preview is outdated — settings have changed.</p>
+      }
+      <app-ecotwin-biomass-chart
+        [panelCompact]="true"
+        [result]="result"
+        [frame]="session.frame()"
+        (frameChange)="session.seekFrame($event)"
+      />
+      <app-ecotwin-impact-outlines />
+      @if (session.saved()) {
+        <p class="hint">Saved in this calculation's report appendix.</p>
+      }
+    </div>
+  </aside>
+  <section #playbackTray class="playback-tray" aria-label="Simulation map playback">
+    <div class="map-settings">
+      <div class="species-control">
+        <label for="ecotwin-species">{{
+          result.ensemble ? 'Mean biomass on map' : 'Biomass on map'
+        }}</label>
+        <select
+          id="ecotwin-species"
+          [ngModel]="session.species()"
+          (ngModelChange)="session.selectSpecies(+$event)"
+        >
+          @for (name of result.species; track $index) {
+            <option [ngValue]="$index">{{ speciesLabel(name) }}</option>
+          }
+        </select>
+      </div>
+      <div class="legend">
+        <div class="color-ramp" [style.background]="gradient"></div>
+        <div>
+          <span>0</span><span>{{ result.maxima[session.species()] | number: '1.0-2' }} t/cell</span>
+        </div>
+      </div>
+      <label class="opacity"
+        >Opacity
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          aria-label="Map opacity"
+          [ngModel]="session.opacity()"
+          (ngModelChange)="session.setOpacity(+$event)"
+        />
+      </label>
+      <button type="button" (click)="fit()">Fit map</button>
+      <button type="button" [disabled]="session.previewBusy()" (click)="session.clearResult()">
+        Clear
+      </button>
+    </div>
+    <div class="timeline">
+      <button
+        type="button"
+        class="play"
+        [attr.aria-label]="session.playing() ? 'Pause simulation replay' : 'Play simulation replay'"
+        [disabled]="session.busy() || result.steps.length < 2"
+        (click)="session.togglePlayback()"
+      >
+        {{ session.playing() ? 'Ⅱ Pause' : '▶ Play' }}
+      </button>
+      <div class="scrubber">
+        <label for="ecotwin-frame"
+          >Day {{ stepsToDays(result.steps[session.frame()]) | number: '1.0-2' }}
+          <span
+            >of {{ stepsToDays(result.steps[result.steps.length - 1]) | number: '1.0-2' }}</span
+          ></label
+        >
+        <input
+          id="ecotwin-frame"
+          type="range"
+          min="0"
+          [max]="result.steps.length - 1"
+          step="1"
+          [ngModel]="session.frame()"
+          (ngModelChange)="session.seekFrame(+$event)"
+        />
+      </div>
+      <label class="speed"
+        >Speed
+        <select
+          aria-label="Playback speed"
+          [ngModel]="session.playbackSpeed()"
+          (ngModelChange)="session.setPlaybackSpeed(+$event)"
+        >
+          <option [ngValue]="0.5">0.5×</option>
+          <option [ngValue]="1">1×</option>
+          <option [ngValue]="2">2×</option>
+          <option [ngValue]="4">4×</option>
+        </select>
+      </label>
+    </div>
+  </section>
+}

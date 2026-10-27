@@ -1,12 +1,9 @@
-import { MARELD_RUN } from '../app/features/mareld-shared/run-config';
-
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   production: false,
-  mareldPoc: { enabled: true, apiUrl: MARELD_RUN.apiPath, modelId: 'allminussb' },
   // Change this line to switch branding file
   brandingFile: 'branding.json', // ← generic by default
   //brandingFile: 'branding_swam.json',  // ← uncomment for SwAM

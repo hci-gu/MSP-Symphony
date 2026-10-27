@@ -1,0 +1,195 @@
+{
+  "profile": "hav-west-native-v1",
+  "description": "Cross-language boundary cases. Zero stays zero, positive values clamp to at least level one, half steps round upward, values above 100 saturate. Values are supported native relative indices.",
+  "quantization": [
+    {
+      "kind": "trawling",
+      "nativeValue": 0,
+      "level": 0,
+      "intensity": 0,
+      "float32": 0.0
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 1e-06,
+      "level": 1,
+      "intensity": 0.0125,
+      "float32": 0.012500000186264515
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 3.124999,
+      "level": 1,
+      "intensity": 0.0125,
+      "float32": 0.012500000186264515
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 3.125,
+      "level": 1,
+      "intensity": 0.0125,
+      "float32": 0.012500000186264515
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 6.25,
+      "level": 1,
+      "intensity": 0.0125,
+      "float32": 0.012500000186264515
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 9.374999,
+      "level": 1,
+      "intensity": 0.0125,
+      "float32": 0.012500000186264515
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 9.375,
+      "level": 2,
+      "intensity": 0.025,
+      "float32": 0.02500000037252903
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 50,
+      "level": 8,
+      "intensity": 0.1,
+      "float32": 0.10000000149011612
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 96.875,
+      "level": 16,
+      "intensity": 0.2,
+      "float32": 0.20000000298023224
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 100,
+      "level": 16,
+      "intensity": 0.2,
+      "float32": 0.20000000298023224
+    },
+    {
+      "kind": "trawling",
+      "nativeValue": 150,
+      "level": 16,
+      "intensity": 0.2,
+      "float32": 0.20000000298023224
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 0,
+      "level": 0,
+      "intensity": 0,
+      "float32": 0.0
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 1e-06,
+      "level": 1,
+      "intensity": 63.75,
+      "float32": 63.75
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 3.124999,
+      "level": 1,
+      "intensity": 63.75,
+      "float32": 63.75
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 3.125,
+      "level": 1,
+      "intensity": 63.75,
+      "float32": 63.75
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 6.25,
+      "level": 1,
+      "intensity": 63.75,
+      "float32": 63.75
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 9.374999,
+      "level": 1,
+      "intensity": 63.75,
+      "float32": 63.75
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 9.375,
+      "level": 2,
+      "intensity": 67.5,
+      "float32": 67.5
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 50,
+      "level": 8,
+      "intensity": 90.0,
+      "float32": 90.0
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 96.875,
+      "level": 16,
+      "intensity": 120.0,
+      "float32": 120.0
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 100,
+      "level": 16,
+      "intensity": 120.0,
+      "float32": 120.0
+    },
+    {
+      "kind": "noise",
+      "nativeValue": 150,
+      "level": 16,
+      "intensity": 120.0,
+      "float32": 120.0
+    }
+  ],
+  "water": [
+    {
+      "domainCoverage": 0,
+      "water": 0
+    },
+    {
+      "domainCoverage": 1e-06,
+      "water": 1
+    },
+    {
+      "domainCoverage": 0.5,
+      "water": 1
+    },
+    {
+      "domainCoverage": 1,
+      "water": 1
+    }
+  ],
+  "invalid": [
+    {
+      "reason": "unknown support",
+      "value": null,
+      "coverage": 0
+    },
+    {
+      "reason": "partial support",
+      "value": 50,
+      "coverage": 0.9
+    },
+    {
+      "reason": "negative index",
+      "value": -1,
+      "coverage": 1
+    }
+  ]
+}

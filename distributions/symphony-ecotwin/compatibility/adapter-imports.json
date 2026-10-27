@@ -1,0 +1,45 @@
+{
+  "plugins/ecotwin/backend/adapter/src/main/java/org/ecotwin/integration/symphony/CalculationInputService.java": [
+    "se.havochvatten.symphony.calculation.CalculationDomain",
+    "se.havochvatten.symphony.calculation.MatrixMask",
+    "se.havochvatten.symphony.dto.LayerType",
+    "se.havochvatten.symphony.dto.LayerType.valueOf",
+    "se.havochvatten.symphony.entity.CalculationResult",
+    "se.havochvatten.symphony.entity.CalculationResultSlice.class",
+    "se.havochvatten.symphony.entity.ScenarioArea",
+    "se.havochvatten.symphony.service.DataLayerService",
+    "se.havochvatten.symphony.service.MetaDataService",
+    "se.havochvatten.symphony.service.PropertiesService",
+    "se.havochvatten.symphony.service.ScenarioService"
+  ],
+  "plugins/ecotwin/backend/adapter/src/main/java/org/ecotwin/integration/symphony/SimulationBaselineService.java": [
+    "se.havochvatten.symphony.service.CalcService"
+  ],
+  "plugins/ecotwin/backend/adapter/src/test/java/org/ecotwin/integration/symphony/CalculationInputContractTest.java": [
+    "se.havochvatten.symphony.calculation.CalculationDomain"
+  ],
+  "plugins/ecotwin/backend/adapter/src/test/java/org/ecotwin/integration/symphony/CalculationInputServiceTest.java": [
+    "se.havochvatten.symphony.calculation.Operations",
+    "se.havochvatten.symphony.entity.*",
+    "se.havochvatten.symphony.service.*"
+  ],
+  "plugins/ecotwin/backend/adapter/src/test/java/org/ecotwin/integration/symphony/SimulationBaselineServiceTest.java": [
+    "se.havochvatten.symphony.entity.*",
+    "se.havochvatten.symphony.service.CalcService"
+  ],
+  "plugins/ecotwin/backend/adapter/src/test/java/org/ecotwin/integration/symphony/SnapshotCompatibilityTest.java": [
+    "se.havochvatten.symphony.entity.ScenarioSnapshot"
+  ],
+  "plugins/ecotwin/frontend/integration/symphony/calculation.adapter.ts": [
+    "@data/calculation",
+    "@data/calculation/calculation.interfaces"
+  ],
+  "plugins/ecotwin/frontend/integration/symphony/contributions.ts": [
+    "@data/calculation",
+    "@data/user",
+    "@src/app/extensions/extensions"
+  ],
+  "plugins/ecotwin/frontend/integration/symphony/providers.ts": [
+    "@src/app/extensions/extensions"
+  ]
+}

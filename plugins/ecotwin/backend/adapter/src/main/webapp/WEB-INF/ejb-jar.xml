@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="https://jakarta.ee/xml/ns/jakartaee" version="4.0">
+  <assembly-descriptor>
+    <!-- Keep the core independent of Jakarta while retaining application-error rollback semantics. -->
+    <application-exception><exception-class>org.ecotwin.core.SimulationValidationException</exception-class><rollback>true</rollback></application-exception>
+  </assembly-descriptor>
+</ejb-jar>

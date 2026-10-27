@@ -59,7 +59,7 @@ import { ScenarioService } from '@data/scenario/scenario.service';
 import { selectPublicAccess } from '@data/systemproperties/systemproperties.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { MareldMapBridge } from '../../features/mareld-poc/mareld-map.bridge';
+import { HostExtensions } from '../../extensions/extensions';
 
 @Component({
   selector: 'app-map',
@@ -75,7 +75,8 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private readonly translateService = inject(TranslateService);
   private readonly dataLayerService = inject(DataLayerService);
   private readonly scenarioService = inject(ScenarioService);
-  private readonly mareld = inject(MareldMapBridge);
+  private readonly extensions = inject(HostExtensions);
+  private detachExtensions?: () => void;
 
   @Input() mapCenter?: Coordinate;
   @Output() resultLayerGroupChange: EventEmitter<number> = new EventEmitter<number>();
@@ -383,7 +384,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
         this.areaLayer.deselectAreas();
         this.clearResult();
       });
-    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareld.attach(this.map!);
+    const primaryRoute = this.router.parseUrl(this.router.url).root.children['primary'];
+    const isPublicRoute = primaryRoute?.segments[0]?.path === 'public';
+    if (!isPublicRoute) this.detachExtensions = this.extensions.attachMap(this.map!, () => {
+      const sidebar = document.querySelector('app-slide-view[position="left"]');
+      return [32, 32, 32, sidebar?.getBoundingClientRect().width ?? 0];
+    });
   }
 
   public clearResult() {
@@ -424,7 +430,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   };
 
   ngOnDestroy() {
-    if (env.mareldPoc.enabled && !this.showPublicVersion) this.mareld.detach();
+    this.detachExtensions?.();
     if (this.storeSubscription) {
       this.storeSubscription.unsubscribe();
     }

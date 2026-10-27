@@ -41,7 +41,7 @@ sudo service postgresql start
 ```sh
 cd ~/repos/MSP-Symphony/symphony-ws
 mvn clean package -DskipTests
-cp target/*.war $WILDFLY_HOME/standalone/deployments/
+cp target/base/*.war $WILDFLY_HOME/standalone/deployments/
 $WILDFLY_HOME/bin/standalone.sh -c standalone-full.xml
 ```
 
@@ -460,7 +460,7 @@ fi
 ```sh
 cd ~/repos/MSP-Symphony/symphony-ws
 mvn clean package -DskipTests
-cp target/*.war $WILDFLY_HOME/standalone/deployments/
+cp target/base/*.war $WILDFLY_HOME/standalone/deployments/
 ```
 
 ### 12. Frontend Setup

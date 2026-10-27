@@ -1,3 +1,5 @@
+import { NgComponentOutlet } from '@angular/common';
+import { ComparisonOutletComponent } from '../extensions/comparison-outlet.component';
 import { NgModule } from '@angular/core';
 import { EcoSliderComponent } from './band-selection/eco-slider/eco-slider.component';
 import { SharedModule } from '@shared/shared.module';
@@ -49,8 +51,6 @@ import { SummaryModelAccordionComponent } from './band-selection/summary-model-s
 import { SummaryModelControlsComponent } from './band-selection/summary-model-selection/summary-model-controls/summary-model-controls.component';
 import { SummaryModelDialogComponent } from './band-selection/summary-model-selection/summary-model-dialog/summary-model-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
-import { SimulationComparisonPickerComponent } from '../features/simulation-comparison/simulation-comparison-picker.component';
 
 @NgModule({
   declarations: [
@@ -88,8 +88,7 @@ import { SimulationComparisonPickerComponent } from '../features/simulation-comp
     SummaryModelDialogComponent
   ],
   imports: [
-    SimulationComparisonPickerComponent,
-    MareldPocModule,
+    NgComponentOutlet, ComparisonOutletComponent,
     SharedModule,
     CoreModule,
     FormsModule,

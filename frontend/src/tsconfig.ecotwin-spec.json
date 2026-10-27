@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts",
+    "../../plugins/ecotwin/frontend/**/*.spec.ts",
+    "../../distributions/symphony-ecotwin/frontend/*.spec.ts"
+  ]
+}

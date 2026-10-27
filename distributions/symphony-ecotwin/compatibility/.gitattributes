@@ -1,0 +1,3 @@
+# A unified patch contains space-prefixed blank context lines and preserves
+# upstream CRLF bytes. Do not normalize it or lint its payload as source text.
+host.patch -text -whitespace

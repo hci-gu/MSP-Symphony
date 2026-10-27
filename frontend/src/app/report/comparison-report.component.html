@@ -102,10 +102,7 @@
     {{ now | date: 'yyyy-MM-dd HH:mm' }}
   </p>
   </tbody>
-  @if (simulationSelection; as selected) {
-    <app-simulation-comparison-report [selection]="selected" [implicit]="implicitBaseline"
-      [expectedBaselineId]="expectedBaselineId" [reverse]="implicitBaseline && reverse" />
-  }
+  <app-report-extensions [context]="extensionContext" [nativeReady]="!!(metadata$ | async)" />
 }
 
 @if (loadingReport) {

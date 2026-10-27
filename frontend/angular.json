@@ -78,6 +78,77 @@
                   "maximumWarning": "10kb"
                 }
               ]
+            },
+            "ecotwin": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/extensions/application-providers.ts",
+                  "with": "../distributions/symphony-ecotwin/frontend/providers.ts"
+                }
+              ],
+              "outputPath": "dist/symphony-ecotwin"
+            },
+            "ecotwin-production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/app/extensions/application-providers.ts",
+                  "with": "../distributions/symphony-ecotwin/frontend/providers.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "10kb"
+                }
+              ],
+              "outputPath": "dist/symphony-ecotwin"
+            },
+            "ecotwin-absent": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/app/extensions/application-providers.ts",
+                  "with": "../distributions/symphony-ecotwin/frontend/absent-providers.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "10kb"
+                }
+              ],
+              "outputPath": "dist/symphony-ecotwin-absent"
             }
           },
           "defaultConfiguration": ""
@@ -94,6 +165,10 @@
           "configurations": {
             "production": {
               "buildTarget": "symphony-fe:build:production"
+            },
+            "ecotwin": {
+              "buildTarget": "symphony-fe:build:ecotwin",
+              "proxyConfig": "../distributions/symphony-ecotwin/frontend/proxy.conf.cjs"
             }
           }
         },
@@ -115,7 +190,26 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
+            ],
+            "include": [
+              "src/**/*.spec.ts"
             ]
+          },
+          "configurations": {
+            "ecotwin": {
+              "tsConfig": "src/tsconfig.ecotwin-spec.json",
+              "include": [
+                "src/**/*.spec.ts",
+                "../../plugins/ecotwin/frontend/suite.spec.ts",
+                "../../distributions/symphony-ecotwin/frontend/legacy-links.spec.ts"
+              ]
+            },
+            "ecotwin-core": {
+              "tsConfig": "src/tsconfig.ecotwin-core-spec.json",
+              "include": [
+                "../../plugins/ecotwin/frontend/core-suite.spec.ts"
+              ]
+            }
           }
         },
         "lint": {

@@ -1,12 +1,10 @@
-import { SimulationComparisonPickerComponent } from '@src/app/features/simulation-comparison/simulation-comparison-picker.component';
+import { NgComponentOutlet } from '@angular/common';
+import { ComparisonOutletComponent } from '../extensions/comparison-outlet.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
 
 import { MainViewComponent } from './main-view.component';
-import { MareldPocModule } from '../features/mareld-poc/mareld-poc.module';
-import { MareldApiClient } from '../features/mareld-poc/mareld-api.client';
-import { environment } from '@src/environments/environment';
 import { SharedModule } from '@shared/shared.module';
 import { MapComponent } from './map/map.component';
 import { MapToolbarComponent } from './map/map-toolbar/map-toolbar.component';
@@ -54,8 +52,7 @@ describe('MainViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        SimulationComparisonPickerComponent,
-        MareldPocModule,
+        NgComponentOutlet, ComparisonOutletComponent,
         SharedModule,
         CoreModule,
         TranslationSetupModule,
@@ -93,12 +90,6 @@ describe('MainViewComponent', () => {
       ],
       providers: [
         FormBuilder,
-        {
-          provide: MareldApiClient,
-          useValue: {
-            models: () => Promise.resolve([{ id: 'test', name: 'Test', species: ['codfish'] }])
-          }
-        },
         provideMockStore({
           initialState: {
             user: { baseline: undefined },
@@ -121,31 +112,8 @@ describe('MainViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('keeps simulation services dormant and removes supplemental content from native tabs', () => {
-    const api = TestBed.inject(MareldApiClient);
-    const discover = spyOn(api, 'models').and.callThrough();
-    fixture.detectChanges();
-    expect(fixture.nativeElement.querySelector('app-mareld-panel')).toBeNull();
-    expect(fixture.nativeElement.querySelector('app-mareld-layers')).toBeNull();
-    expect(fixture.nativeElement.querySelector('app-mareld-pressure-layer')).toBeNull();
-    expect(fixture.nativeElement.querySelector('app-mareld-layer-legend')).toBeNull();
-    expect(discover).not.toHaveBeenCalled();
-  });
-
-  it('omits the MARELD tab when the feature is disabled', () => {
-    fixture.destroy();
-    const enabled = environment.mareldPoc.enabled;
-    environment.mareldPoc.enabled = false;
-    try {
-      fixture = TestBed.createComponent(MainViewComponent);
-      fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('#mareld-poc')).toBeNull();
-      expect(fixture.nativeElement.querySelector('app-mareld-panel')).toBeNull();
-      expect(fixture.nativeElement.querySelector('app-mareld-pressure-layer')).toBeNull();
-      expect(fixture.nativeElement.querySelector('app-mareld-layers')).toBeNull();
-      expect(fixture.nativeElement.querySelector('app-mareld-layer-legend')).toBeNull();
-    } finally {
-      environment.mareldPoc.enabled = enabled;
-    }
+  it('has no extension UI when the registry is empty', () => {
+    expect(component.extensionWorkspaces).toEqual([]);
+    expect(fixture.nativeElement.querySelector('app-report-extensions')).toBeNull();
   });
 });

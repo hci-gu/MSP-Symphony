@@ -117,7 +117,7 @@
   </p>
   </tbody>
   @if (calculationId) {
-    <app-simulation-report-appendix [calculationId]="calculationId" />
+    <app-report-extensions [context]="extensionContext" [nativeReady]="!!(metadata$ | async)" />
   }
 }
 

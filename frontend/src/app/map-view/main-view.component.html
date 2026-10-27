@@ -2,6 +2,7 @@
 <!--TODO Migrate to use routerLinks instead-->
 <app-slide-view position="left"
   [initialTabId]="initialTabId"
+  [style.--slide-view-controls-position]="activeWorkspaceContribution?.overlaySidebarControls ? 'absolute' : null"
   [open]="leftSidebarIsOpen"
   [compoundComparisonCount$]="compoundComparisonCount$"
   (toggleTab)="toggleLeftSidebar()"
@@ -40,10 +41,10 @@
   <app-slide-view-tab [title]="'map.history.title' | translate" icon="report">
     <app-history></app-history>
   </app-slide-view-tab>
-  @if (mareldPocEnabled) {
-    <app-slide-view-tab id="mareld-poc" title="EcoTwin" icon="grid">
-      @if (mareldActive && leftSidebarIsOpen) {
-        <app-mareld-panel></app-mareld-panel>
+  @for (workspace of extensionWorkspaces; track workspace.id) {
+    <app-slide-view-tab [id]="workspace.id" [title]="workspace.title" [icon]="workspace.icon">
+      @if (activeWorkspace === workspace.id && leftSidebarIsOpen) {
+        <ng-container *ngComponentOutlet="workspace.panel" />
       }
     </app-slide-view-tab>
   }
@@ -111,8 +112,8 @@
   (resultLayerGroupChange)="setVisibleImpact($event)"
   (resultLayerGroupChangeCmp)="setVisibleComparison($event)">
 </app-map>
-@if (mareldPocEnabled && mareldActive && leftSidebarIsOpen) {
-  <app-mareld-results />
+@if (leftSidebarIsOpen && activeWorkspaceContribution?.overlay) {
+  <ng-container *ngComponentOutlet="activeWorkspaceContribution!.overlay!" />
 }
 @if (scenarioAreaSelection && ((activeScenarioArea$ | async) === undefined)) {
   <div id="scenario-area-selection-hint" class="mouse-interface-hint">

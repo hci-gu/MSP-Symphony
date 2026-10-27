@@ -51,17 +51,17 @@ describe('CalculationReportModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('only enables printing after this report iframe confirms the appendix is rendered', () => {
+  it('only enables printing after this report iframe confirms the report is rendered', () => {
     const frame = component.iframe!.nativeElement.contentWindow;
     const message = (origin = window.origin, source = frame, calcId = 1, state = 'ready') =>
-      new MessageEvent('message', { origin, source, data: { type: 'simulationAppendixState', calcId, state } });
+      new MessageEvent('message', { origin, source, data: { type: 'reportState', documentId: calcId === 1 ? component.documentId : 'other', state } });
     expect(component.printReady).toBeFalse();
-    component.onAppendixState(message('https://unrelated.invalid'));
-    component.onAppendixState(message(window.origin, window));
-    component.onAppendixState(message(window.origin, frame, 2));
+    component.onReportState(message('https://unrelated.invalid'));
+    component.onReportState(message(window.origin, window));
+    component.onReportState(message(window.origin, frame, 2));
     expect(component.printReady).toBeFalse();
-    component.onAppendixState(message()); expect(component.printReady).toBeTrue();
-    component.onAppendixState(message(window.origin, frame, 1, 'error'));
+    component.onReportState(message()); expect(component.printReady).toBeTrue();
+    component.onReportState(message(window.origin, frame, 1, 'error'));
     expect(component.printReady).toBeFalse();
   });
 });

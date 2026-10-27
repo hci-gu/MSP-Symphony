@@ -1,3 +1,4 @@
+import { APPLICATION_EXTENSION_PROVIDERS } from './extensions/application-providers';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -69,6 +70,7 @@ import { lastValueFrom } from 'rxjs';
     LoginModule
   ],
   providers: [
+    ...APPLICATION_EXTENSION_PROVIDERS,
     provideHttpClient(),
     provideZonelessChangeDetection(),
     BrandingService,

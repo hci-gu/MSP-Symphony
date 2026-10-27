@@ -1,0 +1,317 @@
+<div class="ecotwin-panel">
+  <header>
+    <div class="eyebrow">ECOSYSTEM SIMULATION</div>
+    <h2>EcoTwin</h2>
+    <p>Explore a changing ecosystem<br />on your Symphony map.</p>
+  </header>
+  @if (session.preparingComparison()) {
+    <p role="status">Preparing matching simulation settings…</p>
+  }
+  @if (session.preparationNote()) {
+    <p class="notice" role="status">{{ session.preparationNote() }}</p>
+  }
+
+  <section aria-labelledby="ecotwin-calculation-heading">
+    <h3 id="ecotwin-calculation-heading"><span class="step">1</span> Saved calculation</h3>
+    <label for="ecotwin-calculation">Calculation</label>
+    <select
+      id="ecotwin-calculation"
+      [disabled]="session.submitting() || session.submissionUncertain()"
+      [ngModel]="session.selectedId()"
+      (ngModelChange)="session.selectCalculation(+$event)"
+    >
+      <option [ngValue]="null" disabled>Choose a completed calculation</option>
+      @for (calculation of session.calculations.calculations(); track calculation.id) {
+        <option [ngValue]="calculation.id">
+          {{ calculation.name }} · {{ calculation.timestamp | date: 'short' }} · #{{
+            calculation.id
+          }}
+        </option>
+      }
+    </select>
+    <button type="button" class="text-button" (click)="session.calculations.refresh()">
+      Refresh calculations
+    </button>
+    @if (session.calculations.error()) {
+      <p class="error" role="alert">{{ session.calculations.error() }}</p>
+    }
+    @if (!session.calculations.loading() && !session.calculations.calculations().length) {
+      <p class="hint">Create and complete a calculation in Symphony first, then return here.</p>
+    }
+    @if (session.loading()) {
+      <p role="status">Loading saved calculation inputs…</p>
+    }
+    @if (session.context(); as source) {
+      <p class="hint">
+        {{ source.name }} · #{{ source.calculationId }}<br />
+        {{ source.timestamp | date: 'medium' }}<br />{{ source.baselineName }}
+      </p>
+      @for (error of session.compatibilityErrors(); track $index) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+      <details>
+        <summary>Saved input selection and provenance</summary>
+        @for (band of source.bands; track band.category + band.bandNumber) {
+          <p class="hint">
+            {{ band.title }} · {{ band.category }} / {{ band.bandNumber }} · {{ band.units }}
+          </p>
+        }
+        @for (note of source.notes; track $index) {
+          <p class="hint">{{ note }}</p>
+        }
+      </details>
+    }
+    @if (session.input(); as input) {
+      <div class="input-card">
+        <img [src]="preview()" alt="Calculation domain on the model grid" width="86" height="86" />
+        <div>
+          <strong>{{ input.name }}</strong>
+          <div class="metrics">{{ input.grid.width }} × {{ input.grid.height }} cells · 1 km</div>
+          <div class="metrics">{{ input.waterCells }} model water cells</div>
+          <button type="button" class="text-button" (click)="map.fit()">Show on map ↗</button>
+        </div>
+      </div>
+    }
+    <div class="notice">
+      Uses this calculation's saved inputs. To change native pressures, edit your scenario and
+      calculate again.
+    </div>
+  </section>
+
+  @if (session.capabilities.execution()) {
+  <section aria-labelledby="ecotwin-model-heading" [attr.aria-busy]="session.discovering()">
+    <h3 id="ecotwin-model-heading"><span class="step">2</span> Select model</h3>
+    <label for="ecotwin-model">Model</label>
+    <select
+      id="ecotwin-model"
+      [ngModel]="session.modelId()"
+      (ngModelChange)="session.selectModel($event)"
+      [disabled]="session.discovering() || session.busy() || !session.models().length"
+    >
+      @if (!session.models().length) {
+        <option [value]="session.modelId()" disabled>
+          {{ session.discovering() ? 'Loading models…' : 'No models available' }}
+        </option>
+      }
+      @for (model of session.models(); track model.id) {
+        <option [value]="model.id">
+          {{ model.name }}{{ model.id === defaultModelId ? ' (default)' : '' }}
+        </option>
+      }
+    </select>
+    @if (session.discovering()) {
+      <p class="hint" role="status">Loading available models…</p>
+    }
+    @if (session.modelError()) {
+      <p class="error" role="alert">{{ session.modelError() }}</p>
+      <button type="button" (click)="session.discover()" [disabled]="session.busy()">
+        Retry loading models
+      </button>
+    }
+    <p class="hint">
+      Choose the Eco-evo model. Model initialization and pressure conversion are experimental.
+    </p>
+  </section>
+
+  <section aria-labelledby="ecotwin-impacts-heading">
+    <h3 id="ecotwin-impacts-heading"><span class="step">3</span> Calculation inputs</h3>
+    @for (layer of session.preparedImpacts()?.layers ?? []; track layer.kind) {
+      <p>
+        {{ layer.kind === 'noise' ? 'Shipping noise' : 'Bottom trawling' }} ·
+        {{ layer.affectedCells }} affected cells · {{ layer.coverage * 100 | number: '1.0-1' }}%
+        source support
+      </p>
+      <button type="button" (click)="session.showImpact(layer.kind)">
+        Preview {{ layer.kind }}
+      </button>
+    }
+    @if (session.input(); as input) {
+      <details>
+        <summary>Model assumptions</summary>
+        @for (assumption of input.assumptions; track $index) {
+          <p class="hint">{{ assumption }}</p>
+        }
+      </details>
+    }
+    @if (!session.result()) {
+      <app-ecotwin-impact-outlines />
+    }
+  </section>
+
+  <section aria-labelledby="ecotwin-run-heading">
+    <h3 id="ecotwin-run-heading"><span class="step">4</span> Preview and full run</h3>
+    <label for="ecotwin-steps">Full simulation steps</label>
+    <input
+      id="ecotwin-steps"
+      type="number"
+      min="1"
+      [max]="maxStepsLimit"
+      step="1"
+      [ngModel]="session.maxSteps()"
+      (ngModelChange)="session.setMaxSteps($event)"
+      [disabled]="session.busy()"
+    />
+    <p class="hint">
+      {{ stepsToDays(session.maxSteps()) | number: '1.0-2' }} days · 6 hours per step
+    </p>
+    <label for="ecotwin-preview-steps">Preview steps</label>
+    <input
+      id="ecotwin-preview-steps"
+      type="number"
+      min="1"
+      [max]="session.maxSteps()"
+      step="1"
+      [ngModel]="session.previewSteps()"
+      (ngModelChange)="session.previewSteps.set($event)"
+      [disabled]="session.busy()"
+    />
+    <label for="ecotwin-seed">Starting seed</label>
+    <input
+      id="ecotwin-seed"
+      type="number"
+      min="0"
+      max="2147483637"
+      step="1"
+      [ngModel]="session.seed()"
+      (ngModelChange)="session.seed.set($event)"
+      [disabled]="session.busy()"
+    />
+    <p class="hint">
+      Preview uses one seed. Full runs use ten consecutive seeds with the same model and calculation
+      inputs.
+    </p>
+    <button type="button" [disabled]="!canRun()" (click)="session.run()">
+      {{ session.previewBusy() ? 'Running preview…' : 'Run preview' }}
+    </button>
+    <p class="hint">Previews stay in this workspace and do not create report appendices.</p>
+    @if (session.previewOutdated()) {
+      <p class="notice" role="status">Settings changed. Run a new preview to update the map.</p>
+    }
+    <button type="button" class="primary" [disabled]="!canRun()" (click)="session.runFull()">
+      {{ session.submitting() ? 'Submitting…' : 'Run full simulation · 10 seeds' }}
+    </button>
+    @if (session.activeJob(); as job) {
+      <div class="notice" role="status">
+        <strong>{{
+          job.status === 'queued'
+            ? 'Queued'
+            : job.completedSeeds === 10
+              ? 'Saving result…'
+              : 'Running seed ' + (job.completedSeeds + 1) + ' of 10'
+        }}</strong>
+        <p>
+          {{ job.completedSeeds }} of 10 seeds completed · {{ job.config.maxSteps }} steps each.
+        </p>
+        <progress
+          [value]="job.completedSeeds"
+          max="10"
+          aria-label="Completed simulation seeds"
+        ></progress>
+        <p>
+          You can leave this page. The completed result will be added to the calculation report.
+        </p>
+      </div>
+    }
+    @if (session.error()) {
+      <p class="error" role="alert">{{ session.error() }}</p>
+    }
+    @if (session.submissionUncertain()) {
+      <p class="hint">
+        Submission has not been confirmed. Retry checks the same run without creating a duplicate.
+      </p>
+      <button type="button" (click)="session.submitFull()" [disabled]="session.submitting()">
+        Retry submission
+      </button>
+    }
+    @if (session.jobsError()) {
+      <p class="error" role="alert">Could not check full-run progress: {{ session.jobsError() }}</p>
+      <button type="button" (click)="session.loadJobs()">Refresh progress</button>
+    }
+    @for (job of session.jobs(); track job.runId) {
+      @if (job.status === 'failed') {
+        <div class="notice">
+          <strong>Full run stopped after {{ job.completedSeeds }} of 10 seeds</strong>
+          <p>{{ job.error }}</p>
+          <button type="button" [disabled]="session.busy()" (click)="session.retryJob(job.runId)">
+            Resume this run
+          </button>
+        </div>
+      }
+    }
+  </section>
+  }
+  <section aria-label="Saved simulations">
+    <h3>Saved simulations</h3>
+    @if (session.historyError()) {
+      <p class="error" role="alert">{{ session.historyError() }}</p>
+      <button type="button" (click)="session.loadHistory()">Retry loading saved runs</button>
+    }
+    @if (session.deleteError()) {
+      <p class="error" role="alert">Could not delete simulation: {{ session.deleteError() }}</p>
+    }
+    <ul class="saved-runs">
+      @for (run of session.history(); track run.runId) {
+        <li class="saved-run" [class.selected]="session.selectedRunId() === run.runId">
+          <button
+            class="open-run"
+            type="button"
+            (click)="session.openSaved(run.runId)"
+            [attr.aria-pressed]="session.selectedRunId() === run.runId"
+            [disabled]="
+              session.previewBusy() ||
+              session.submitting() ||
+              session.saving() ||
+              !!session.deletingRunId()
+            "
+          >
+            <strong>{{ run.completedAt | date: 'medium' }}</strong>
+            <span>{{ run.model.name }} · {{ run.config.maxSteps }} steps</span>
+            <span>{{ run.ensemble ? '10-seed mean + 95% CI' : 'Single seed (legacy)' }}</span>
+            @if (session.selectedRunId() === run.runId) {
+              <span class="selected-label">Selected</span>
+            }
+          </button>
+          @if (pendingDelete() === run.runId) {
+            <div class="delete-confirmation">
+              <p>Delete this simulation and its report appendix? This cannot be undone.</p>
+              <div class="buttons">
+                <button
+                  type="button"
+                  class="delete-run"
+                  (click)="deleteSaved(run.runId)"
+                  [disabled]="
+                    session.loading() ||
+                    session.previewBusy() ||
+                    session.submitting() ||
+                    session.saving() ||
+                    !!session.deletingRunId()
+                  "
+                >
+                  Delete simulation
+                </button>
+                <button type="button" (click)="pendingDelete.set(null)">Cancel</button>
+              </div>
+            </div>
+          } @else {
+            <button
+              type="button"
+              class="delete-run"
+              (click)="pendingDelete.set(run.runId)"
+              [attr.aria-label]="'Delete simulation from ' + (run.completedAt | date: 'medium')"
+              [disabled]="
+                session.loading() ||
+                session.previewBusy() ||
+                session.submitting() ||
+                session.saving() ||
+                !!session.deletingRunId()
+              "
+            >
+              {{ session.deletingRunId() === run.runId ? 'Deleting…' : 'Delete' }}
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+  <footer>Completed full simulations appear as appendices in their calculation report.</footer>
+</div>

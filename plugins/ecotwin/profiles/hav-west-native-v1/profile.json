@@ -1,0 +1,49 @@
+{
+  "id": "hav-west-native-v1",
+  "baselineName": "HAV_2019_WEST_LOCAL",
+  "inputVersion": "calculation-input-v1",
+  "supportVersion": "native-input-support-v1",
+  "grid": {
+    "crs": "EPSG:3035",
+    "cellMetres": 1000,
+    "minCells": 3,
+    "maxCells": 60
+  },
+  "pressureUnits": "relative index 0–100",
+  "levels": 16,
+  "pressureBands": [
+    {
+      "bandNumber": 3,
+      "kind": "trawling",
+      "sourceSha256": "b0c2bb630a7694306139512667058d275b88ffb8cebe33f21ac66806c9f331bf",
+      "intensity": {
+        "min": 0,
+        "max": 0.2
+      }
+    },
+    {
+      "bandNumber": 13,
+      "kind": "noise",
+      "sourceSha256": "716dbf1e91bb1dcd53b65a790799b8272682ea6eb44a973fa10d2392103d7dc1",
+      "intensity": {
+        "min": 60,
+        "max": 120
+      }
+    }
+  ],
+  "tickDurationDays": 0.25,
+  "maxSteps": 10000,
+  "defaultSteps": 5000,
+  "replicates": 10,
+  "confidenceLevel": 0.95,
+  "ciMethod": "student-t",
+  "criticalValue": 2.2621571627409915,
+  "coverageTolerance": 1e-09,
+  "assumptions": [
+    "Historical normalized pressure indices are averaged within the saved calculation domain, then quantized to 16 positive levels.",
+    "Noise (60–120) and trawling (0–0.2) model intensities are experimental; they are not calibrated dB or measured fishing mortality.",
+    "Each 1 km cell with any native domain support is treated as one complete water cell. Domain fractions are retained; biomass totals sum these model cells without area weighting.",
+    "Depth is synthetic zero. Native ecosystem bands and sensitivity matrices are contextual; initial biomass comes from the model.",
+    "The model supplies no checkpoint version; model ID/name do not prove immutable model weights."
+  ]
+}

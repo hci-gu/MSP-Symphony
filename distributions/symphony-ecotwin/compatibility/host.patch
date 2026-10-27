@@ -1,0 +1,2031 @@
+diff --git a/frontend/angular.json b/frontend/angular.json
+--- a/frontend/angular.json
++++ b/frontend/angular.json
+@@ -78,6 +78,77 @@
+                   "maximumWarning": "10kb"
+                 }
+               ]
++            },
++            "ecotwin": {
++              "fileReplacements": [
++                {
++                  "replace": "src/app/extensions/application-providers.ts",
++                  "with": "../distributions/symphony-ecotwin/frontend/providers.ts"
++                }
++              ],
++              "outputPath": "dist/symphony-ecotwin"
++            },
++            "ecotwin-production": {
++              "fileReplacements": [
++                {
++                  "replace": "src/environments/environment.ts",
++                  "with": "src/environments/environment.prod.ts"
++                },
++                {
++                  "replace": "src/app/extensions/application-providers.ts",
++                  "with": "../distributions/symphony-ecotwin/frontend/providers.ts"
++                }
++              ],
++              "optimization": true,
++              "outputHashing": "all",
++              "sourceMap": false,
++              "namedChunks": false,
++              "extractLicenses": true,
++              "vendorChunk": false,
++              "buildOptimizer": true,
++              "budgets": [
++                {
++                  "type": "initial",
++                  "maximumWarning": "2mb",
++                  "maximumError": "5mb"
++                },
++                {
++                  "type": "anyComponentStyle",
++                  "maximumWarning": "10kb"
++                }
++              ],
++              "outputPath": "dist/symphony-ecotwin"
++            },
++            "ecotwin-absent": {
++              "fileReplacements": [
++                {
++                  "replace": "src/environments/environment.ts",
++                  "with": "src/environments/environment.prod.ts"
++                },
++                {
++                  "replace": "src/app/extensions/application-providers.ts",
++                  "with": "../distributions/symphony-ecotwin/frontend/absent-providers.ts"
++                }
++              ],
++              "optimization": true,
++              "outputHashing": "all",
++              "sourceMap": false,
++              "namedChunks": false,
++              "extractLicenses": true,
++              "vendorChunk": false,
++              "buildOptimizer": true,
++              "budgets": [
++                {
++                  "type": "initial",
++                  "maximumWarning": "2mb",
++                  "maximumError": "5mb"
++                },
++                {
++                  "type": "anyComponentStyle",
++                  "maximumWarning": "10kb"
++                }
++              ],
++              "outputPath": "dist/symphony-ecotwin-absent"
+             }
+           },
+           "defaultConfiguration": ""
+@@ -94,6 +165,10 @@
+           "configurations": {
+             "production": {
+               "buildTarget": "symphony-fe:build:production"
++            },
++            "ecotwin": {
++              "buildTarget": "symphony-fe:build:ecotwin",
++              "proxyConfig": "../distributions/symphony-ecotwin/frontend/proxy.conf.cjs"
+             }
+           }
+         },
+@@ -115,7 +190,26 @@
+             "assets": [
+               "src/favicon.ico",
+               "src/assets"
++            ],
++            "include": [
++              "src/**/*.spec.ts"
+             ]
++          },
++          "configurations": {
++            "ecotwin": {
++              "tsConfig": "src/tsconfig.ecotwin-spec.json",
++              "include": [
++                "src/**/*.spec.ts",
++                "../../plugins/ecotwin/frontend/suite.spec.ts",
++                "../../distributions/symphony-ecotwin/frontend/legacy-links.spec.ts"
++              ]
++            },
++            "ecotwin-core": {
++              "tsConfig": "src/tsconfig.ecotwin-core-spec.json",
++              "include": [
++                "../../plugins/ecotwin/frontend/core-suite.spec.ts"
++              ]
++            }
+           }
+         },
+         "lint": {
+diff --git a/frontend/package.json b/frontend/package.json
+--- a/frontend/package.json
++++ b/frontend/package.json
+@@ -18,7 +18,22 @@
+     "prepush": "npm run lint:ts",
+     "generate-cert": "openssl req -newkey rsa:2048 -x509 -nodes -keyout ssl/server.key -new -out ssl/server.crt -config ssl/openssl-custom.cnf -sha256 -days 365",
+     "cypress:open": "cypress open",
+-    "cypress:run": "cypress run"
++    "cypress:run": "cypress run",
++    "build:base": "ng build --configuration production",
++    "build:ecotwin": "ng build --configuration ecotwin-production",
++    "start:ecotwin": "ng serve --configuration ecotwin",
++    "test:base": "ng test --watch=false --browsers=ChromeHeadless",
++    "test:ecotwin": "ng test --configuration ecotwin --watch=false --browsers=ChromeHeadless",
++    "prepare:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "prebuild:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "pretest:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "prestart:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "prebuild:ecotwin-absent": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs --without-plugin",
++    "build:ecotwin-absent": "ng build --configuration ecotwin-absent",
++    "pretest:ecotwin-core": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "test:ecotwin-core": "ng test --configuration ecotwin-core --watch=false --browsers=ChromeHeadless",
++    "prelint:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
++    "lint:ecotwin": "ESLINT_USE_FLAT_CONFIG=false eslint --config .eslintrc.json --parser-options '{\"project\":[\"tsconfig.ecotwin-lint.json\"]}' \"src/app/extensions/**/*.ts\" \"../plugins/ecotwin/frontend/**/*.ts\" \"../distributions/symphony-ecotwin/frontend/*.ts\""
+   },
+   "private": true,
+   "dependencies": {
+diff --git a/frontend/proxy.conf.js b/frontend/proxy.conf.js
+--- a/frontend/proxy.conf.js
++++ b/frontend/proxy.conf.js
+@@ -1,25 +1,26 @@
+ const TARGETS_CONFIG = {
+   remote: {
+-    host: 'https://myserver:8443',
++    host: 'https://myserver:8443'
+   },
+   local: {
+-    host: 'https://127.0.0.1:8443',
+-  },
++    host: 'https://127.0.0.1:8443'
++  }
+ };
+ 
+-const targets = TARGETS_CONFIG[process.env.PROXY_TARGET ?? 'remote'];
++const target =
++  process.env.SYMPHONY_API_URL || TARGETS_CONFIG[process.env.PROXY_TARGET ?? 'remote'].host;
+ const PROXY_CONFIG = {
+-  "/symphony-ws/service/*": {
+-    "target": targets.host,
+-    "secure": false,
+-    "logLevel": "debug",
+-    "changeOrigin": true
++  '/symphony-ws/service': {
++    target,
++    secure: false,
++    logLevel: 'debug',
++    changeOrigin: true
+   },
+-  "/socket": {
+-    "target": targets.host,
+-    "pathRewrite": {'^/socket' : '/symphony-ws'},
+-    "secure": false,
+-    "ws": true
++  '/socket': {
++    target,
++    pathRewrite: { '^/socket': '/symphony-ws' },
++    secure: false,
++    ws: true
+   }
+ };
+ 
+diff --git a/frontend/src/app/app.module.ts b/frontend/src/app/app.module.ts
+--- a/frontend/src/app/app.module.ts
++++ b/frontend/src/app/app.module.ts
+@@ -1,3 +1,4 @@
++import { APPLICATION_EXTENSION_PROVIDERS } from './extensions/application-providers';
+ import { CoreModule } from './core/core.module';
+ import { SharedModule } from '@shared/shared.module';
+ import { BrowserModule } from '@angular/platform-browser';
+@@ -69,6 +70,7 @@
+     LoginModule
+   ],
+   providers: [
++    ...APPLICATION_EXTENSION_PROVIDERS,
+     provideHttpClient(),
+     provideZonelessChangeDetection(),
+     BrandingService,
+diff --git a/frontend/src/app/extensions/application-providers.ts b/frontend/src/app/extensions/application-providers.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/extensions/application-providers.ts
+@@ -0,0 +1,3 @@
++import { Provider } from '@angular/core';
++/** Replaced only by an explicitly selected distribution build. */
++export const APPLICATION_EXTENSION_PROVIDERS: Provider[] = [];
+diff --git a/frontend/src/app/extensions/comparison-outlet.component.ts b/frontend/src/app/extensions/comparison-outlet.component.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/extensions/comparison-outlet.component.ts
+@@ -0,0 +1,38 @@
++import { NgComponentOutlet } from '@angular/common';
++import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core';
++import { ComparisonContext, ComparisonContributionState, HostExtensions } from './extensions';
++
++@Component({
++  selector: 'app-comparison-extensions',
++  standalone: true,
++  imports: [NgComponentOutlet],
++  template: `@for (item of contributions; track item.id) {
++    <ng-container *ngComponentOutlet="item.comparison!; inputs: inputs(item.id)" />
++  }`
++})
++export class ComparisonOutletComponent implements OnChanges {
++  @Input({ required: true }) context!: ComparisonContext;
++  @Output() stateChange = new EventEmitter<ComparisonContributionState>();
++  readonly contributions = inject(HostExtensions).items.filter((item) => item.comparison);
++  private readonly states = new Map<string, ComparisonContributionState>();
++  private readonly callbacks = new Map<string, (state: ComparisonContributionState) => void>();
++  inputs(id: string): Record<string, unknown> {
++    if (!this.callbacks.has(id))
++      this.callbacks.set(id, (state) => {
++        this.states.set(id, state);
++        this.publish();
++      });
++    return { context: this.context, stateChange: this.callbacks.get(id) };
++  }
++  ngOnChanges(): void {
++    this.states.clear();
++    this.publish();
++  }
++  private publish(): void {
++    const values = [...this.states.values()];
++    const query = Object.assign({}, ...values.map((value) => value.query));
++    const required = values.flatMap((value) => value.query['extensions']?.split(',') ?? []);
++    if (required.length) query.extensions = [...new Set(required)].join(',');
++    this.stateChange.emit({ valid: values.every((value) => value.valid), query });
++  }
++}
+diff --git a/frontend/src/app/extensions/extensions.spec.ts b/frontend/src/app/extensions/extensions.spec.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/extensions/extensions.spec.ts
+@@ -0,0 +1,245 @@
++import {
++  Component,
++  Input,
++  OnChanges,
++  OnDestroy,
++  provideZonelessChangeDetection,
++  signal
++} from '@angular/core';
++import { TestBed } from '@angular/core/testing';
++import { By } from '@angular/platform-browser';
++import { NgComponentOutlet } from '@angular/common';
++import { provideNoopAnimations } from '@angular/platform-browser/animations';
++import { of } from 'rxjs';
++import { HOST_EXTENSIONS, HostExtensions, RenderState, ReportContext } from './extensions';
++import { ReportOutletComponent } from './report-outlet.component';
++import {
++  SlideViewComponent,
++  SlideViewTabComponent
++} from '../shared/slide-view/slide-view.component';
++import { IconComponent } from '../shared/icon/icon.component';
++
++@Component({
++  selector: 'app-test-report-part',
++  standalone: true,
++  template: '<p>Extension report content</p>'
++})
++class ReportPart implements OnChanges {
++  @Input() context!: ReportContext;
++  @Input() renderState!: (state: RenderState) => void;
++  ngOnChanges(): void {
++    this.renderState('loading');
++  }
++}
++@Component({ selector: 'app-test-workspace', standalone: true, template: '<p>Workspace</p>' })
++class Workspace implements OnDestroy {
++  static destroyed = 0;
++  ngOnDestroy(): void {
++    Workspace.destroyed++;
++  }
++}
++@Component({
++  selector: 'app-test-tabs',
++  standalone: false,
++  template: ` <app-slide-view
++    [open]="open()"
++    initialTabId="fixture"
++    [compoundComparisonCount$]="count"
++    (navigate)="active = $event"
++  >
++    <app-slide-view-tab id="native" title="Native" />
++    @for (item of items; track item.id) {
++      <app-slide-view-tab [id]="item.id" [title]="item.title">
++        @if (open() && active === item.id) {
++          <ng-container *ngComponentOutlet="item.panel" />
++        }
++      </app-slide-view-tab>
++    }
++  </app-slide-view>`
++})
++class Tabs {
++  open = signal(true);
++  active = '';
++  count = of(0);
++  items = [{ id: 'fixture', title: 'Fixture', panel: Workspace }];
++}
++
++const settle = async () => {
++  await new Promise<void>((resolve) =>
++    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
++  );
++  await document.fonts.ready;
++  await Promise.resolve();
++};
++describe('optional host contributions', () => {
++  beforeEach(() =>
++    TestBed.configureTestingModule({ providers: [provideZonelessChangeDetection()] })
++  );
++  it('has no workspaces or map side effects with the default registry', () => {
++    const registry = TestBed.inject(HostExtensions);
++    expect(registry.workspaces).toEqual([]);
++    expect(registry.items).toEqual([]);
++  });
++  it('makes a native report ready without any installed extension', async () => {
++    const notify: jasmine.Spy = spyOn(window.parent, 'postMessage');
++    const fixture = TestBed.createComponent(ReportOutletComponent);
++    fixture.componentRef.setInput('context', {
++      kind: 'calculation',
++      calculationId: 7,
++      query: { reportDocument: 'native-document' }
++    });
++    fixture.detectChanges();
++    await settle();
++    expect(notify).toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'native-document', state: 'ready' },
++      window.origin
++    );
++    expect(fixture.nativeElement.textContent.trim()).toBe('');
++  });
++  it('waits for native report content before allowing an otherwise ready report to print', async () => {
++    const notify: jasmine.Spy = spyOn(window.parent, 'postMessage');
++    const fixture = TestBed.createComponent(ReportOutletComponent);
++    fixture.componentRef.setInput('context', {
++      kind: 'calculation',
++      calculationId: 7,
++      query: { reportDocument: 'metadata-pending' }
++    });
++    fixture.componentRef.setInput('nativeReady', false);
++    fixture.detectChanges();
++    await settle();
++    expect(notify).not.toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'metadata-pending', state: 'ready' },
++      window.origin
++    );
++    fixture.componentRef.setInput('nativeReady', true);
++    fixture.detectChanges();
++    await settle();
++    expect(notify).toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'metadata-pending', state: 'ready' },
++      window.origin
++    );
++    fixture.componentRef.setInput('nativeReady', false);
++    fixture.detectChanges();
++    expect(notify.calls.mostRecent().args[0].state).toBe('loading');
++  });
++  it('reports a required missing extension explicitly and never reports ready', async () => {
++    const notify: jasmine.Spy = spyOn(window.parent, 'postMessage');
++    const fixture = TestBed.createComponent(ReportOutletComponent);
++    fixture.componentRef.setInput('context', {
++      kind: 'comparison',
++      query: { reportDocument: 'missing-document', extensions: 'fixture' }
++    });
++    fixture.detectChanges();
++    await settle();
++    expect(fixture.nativeElement.textContent).toContain('Requested extension unavailable');
++    expect(notify).toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'missing-document', state: 'error' },
++      window.origin
++    );
++    expect(notify).not.toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'missing-document', state: 'ready' },
++      window.origin
++    );
++  });
++  it('waits for installed contributions and ignores callbacks from a previous document', async () => {
++    TestBed.overrideProvider(HOST_EXTENSIONS, {
++      useValue: [{ id: 'fixture', report: ReportPart }]
++    });
++    const notify: jasmine.Spy = spyOn(window.parent, 'postMessage');
++    const fixture = TestBed.createComponent(ReportOutletComponent);
++    fixture.componentRef.setInput('context', {
++      kind: 'calculation',
++      calculationId: 7,
++      query: { reportDocument: 'first' }
++    });
++    fixture.detectChanges();
++    const part = fixture.debugElement.query(By.directive(ReportPart))
++      .componentInstance as ReportPart;
++    const oldCallback = part.renderState;
++    fixture.componentRef.setInput('context', {
++      kind: 'calculation',
++      calculationId: 9,
++      query: { reportDocument: 'second' }
++    });
++    fixture.detectChanges();
++    oldCallback('ready');
++    await settle();
++    expect(notify).not.toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'second', state: 'ready' },
++      window.origin
++    );
++    part.renderState('ready');
++    await settle();
++    expect(notify).toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'second', state: 'ready' },
++      window.origin
++    );
++    part.renderState('error');
++    expect(notify).toHaveBeenCalledWith(
++      { type: 'reportState', documentId: 'second', state: 'error' },
++      window.origin
++    );
++  });
++  it('discards old image-readiness work after a same-document artifact refresh', async () => {
++    TestBed.overrideProvider(HOST_EXTENSIONS, {
++      useValue: [{ id: 'fixture', report: ReportPart }]
++    });
++    const notify: jasmine.Spy = spyOn(window.parent, 'postMessage');
++    const pendingImage = document.createElement('img');
++    const releases: (() => void)[] = [];
++    spyOn(pendingImage, 'decode').and.callFake(
++      () => new Promise<void>((resolve) => releases.push(resolve))
++    );
++    document.body.appendChild(pendingImage);
++    try {
++      const fixture = TestBed.createComponent(ReportOutletComponent);
++      fixture.componentRef.setInput('context', {
++        kind: 'calculation',
++        calculationId: 7,
++        query: { reportDocument: 'same-document' }
++      });
++      fixture.detectChanges();
++      const part = fixture.debugElement.query(By.directive(ReportPart))
++        .componentInstance as ReportPart;
++      part.renderState('ready');
++      await settle();
++      expect(releases.length).toBe(1);
++      part.renderState('loading');
++      part.renderState('ready');
++      await settle();
++      expect(releases.length).toBe(2);
++      notify.calls.reset();
++      releases[0]();
++      await settle();
++      expect(notify).not.toHaveBeenCalled();
++      releases[1]();
++      await settle();
++      expect(notify).toHaveBeenCalledWith(
++        { type: 'reportState', documentId: 'same-document', state: 'ready' },
++        window.origin
++      );
++    } finally {
++      pendingImage.remove();
++    }
++  });
++  it('discovers host-rendered extension tabs, activates deep links and disposes hidden content', async () => {
++    TestBed.configureTestingModule({
++      imports: [NgComponentOutlet],
++      declarations: [Tabs, SlideViewComponent, SlideViewTabComponent, IconComponent],
++      providers: [provideNoopAnimations()]
++    });
++    const fixture = TestBed.createComponent(Tabs);
++    fixture.detectChanges();
++    await new Promise((resolve) => setTimeout(resolve, 0));
++    fixture.detectChanges();
++    const slides = fixture.debugElement.query(By.directive(SlideViewComponent))
++      .componentInstance as SlideViewComponent;
++    expect(slides.tabs.map((tab) => tab.id)).toEqual(['native', 'fixture']);
++    expect(fixture.componentInstance.active).toBe('fixture');
++    expect(fixture.nativeElement.querySelector('app-test-workspace')).not.toBeNull();
++    const before = Workspace.destroyed;
++    fixture.componentInstance.open.set(false);
++    fixture.detectChanges();
++    expect(Workspace.destroyed).toBe(before + 1);
++  });
++});
+diff --git a/frontend/src/app/extensions/extensions.ts b/frontend/src/app/extensions/extensions.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/extensions/extensions.ts
+@@ -0,0 +1,70 @@
++import { inject, Injectable, InjectionToken, Type } from '@angular/core';
++import type Map from 'ol/Map';
++
++/** Host-owned values only. Extensions translate this context inside their adapters. */
++export interface ComparisonContext {
++  baselineCalculationId: number | null;
++  scenarioCalculationId: number | null;
++  implicit: boolean;
++  reverse: boolean;
++}
++export interface ComparisonContributionState {
++  valid: boolean;
++  query: Record<string, string>;
++}
++export interface ReportContext {
++  kind: 'calculation' | 'comparison';
++  calculationId?: number;
++  comparison?: ComparisonContext;
++  query: Record<string, string>;
++}
++export type RenderState = 'loading' | 'ready' | 'error';
++export interface WorkspaceContribution {
++  id: string;
++  title: string;
++  icon: 'grid' | 'info-circle';
++  panel: Type<unknown>;
++  overlay?: Type<unknown>;
++  overlaySidebarControls?: boolean;
++}
++export interface MapLease {
++  map: Map;
++  /** Extensions own this overlay slot and must remove/dispose their resources. */
++  overlayZIndex: number;
++  /** Host UI occlusion: top, right, bottom, left, in CSS pixels. */
++  padding: () => number[];
++}
++export interface HostExtension {
++  id: string;
++  workspace?: WorkspaceContribution;
++  attachMap?: (lease: MapLease) => () => void;
++  comparison?: Type<unknown>;
++  report?: Type<unknown>;
++}
++export const HOST_EXTENSIONS = new InjectionToken<HostExtension[]>('Host extensions', {
++  factory: () => []
++});
++/** Legacy link recognizers are distribution metadata, never plugin implementations. */
++export const LEGACY_REQUIRED_EXTENSIONS = new InjectionToken<
++  ((query: Record<string, string>) => string[])[]
++>('Legacy required extensions', { factory: () => [] });
++@Injectable({ providedIn: 'root' })
++export class HostExtensions {
++  readonly items = inject(HOST_EXTENSIONS);
++  readonly workspaces = this.items.flatMap((item) => (item.workspace ? [item.workspace] : []));
++  private readonly legacy = inject(LEGACY_REQUIRED_EXTENSIONS);
++  required(query: Record<string, string>): string[] {
++    return [
++      ...new Set([
++        ...(query['extensions']?.split(',').filter(Boolean) ?? []),
++        ...this.legacy.flatMap((read) => read(query))
++      ])
++    ];
++  }
++  attachMap(map: Map, padding: () => number[]): () => void {
++    const dispose = this.items.flatMap((item, index) =>
++      item.attachMap ? [item.attachMap({ map, overlayZIndex: 20 + index, padding })] : []
++    );
++    return () => dispose.reverse().forEach((close) => close());
++  }
++}
+diff --git a/frontend/src/app/extensions/report-outlet.component.ts b/frontend/src/app/extensions/report-outlet.component.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/extensions/report-outlet.component.ts
+@@ -0,0 +1,105 @@
++import { NgComponentOutlet } from '@angular/common';
++import {
++  Component,
++  inject,
++  Input,
++  OnChanges,
++  OnDestroy,
++  signal,
++  SimpleChanges
++} from '@angular/core';
++import { HostExtensions, ReportContext, RenderState } from './extensions';
++
++@Component({
++  selector: 'app-report-extensions',
++  standalone: true,
++  imports: [NgComponentOutlet],
++  template: `@if (missing().length) {
++      <section role="alert">
++        <h2>Requested extension unavailable</h2>
++        <p>
++          This report requires {{ missing().join(', ') }}. Its requested content cannot be displayed
++          or printed.
++        </p>
++      </section>
++    }
++    @for (item of contributions; track item.id) {
++      <ng-container *ngComponentOutlet="item.report!; inputs: inputs(item.id)" />
++    }`
++})
++export class ReportOutletComponent implements OnChanges, OnDestroy {
++  @Input({ required: true }) context!: ReportContext;
++  @Input() nativeReady = true;
++  private readonly extensions = inject(HostExtensions);
++  readonly contributions = this.extensions.items.filter((item) => item.report);
++  readonly missing = signal<string[]>([]);
++  private readonly states = new Map<string, RenderState>();
++  private callbacks = new Map<string, (state: RenderState) => void>();
++  private revision = 0;
++  private publication = 0;
++  inputs(id: string): Record<string, unknown> {
++    return { context: this.context, renderState: this.callbacks.get(id) };
++  }
++  ngOnChanges(changes: SimpleChanges): void {
++    if (!changes['context']) {
++      void this.publish();
++      return;
++    }
++    const revision = ++this.revision;
++    this.states.clear();
++    this.callbacks = new Map();
++    this.missing.set(
++      this.extensions
++        .required(this.context.query)
++        .filter((id) => !this.contributions.some((item) => item.id === id))
++    );
++    for (const item of this.contributions) {
++      this.states.set(item.id, 'loading');
++      this.callbacks.set(item.id, (state) => {
++        if (revision === this.revision) {
++          this.states.set(item.id, state);
++          void this.publish();
++        }
++      });
++    }
++    void this.publish();
++  }
++  private async publish(): Promise<void> {
++    const publication = ++this.publication;
++    const revision = this.revision;
++    let state: RenderState =
++      this.missing().length || [...this.states.values()].includes('error')
++        ? 'error'
++        : !this.nativeReady || [...this.states.values()].includes('loading')
++          ? 'loading'
++          : 'ready';
++    if (state === 'ready') {
++      await new Promise<void>((resolve) =>
++        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
++      );
++      try {
++        await document.fonts.ready;
++        await Promise.all(Array.from(document.images).map((image) => image.decode()));
++      } catch {
++        state = 'error';
++      }
++      if (
++        publication !== this.publication ||
++        revision !== this.revision ||
++        !this.nativeReady ||
++        [...this.states.values()].some((value) => value !== 'ready')
++      )
++        return;
++    }
++    document.documentElement.dataset['reportState'] = state;
++    window.parent.postMessage(
++      { type: 'reportState', documentId: this.context.query['reportDocument'] ?? '', state },
++      window.origin
++    );
++  }
++  ngOnDestroy(): void {
++    this.publication++;
++    this.revision++;
++    delete document.documentElement.dataset['reportState'];
++  }
++}
+diff --git a/frontend/src/app/login/authentication.guard.spec.ts b/frontend/src/app/login/authentication.guard.spec.ts
+--- a/frontend/src/app/login/authentication.guard.spec.ts
++++ b/frontend/src/app/login/authentication.guard.spec.ts
+@@ -1,21 +1,55 @@
+-import { TestBed, inject } from '@angular/core/testing';
+-import { provideMockStore } from '@ngrx/store/testing';
++import { TestBed } from '@angular/core/testing';
++import { Router, provideRouter, UrlTree } from '@angular/router';
++import { provideStore, Store } from '@ngrx/store';
+ 
+ import { AuthenticationGuard } from './authentication.guard';
+-import { provideZonelessChangeDetection } from "@angular/core";
++import { provideZonelessChangeDetection } from '@angular/core';
++import { userReducer } from '@data/user/user.reducers';
++import { UserActions } from '@data/user';
+ 
+ describe('AuthenticationGuard', () => {
++  let guard: AuthenticationGuard;
++  let router: Router;
++  let store: Store;
++
+   beforeEach(() => {
+     TestBed.configureTestingModule({
+       providers: [
+         AuthenticationGuard,
+-        provideMockStore(),
++        provideStore({ user: userReducer }),
++        provideRouter([]),
+         provideZonelessChangeDetection()
+       ]
+     });
++
++    guard = TestBed.inject(AuthenticationGuard);
++    router = TestBed.inject(Router);
++    store = TestBed.inject(Store);
+   });
+ 
+-  it('should ...', inject([AuthenticationGuard], (guard: AuthenticationGuard) => {
+-    expect(guard).toBeTruthy();
+-  }));
++  it('waits for user lookup and rejects the protected route when it fails', () => {
++    let result: boolean | UrlTree | undefined;
++
++    guard.checkLogin('/map').subscribe((value) => (result = value));
++
++    expect(result).toBeUndefined();
++
++    store.dispatch(
++      UserActions.fetchUserFailure({ error: { status: 401, message: 'Not logged in' } })
++    );
++
++    expect(router.serializeUrl(result as UrlTree)).toBe('/login');
++  });
++
++  it('allows the protected route when user lookup succeeds', () => {
++    let result: boolean | UrlTree | undefined;
++
++    guard.checkLogin('/map').subscribe((value) => (result = value));
++
++    expect(result).toBeUndefined();
++
++    store.dispatch(UserActions.fetchUserSuccess({ user: { username: 'symphony', settings: {} } }));
++
++    expect(result).toBeTrue();
++  });
+ });
+diff --git a/frontend/src/app/login/authentication.guard.ts b/frontend/src/app/login/authentication.guard.ts
+--- a/frontend/src/app/login/authentication.guard.ts
++++ b/frontend/src/app/login/authentication.guard.ts
+@@ -1,36 +1,47 @@
+ import { Injectable, inject } from '@angular/core';
+-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
++import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+ import { Store } from '@ngrx/store';
+ import { State } from '../app-reducer';
+ import { UserSelectors, UserActions } from '@data/user';
+-import { Observable, of } from 'rxjs';
+-import { tap, take, switchMap, catchError } from 'rxjs/operators';
++import { combineLatest, Observable, of } from 'rxjs';
++import { filter, map, take, switchMap } from 'rxjs/operators';
+ 
+ @Injectable({
+   providedIn: 'root'
+ })
+ export class AuthenticationGuard {
+   private readonly store = inject<Store<State>>(Store);
++  private readonly router = inject(Router);
+ 
+-  getFromStoreOrAPI(): Observable<unknown> {
++  getFromStoreOrAPI(): Observable<boolean | UrlTree> {
+     return this.store.select(UserSelectors.selectIsLoggedIn).pipe(
+-      tap((isLoggedIn: boolean) => {
+-        if (!isLoggedIn) {
+-          this.store.dispatch(UserActions.fetchUser());
++      take(1),
++      switchMap((isLoggedIn) => {
++        if (isLoggedIn) {
++          return of(true);
+         }
+-      }),
+-      take(1)
++
++        this.store.dispatch(UserActions.fetchUser());
++
++        return combineLatest([
++          this.store.select(UserSelectors.selectIsLoggedIn),
++          this.store.select(UserSelectors.selectIsUserLoading)
++        ]).pipe(
++          filter(([, isLoading]) => !isLoading),
++          take(1),
++          map(([authenticated]) => (authenticated ? true : this.router.createUrlTree(['/login'])))
++        );
++      })
+     );
+   }
+ 
+-  canActivate = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> =>
+-    this.checkLogin(state.url);
++  canActivate = (
++    next: ActivatedRouteSnapshot,
++    state: RouterStateSnapshot
++  ): Observable<boolean | UrlTree> => this.checkLogin(state.url);
+ 
+-  checkLogin = (url: string): Observable<boolean> => {
++  checkLogin = (url: string): Observable<boolean | UrlTree> => {
+     this.store.dispatch(UserActions.updateRedirectUrl({ url }));
+-    return this.getFromStoreOrAPI().pipe(
+-      switchMap(() => of(true)),
+-      catchError(() => of(false))
+-    );
++    return this.getFromStoreOrAPI();
+   };
+ }
+diff --git a/frontend/src/app/map-view/comparison/comparison.component.html b/frontend/src/app/map-view/comparison/comparison.component.html
+--- a/frontend/src/app/map-view/comparison/comparison.component.html
++++ b/frontend/src/app/map-view/comparison/comparison.component.html
+@@ -91,6 +91,7 @@
+       </mat-radio-button>
+     </article>
+   </div>
++  <app-comparison-extensions [context]="extensionContext" (stateChange)="extensionState = $event" />
+ </section>
+ 
+ <!--TODO: show some calculation metadata?-->
+@@ -99,7 +100,7 @@
+     mat-flat-button
+     id="compare"
+     (click)="submit()"
+-    [disabled]="computingComparisonResult || compareForm.invalid"
++    [disabled]="computingComparisonResult || compareForm.invalid || !extensionState.valid"
+     class="compare-button"
+   >
+     <span
+diff --git a/frontend/src/app/map-view/comparison/comparison.component.spec.ts b/frontend/src/app/map-view/comparison/comparison.component.spec.ts
+--- a/frontend/src/app/map-view/comparison/comparison.component.spec.ts
++++ b/frontend/src/app/map-view/comparison/comparison.component.spec.ts
+@@ -1,3 +1,4 @@
++import { ComparisonOutletComponent } from '../../extensions/comparison-outlet.component';
+ import { ComponentFixture, TestBed } from "@angular/core/testing";
+ import { ComparisonComponent } from "@src/app/map-view/comparison/comparison.component";
+ import { StoreModule } from "@ngrx/store";
+@@ -22,6 +23,7 @@
+   beforeEach(() => {
+     TestBed.configureTestingModule({
+       imports: [
++        ComparisonOutletComponent,
+         MatSelectModule,
+         MatRadioModule,
+         MatCheckboxModule,
+diff --git a/frontend/src/app/map-view/comparison/comparison.component.ts b/frontend/src/app/map-view/comparison/comparison.component.ts
+--- a/frontend/src/app/map-view/comparison/comparison.component.ts
++++ b/frontend/src/app/map-view/comparison/comparison.component.ts
+@@ -16,6 +16,7 @@
+ import { MatRadioChange } from "@angular/material/radio";
+ import { MatCheckboxChange } from "@angular/material/checkbox";
+ import { MapViewModule } from "@src/app/map-view/map-view.module";
++import { ComparisonContext, ComparisonContributionState } from '../../extensions/extensions';
+ 
+ enum ComparisonScaleOptions { CONSTANT, DYNAMIC }
+ 
+@@ -49,6 +50,14 @@
+   reverseComparison = false;
+   computingComparisonResult = false;
+   private baselineSubscription?: Subscription;
++  extensionState: ComparisonContributionState = {valid: true, query: {}};
++  private previousExtensionContext?: ComparisonContext;
++  get extensionContext(): ComparisonContext {
++    const next = { baselineCalculationId: this.aSelect?.value || null, scenarioCalculationId: this.scenarioCalculationId, implicit: this.useImplicit, reverse: this.useImplicit && this.reverseComparison };
++    if (JSON.stringify(next) !== JSON.stringify(this.previousExtensionContext)) this.previousExtensionContext = next;
++    return this.previousExtensionContext!;
++  }
++  get scenarioCalculationId(): number | null { return Number(this.compareForm.value.b) || null; }
+ 
+   constructor() {
+     this.calculations$ = this.store.select(CalculationSelectors.selectCalculations);
+@@ -68,6 +77,7 @@
+   }
+ 
+   private resetForBaselineSwitch() {
++    this.extensionState = {valid: true, query: {}};
+     this.useImplicit = true;
+     this.includeUnchanged = false;
+     this.candidates$ = this.store.select(CalculationSelectors.selectChangedCalculations);
+@@ -83,6 +93,7 @@
+   }
+ 
+   submit() {
++    if (!this.extensionState.valid) return;
+     this.computingComparisonResult = true;
+     const a = this.useImplicit ? null : this.aSelect.value;
+     const that = this,
+@@ -93,12 +104,13 @@
+       comparisonTitle = aTitle + ' ~ ' + (this.bSelect.selected as MatOption).viewValue,
+       dynamic = this.selectedScale === ComparisonScaleOptions.DYNAMIC,
+       constantVal = this.constant,
+-      reverse = this.reverseComparison
++      reverse = this.useImplicit && this.reverseComparison,
++      extensions = this.extensionState.query;
+     this.calcService.addComparisonResult(a, b, dynamic, constantVal, reverse).then(
+       (dynamicMax: number | null) => {
+         const max = dynamicMax !== null ? Math.ceil(dynamicMax * 100) : this.constant;
+         this.dialogService.open(ComparisonReportModalComponent, this.moduleRef, {
+-          data: { a, b, max, reverse }
++          data: { a, b, max, reverse, extensions }
+         });
+         if(dynamic) {
+           that.store.dispatch(CalculationActions.fetchComparisonLegend({ maxValue: dynamicMax || 0, comparisonTitle }));
+diff --git a/frontend/src/app/map-view/main-view.component.html b/frontend/src/app/map-view/main-view.component.html
+--- a/frontend/src/app/map-view/main-view.component.html
++++ b/frontend/src/app/map-view/main-view.component.html
+@@ -1,6 +1,8 @@
+ <div class="result-info-panel"></div>
+ <!--TODO Migrate to use routerLinks instead-->
+ <app-slide-view position="left"
++  [initialTabId]="initialTabId"
++  [style.--slide-view-controls-position]="activeWorkspaceContribution?.overlaySidebarControls ? 'absolute' : null"
+   [open]="leftSidebarIsOpen"
+   [compoundComparisonCount$]="compoundComparisonCount$"
+   (toggleTab)="toggleLeftSidebar()"
+@@ -22,21 +24,30 @@
+       bandType="ecoComponents"
+       [title]="'map.intensity.ecosystems' | translate"
+       [bandGroups]="$any(metadata | async).ecoComponent"
+-    ></app-band-selection>
++    >
++    </app-band-selection>
+   </app-slide-view-tab>
+   <app-slide-view-tab [title]="'map.intensity.pressures' | translate" icon="human">
+     <app-band-selection
+       bandType="pressures"
+       [title]="'map.intensity.pressures' | translate"
+       [bandGroups]="$any(metadata | async).pressureComponent"
+-    ></app-band-selection>
++    >
++    </app-band-selection>
+   </app-slide-view-tab>
+-  <app-slide-view-tab [title]="'map.compare.title' | translate" icon="compare">
++  <app-slide-view-tab id="comparison" [title]="'map.compare.title' | translate" icon="compare">
+     <app-comparison></app-comparison>
+   </app-slide-view-tab>
+   <app-slide-view-tab [title]="'map.history.title' | translate" icon="report">
+     <app-history></app-history>
+   </app-slide-view-tab>
++  @for (workspace of extensionWorkspaces; track workspace.id) {
++    <app-slide-view-tab [id]="workspace.id" [title]="workspace.title" [icon]="workspace.icon">
++      @if (activeWorkspace === workspace.id && leftSidebarIsOpen) {
++        <ng-container *ngComponentOutlet="workspace.panel" />
++      }
++    </app-slide-view-tab>
++  }
+   <div id="map-overlay">
+     @if (activeScenario$ | async) {
+       <app-active-scenario-display
+@@ -101,6 +112,9 @@
+   (resultLayerGroupChange)="setVisibleImpact($event)"
+   (resultLayerGroupChangeCmp)="setVisibleComparison($event)">
+ </app-map>
++@if (leftSidebarIsOpen && activeWorkspaceContribution?.overlay) {
++  <ng-container *ngComponentOutlet="activeWorkspaceContribution!.overlay!" />
++}
+ @if (scenarioAreaSelection && ((activeScenarioArea$ | async) === undefined)) {
+   <div id="scenario-area-selection-hint" class="mouse-interface-hint">
+     <span>
+diff --git a/frontend/src/app/map-view/main-view.component.spec.ts b/frontend/src/app/map-view/main-view.component.spec.ts
+--- a/frontend/src/app/map-view/main-view.component.spec.ts
++++ b/frontend/src/app/map-view/main-view.component.spec.ts
+@@ -1,3 +1,5 @@
++import { NgComponentOutlet } from '@angular/common';
++import { ComparisonOutletComponent } from '../extensions/comparison-outlet.component';
+ import { ComponentFixture, TestBed } from '@angular/core/testing';
+ import { provideMockStore } from '@ngrx/store/testing';
+ import { FormBuilder, FormsModule } from '@angular/forms';
+@@ -50,6 +52,7 @@
+   beforeEach(() => {
+     TestBed.configureTestingModule({
+       imports: [
++        NgComponentOutlet, ComparisonOutletComponent,
+         SharedModule,
+         CoreModule,
+         TranslationSetupModule,
+@@ -108,4 +111,9 @@
+   it('should create', () => {
+     expect(component).toBeTruthy();
+   });
++
++  it('has no extension UI when the registry is empty', () => {
++    expect(component.extensionWorkspaces).toEqual([]);
++    expect(fixture.nativeElement.querySelector('app-report-extensions')).toBeNull();
++  });
+ });
+diff --git a/frontend/src/app/map-view/main-view.component.ts b/frontend/src/app/map-view/main-view.component.ts
+--- a/frontend/src/app/map-view/main-view.component.ts
++++ b/frontend/src/app/map-view/main-view.component.ts
+@@ -1,3 +1,4 @@
++import { HostExtensions } from '../extensions/extensions';
+ import {
+   AfterViewInit,
+   ChangeDetectorRef,
+@@ -8,6 +9,7 @@
+   ViewChild
+ } from '@angular/core';
+ import { Store } from '@ngrx/store';
++import { ActivatedRoute } from '@angular/router';
+ import { Observable, Subscription } from 'rxjs';
+ import { distinctUntilChanged, skip, take } from 'rxjs/operators';
+ 
+@@ -38,6 +40,7 @@
+   standalone: false
+ })
+ export class MainViewComponent implements OnInit, AfterViewInit {
++  readonly initialTabId = inject(ActivatedRoute).snapshot.queryParamMap.get('tab');
+   private readonly store = inject<Store<State>>(Store);
+   private readonly cd = inject(ChangeDetectorRef);
+   private readonly dialogService = inject(DialogService);
+@@ -56,6 +59,9 @@
+     CalculationSelectors.selectCompoundComparisonSuccessCount
+   );
+   center = environment.map.center;
++  readonly extensionWorkspaces = inject(HostExtensions).workspaces;
++  activeWorkspace = '';
++  get activeWorkspaceContribution() { return this.extensionWorkspaces.find(item => item.id === this.activeWorkspace); }
+   visibleImpact = false;
+   visibleComparison = false;
+   singleSelection = false;
+@@ -133,6 +139,7 @@
+   }
+ 
+   onNavigate(tabId: string) {
++    this.activeWorkspace = tabId;
+     this.scenarioAreaSelection = tabId === 'scenario' || tabId === 'areas';
+   }
+ 
+diff --git a/frontend/src/app/map-view/map-view.module.ts b/frontend/src/app/map-view/map-view.module.ts
+--- a/frontend/src/app/map-view/map-view.module.ts
++++ b/frontend/src/app/map-view/map-view.module.ts
+@@ -1,3 +1,5 @@
++import { NgComponentOutlet } from '@angular/common';
++import { ComparisonOutletComponent } from '../extensions/comparison-outlet.component';
+ import { NgModule } from '@angular/core';
+ import { EcoSliderComponent } from './band-selection/eco-slider/eco-slider.component';
+ import { SharedModule } from '@shared/shared.module';
+@@ -86,6 +88,7 @@
+     SummaryModelDialogComponent
+   ],
+   imports: [
++    NgComponentOutlet, ComparisonOutletComponent,
+     SharedModule,
+     CoreModule,
+     FormsModule,
+diff --git a/frontend/src/app/map-view/map/map.component.spec.ts b/frontend/src/app/map-view/map/map.component.spec.ts
+--- a/frontend/src/app/map-view/map/map.component.spec.ts
++++ b/frontend/src/app/map-view/map/map.component.spec.ts
+@@ -19,6 +19,8 @@
+ import { ChangeState, ScenarioLayer } from '@src/app/map-view/map/layers/scenario-layer';
+ import { BandChange } from '@data/metadata/metadata.interfaces';
+ import { provideZonelessChangeDetection } from '@angular/core';
++import { Router } from '@angular/router';
++import { HostExtensions } from '../../extensions/extensions';
+ 
+ describe('MapComponent', () => {
+   let fixture: ComponentFixture<MapComponent>, component: MapComponent;
+@@ -70,6 +72,17 @@
+     expect(setTargetSpy).toHaveBeenCalledWith(undefined);
+   });
+ 
++  it('never attaches extension map services on a public URL, including query parameters', () => {
++    fixture.destroy();
++    const attach = spyOn(TestBed.inject(HostExtensions), 'attachMap');
++    spyOnProperty(TestBed.inject(Router), 'url', 'get').and.returnValue('/public?language=en');
++    fixture = TestBed.createComponent(MapComponent);
++    fixture.componentInstance.mapCenter = [0, 0];
++    fixture.detectChanges();
++    // Public configuration has not loaded; route identity still prevents extension construction.
++    expect(attach).not.toHaveBeenCalled();
++  });
++
+   it('classifyBandChanges should classify correctly', () => {
+     expect(ScenarioLayer.classifyBandChanges([{ multiplier: 1.2 } as BandChange])).toBe(
+       ChangeState.Red
+diff --git a/frontend/src/app/map-view/map/map.component.ts b/frontend/src/app/map-view/map/map.component.ts
+--- a/frontend/src/app/map-view/map/map.component.ts
++++ b/frontend/src/app/map-view/map/map.component.ts
+@@ -59,6 +59,7 @@
+ import { selectPublicAccess } from '@data/systemproperties/systemproperties.selectors';
+ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+ import { Router } from '@angular/router';
++import { HostExtensions } from '../../extensions/extensions';
+ 
+ @Component({
+   selector: 'app-map',
+@@ -74,6 +75,8 @@
+   private readonly translateService = inject(TranslateService);
+   private readonly dataLayerService = inject(DataLayerService);
+   private readonly scenarioService = inject(ScenarioService);
++  private readonly extensions = inject(HostExtensions);
++  private detachExtensions?: () => void;
+ 
+   @Input() mapCenter?: Coordinate;
+   @Output() resultLayerGroupChange: EventEmitter<number> = new EventEmitter<number>();
+@@ -127,7 +130,9 @@
+ 
+   private readonly destroyRef = inject(DestroyRef);
+ 
+-  constructor(private readonly router: Router) {
++  private readonly router = inject(Router);
++
++  constructor() {
+     const currentRoute = this.router.url;
+ 
+     this.isPublic$ = this.configStore.select(selectPublicAccess);
+@@ -267,7 +272,7 @@
+         this.map,
+         this.dispatchSelectionUpdate,
+         this.zoomToExtent,
+-        () => {},
++        () => { /* Public maps do not edit scenarios. */ },
+         this.onDrawInvalid,
+         this.onDownloadClick,
+         this.onSplitClick,
+@@ -379,6 +384,12 @@
+         this.areaLayer.deselectAreas();
+         this.clearResult();
+       });
++    const primaryRoute = this.router.parseUrl(this.router.url).root.children['primary'];
++    const isPublicRoute = primaryRoute?.segments[0]?.path === 'public';
++    if (!isPublicRoute) this.detachExtensions = this.extensions.attachMap(this.map!, () => {
++      const sidebar = document.querySelector('app-slide-view[position="left"]');
++      return [32, 32, 32, sidebar?.getBoundingClientRect().width ?? 0];
++    });
+   }
+ 
+   public clearResult() {
+@@ -419,6 +430,7 @@
+   };
+ 
+   ngOnDestroy() {
++    this.detachExtensions?.();
+     if (this.storeSubscription) {
+       this.storeSubscription.unsubscribe();
+     }
+diff --git a/frontend/src/app/report/calculation-report.component.html b/frontend/src/app/report/calculation-report.component.html
+--- a/frontend/src/app/report/calculation-report.component.html
++++ b/frontend/src/app/report/calculation-report.component.html
+@@ -116,6 +116,9 @@
+     {{ report().timestamp | date: 'yyyy-MM-dd HH:mm' }}
+   </p>
+   </tbody>
++  @if (calculationId) {
++    <app-report-extensions [context]="extensionContext" [nativeReady]="!!(metadata$ | async)" />
++  }
+ }
+ 
+ @if (loadingReport) {
+diff --git a/frontend/src/app/report/calculation-report.component.ts b/frontend/src/app/report/calculation-report.component.ts
+--- a/frontend/src/app/report/calculation-report.component.ts
++++ b/frontend/src/app/report/calculation-report.component.ts
+@@ -1,3 +1,4 @@
++import { ReportContext } from '../extensions/extensions';
+ import { Component, inject } from '@angular/core';
+ import { ActivatedRoute, ParamMap } from '@angular/router';
+ import { of } from 'rxjs';
+@@ -29,6 +30,9 @@
+   private readonly reportService = inject(ReportService);
+ 
+   area?: number;
++  calculationId?: number;
++  private readonly extensionRoute = inject(ActivatedRoute);
++  extensionContext!: ReportContext;
+   areaDict: Map<number, string> = new Map<number, string>();
+   isDomainNormalization = false;
+ 
+@@ -42,6 +46,8 @@
+         switchMap((paramMap: ParamMap) => of(paramMap.get('calcId'))),
+         filter((calcId) => calcId !== null),
+         tap((calcId) => {
++          this.calculationId = +calcId!;
++          this.extensionContext = { kind: 'calculation', calculationId: this.calculationId, query: this.extensionRoute.snapshot.queryParams };
+           this.imageUrl = `${env.apiBaseUrl}/calculation/${calcId}/image`;
+           reportService.getReport(calcId as string).subscribe({
+             next: (report) => {
+diff --git a/frontend/src/app/report/calculation-report.module.ts b/frontend/src/app/report/calculation-report.module.ts
+--- a/frontend/src/app/report/calculation-report.module.ts
++++ b/frontend/src/app/report/calculation-report.module.ts
+@@ -1,3 +1,4 @@
++import { ReportOutletComponent } from '../extensions/report-outlet.component';
+ import { NgModule } from '@angular/core';
+ import { CommonModule, DecimalPipe, NgOptimizedImage} from '@angular/common';
+ 
+@@ -30,6 +31,7 @@
+     HistogramChartComponent,
+   ],
+   imports: [
++    ReportOutletComponent,
+     CommonModule,
+     SharedModule,
+     CalculationReportRoutingModule,
+diff --git a/frontend/src/app/report/comparison-report.component.html b/frontend/src/app/report/comparison-report.component.html
+--- a/frontend/src/app/report/comparison-report.component.html
++++ b/frontend/src/app/report/comparison-report.component.html
+@@ -102,6 +102,7 @@
+     {{ now | date: 'yyyy-MM-dd HH:mm' }}
+   </p>
+   </tbody>
++  <app-report-extensions [context]="extensionContext" [nativeReady]="!!(metadata$ | async)" />
+ }
+ 
+ @if (loadingReport) {
+diff --git a/frontend/src/app/report/comparison-report.component.ts b/frontend/src/app/report/comparison-report.component.ts
+--- a/frontend/src/app/report/comparison-report.component.ts
++++ b/frontend/src/app/report/comparison-report.component.ts
+@@ -12,6 +12,7 @@
+ import { relativeDifference } from "@src/app/report/report.util";
+ import { AbstractReport } from "@src/app/report/abstract-report.component";
+ import { BrandingService } from '@src/app/core/branding/branding.service';
++import { ReportContext } from '../extensions/extensions';
+ 
+ @Component({
+   selector: 'app-calculation-report',
+@@ -31,6 +32,7 @@
+ 
+   maxValue: number;
+   reverse: boolean;
++  extensionContext!: ReportContext;
+ 
+   chartWeightThresholdPercentage = '1%';
+ 
+@@ -54,6 +56,8 @@
+     this.reverse =
+       Object.keys(route.snapshot.queryParams).includes('reverse') &&
+       route.snapshot.queryParams.reverse !== 'false';
++    this.extensionContext = { kind: 'comparison', query: route.snapshot.queryParams,
++      comparison: { baselineCalculationId: bId ? Number(aId) : null, scenarioCalculationId: Number(bId ?? aId), implicit: !bId, reverse: !bId && this.reverse } };
+ 
+     this.legend = calcService.getComparisonLegend(this.maxValue / 100);
+ 
+diff --git a/frontend/src/app/report/report.component.scss b/frontend/src/app/report/report.component.scss
+--- a/frontend/src/app/report/report.component.scss
++++ b/frontend/src/app/report/report.component.scss
+@@ -238,7 +238,8 @@
+     padding: 0;
+     box-shadow: none;
+     width: 210mm;
+-    height: 297mm;
++    min-height: 297mm;
++    height: auto;
+ 
+       app-highest-impacts {
+         position: relative;
+diff --git a/frontend/src/app/report/scenario-changes/scenario-changes.component.spec.ts b/frontend/src/app/report/scenario-changes/scenario-changes.component.spec.ts
+--- a/frontend/src/app/report/scenario-changes/scenario-changes.component.spec.ts
++++ b/frontend/src/app/report/scenario-changes/scenario-changes.component.spec.ts
+@@ -4,6 +4,7 @@
+ import { TranslationSetupModule } from "@src/app/app-translation-setup.module";
+ import { provideMockStore } from "@ngrx/store/testing";
+ import { provideZonelessChangeDetection } from "@angular/core";
++import { BandChange } from '@data/metadata/metadata.interfaces';
+ 
+ describe('ScenarioChangesComponent', () => {
+   let fixture: ComponentFixture<ScenarioChangesComponent>,
+@@ -31,4 +32,17 @@
+   it('should create', () => {
+     expect(component).toBeTruthy();
+   });
++
++  it('renders category-keyed saved edits even when redundant type fields are absent', () => {
++    fixture.componentRef.setInput('bandDict', { PRESSURE: { '3': 'Catch bottom trawl' }, ECOSYSTEM: { '1': 'Porpoise' } });
++    fixture.componentRef.setInput('areaDict', new Map([[1, 'Study area']]));
++    fixture.componentRef.setInput('scenarioChanges', {
++      baseChanges: { PRESSURE: { '3': { multiplier: 0.5 } as BandChange } },
++      areaChanges: { 1: { ECOSYSTEM: { '1': { offset: 10 } as BandChange } } }
++    });
++    fixture.detectChanges();
++    const labels = [...fixture.nativeElement.querySelectorAll('.change-label')].map((element: Element) => element.textContent);
++    expect(labels).toEqual(['Catch bottom trawl', 'Porpoise']);
++    expect(component.allBaseChanges['3'].multiplier).toBe(0.5);
++  });
+ });
+diff --git a/frontend/src/app/report/scenario-changes/scenario-changes.component.ts b/frontend/src/app/report/scenario-changes/scenario-changes.component.ts
+--- a/frontend/src/app/report/scenario-changes/scenario-changes.component.ts
++++ b/frontend/src/app/report/scenario-changes/scenario-changes.component.ts
+@@ -30,7 +30,8 @@
+     const changes: ChangesProperty = {};
+     for(const category of BandTypes) {
+       for (const bandNumber in this.scenarioChanges.baseChanges[category]) {
+-        changes[bandNumber] = this.scenarioChanges.baseChanges[category][bandNumber];
++        // The category key is authoritative; older/API-created edits can omit type.
++        changes[bandNumber] = { ...this.scenarioChanges.baseChanges[category][bandNumber], type: category };
+       }
+     }
+     return changes;
+@@ -42,7 +43,7 @@
+       changes[areaId] = {};
+       for(const category of BandTypes) {
+         for(const bandName in this.scenarioChanges.areaChanges[areaId][category]) {
+-          changes[areaId][bandName] = this.scenarioChanges.areaChanges[areaId][category][bandName];
++          changes[areaId][bandName] = { ...this.scenarioChanges.areaChanges[areaId][category][bandName], type: category };
+         }
+       }
+     }
+diff --git a/frontend/src/app/shared/report-modal/calculation-report-modal.component.ts b/frontend/src/app/shared/report-modal/calculation-report-modal.component.ts
+--- a/frontend/src/app/shared/report-modal/calculation-report-modal.component.ts
++++ b/frontend/src/app/shared/report-modal/calculation-report-modal.component.ts
+@@ -1,19 +1,10 @@
+ import { Component, inject } from '@angular/core';
+-import { ReportModalComponent } from "@shared/report-modal/report-modal.component";
++import { ReportModalComponent } from './report-modal.component';
+ import { DialogConfig } from '../dialog/dialog-config';
+-
+-@Component({
+-  selector: 'app-calculation-report-modal',
+-  templateUrl: './report-modal.component.html',
+-  styleUrls: ['./report-modal.component.scss'],
+-  standalone: false
+-})
++@Component({ selector: 'app-calculation-report-modal', templateUrl: './report-modal.component.html', styleUrls: ['./report-modal.component.scss'], standalone: false })
+ export class CalculationReportModalComponent extends ReportModalComponent {
+-
+   constructor() {
+     const config = inject(DialogConfig);
+-
+-    super(window.location.origin+'/report/'+ config.data.id,
+-      `/report/${config.data.id}`,'report.calculation.title');
++    super(window.location.origin + '/report/' + config.data.id, `/report/${config.data.id}`, 'report.calculation.title');
+   }
+ }
+diff --git a/frontend/src/app/shared/report-modal/comparison-report-modal.component.spec.ts b/frontend/src/app/shared/report-modal/comparison-report-modal.component.spec.ts
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/app/shared/report-modal/comparison-report-modal.component.spec.ts
+@@ -0,0 +1,57 @@
++import { ElementRef } from '@angular/core';
++import { TestBed } from '@angular/core/testing';
++import { DialogConfig } from '../dialog/dialog-config';
++import { DialogRef } from '../dialog/dialog-ref';
++import { ComparisonReportModalComponent } from './comparison-report-modal.component';
++
++describe('comparison report printing', () => {
++  function modal(extensions: Record<string, string> | null = { extensions: "fixture", fixture: "chosen" }) {
++    TestBed.configureTestingModule({
++      providers: [
++        {
++          provide: DialogConfig,
++          useValue: { data: { a: null, b: 9, max: 45, reverse: true, extensions } }
++        },
++        { provide: DialogRef, useValue: { close: jasmine.createSpy('close') } }
++      ]
++    });
++    return TestBed.runInInjectionContext(() => new ComparisonReportModalComponent());
++  }
++  it('keeps native comparison printing available and correctly prefixes reverse query parameters', () => {
++    const component = modal(null);
++    expect(component.printReady).toBeFalse();
++    expect(component.param_annex).toBe('?reverse=true');
++  });
++  it('requires readiness from this iframe and this exact pinned pair, and invalidates it on errors', () => {
++    const component = modal();
++    const iframe = document.createElement('iframe');
++    document.body.append(iframe);
++    component.iframe = new ElementRef(iframe);
++    const state = (
++      token: string,
++      origin = window.origin,
++      source = iframe.contentWindow,
++      value = 'ready'
++    ) =>
++      component.onReportState(
++        new MessageEvent('message', {
++          origin,
++          source,
++          data: { type: 'reportState', documentId: token, state: value }
++        })
++      );
++    try {
++      expect(component.printReady).toBeFalse();
++      state('different pair');
++      state(component.documentId, 'https://example.org');
++      state(component.documentId, window.origin, window);
++      expect(component.printReady).toBeFalse();
++      state(component.documentId);
++      expect(component.printReady).toBeTrue();
++      state(component.documentId, window.origin, iframe.contentWindow, 'error');
++      expect(component.printReady).toBeFalse();
++    } finally {
++      iframe.remove();
++    }
++  });
++});
+diff --git a/frontend/src/app/shared/report-modal/comparison-report-modal.component.ts b/frontend/src/app/shared/report-modal/comparison-report-modal.component.ts
+--- a/frontend/src/app/shared/report-modal/comparison-report-modal.component.ts
++++ b/frontend/src/app/shared/report-modal/comparison-report-modal.component.ts
+@@ -1,25 +1,14 @@
+ import { Component, inject } from '@angular/core';
+ import { DialogConfig } from '../dialog/dialog-config';
+-import { ReportModalComponent } from "@shared/report-modal/report-modal.component";
+-
+-@Component({
+-  selector: 'app-comparison-report-modal',
+-  templateUrl: './report-modal.component.html',
+-  styleUrls: ['./report-modal.component.scss'],
+-  standalone: false
+-})
++import { ReportModalComponent } from './report-modal.component';
++@Component({ selector: 'app-comparison-report-modal', templateUrl: './report-modal.component.html', styleUrls: ['./report-modal.component.scss'], standalone: false })
+ export class ComparisonReportModalComponent extends ReportModalComponent {
+-
+   constructor() {
+     const config = inject(DialogConfig);
+-
+-    const locationPS =
+-      (config.data.a === null ?
+-        `${config.data.b}` : `${config.data.a}/${config.data.b}`)
+-
+-    super(window.location.origin + `/report/compare/${locationPS}/${config.data.max}`,
+-      `/report/comparison/${locationPS}`,
+-      'report.comparison.title',
+-      config.data.reverse ? new URLSearchParams([['reverse', 'true']]).toString() : undefined);
++    const path = config.data.a === null ? `${config.data.b}` : `${config.data.a}/${config.data.b}`;
++    const query = new URLSearchParams(config.data.extensions ?? {});
++    if (config.data.a === null && config.data.reverse) query.set('reverse', 'true');
++    super(window.location.origin + `/report/compare/${path}/${config.data.max}`, `/report/comparison/${path}`,
++      'report.comparison.title', query.size ? `?${query}` : '');
+   }
+ }
+diff --git a/frontend/src/app/shared/report-modal/report-modal.component.html b/frontend/src/app/shared/report-modal/report-modal.component.html
+--- a/frontend/src/app/shared/report-modal/report-modal.component.html
++++ b/frontend/src/app/shared/report-modal/report-modal.component.html
+@@ -13,7 +13,7 @@
+   <button mat-flat-button (click)="downloadGeotiff()" [ngClass]="'secondary'">
+     {{ 'report.toolbar.export-geotiff' | translate }}
+   </button>
+-  <button mat-flat-button (click)="print()">
++  <button mat-flat-button (click)="print()" [disabled]="!printReady">
+     {{ 'report.toolbar.print' | translate }}
+   </button>
+ </div>
+diff --git a/frontend/src/app/shared/report-modal/report-modal.component.spec.ts b/frontend/src/app/shared/report-modal/report-modal.component.spec.ts
+--- a/frontend/src/app/shared/report-modal/report-modal.component.spec.ts
++++ b/frontend/src/app/shared/report-modal/report-modal.component.spec.ts
+@@ -29,7 +29,7 @@
+           provide: DialogConfig,
+           useValue: {
+             data: {
+-              reportId: 1
++              id: 1
+             }
+           }
+         },
+@@ -50,4 +50,18 @@
+   it('should create', () => {
+     expect(component).toBeTruthy();
+   });
++
++  it('only enables printing after this report iframe confirms the report is rendered', () => {
++    const frame = component.iframe!.nativeElement.contentWindow;
++    const message = (origin = window.origin, source = frame, calcId = 1, state = 'ready') =>
++      new MessageEvent('message', { origin, source, data: { type: 'reportState', documentId: calcId === 1 ? component.documentId : 'other', state } });
++    expect(component.printReady).toBeFalse();
++    component.onReportState(message('https://unrelated.invalid'));
++    component.onReportState(message(window.origin, window));
++    component.onReportState(message(window.origin, frame, 2));
++    expect(component.printReady).toBeFalse();
++    component.onReportState(message()); expect(component.printReady).toBeTrue();
++    component.onReportState(message(window.origin, frame, 1, 'error'));
++    expect(component.printReady).toBeFalse();
++  });
+ });
+diff --git a/frontend/src/app/shared/report-modal/report-modal.component.ts b/frontend/src/app/shared/report-modal/report-modal.component.ts
+--- a/frontend/src/app/shared/report-modal/report-modal.component.ts
++++ b/frontend/src/app/shared/report-modal/report-modal.component.ts
+@@ -1,4 +1,4 @@
+-import { ElementRef, ViewChild, Directive, OnDestroy, inject } from '@angular/core';
++import { ElementRef, ViewChild, Directive, OnDestroy, inject, HostListener, signal } from '@angular/core';
+ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+ import { DialogRef } from '../dialog/dialog-ref';
+ import { environment as env } from "@src/environments/environment";
+@@ -15,6 +15,23 @@
+   private readonly dialog = inject(DialogRef);
+   private readonly dom = inject(DomSanitizer);
+   private readonly url: string;
++  readonly documentId = crypto.randomUUID();
++  private readonly rendered = signal(false);
++  @HostListener('window:message', ['$event'])
++  onReportState(event: MessageEvent): void {
++    if (event.origin === window.origin && event.source === this.iframe?.nativeElement.contentWindow &&
++        event.data?.type === 'reportState' && event.data.documentId === this.documentId)
++      this.rendered.set(event.data.state === 'ready');
++  }
++  private reportUrl(): string {
++    const target = new URL(this.url + this.param_annex);
++    target.searchParams.set('reportDocument', this.documentId);
++    return target.toString();
++  }
++  private exportQuery(): string {
++    const query = new URLSearchParams(this.param_annex);
++    return query.has('reverse') ? `?reverse=${encodeURIComponent(query.get('reverse')!)}` : '';
++  }
+ 
+   protected constructor(url: string,
+                         pfx: string,
+@@ -22,7 +39,7 @@
+                         annex?: string) {
+     this.url = url;
+     this.param_annex = annex || '';
+-    this.safeUrl = this.dom.bypassSecurityTrustResourceUrl(url + this.param_annex);
++    this.safeUrl = this.dom.bypassSecurityTrustResourceUrl(this.reportUrl());
+     this.apiUrl = env.apiBaseUrl + pfx;
+     this.titleKey = titleKey;
+   }
+@@ -40,19 +57,25 @@
+     this.dialog.close();
+   };
+ 
+-  print() {
+-    this.iframe?.nativeElement.contentWindow?.print();
++  async print() {
++    const frame = this.iframe?.nativeElement.contentWindow;
++    if (!frame || !this.printReady) return;
++    await frame.document.fonts.ready;
++    await Promise.all(Array.from(frame.document.images).map(img => img.decode().catch(() => undefined)));
++    if (this.printReady) frame.print();
+   }
+ 
++  get printReady(): boolean { return this.rendered(); }
++
+   open() {
+-    window.open(this.url + this.param_annex, '_blank');
++    window.open(this.reportUrl(), '_blank');
+   }
+ 
+   downloadGeotiff() {
+-    document.location.href = `${this.apiUrl}/geotiff${this.param_annex}`;
++    document.location.href = `${this.apiUrl}/geotiff${this.exportQuery()}`;
+   }
+ 
+   downloadCSV() {
+-    document.location.href = `${this.apiUrl}/csv${this.param_annex}`;
++    document.location.href = `${this.apiUrl}/csv${this.exportQuery()}`;
+   }
+ }
+diff --git a/frontend/src/app/shared/slide-view/slide-view.component.scss b/frontend/src/app/shared/slide-view/slide-view.component.scss
+--- a/frontend/src/app/shared/slide-view/slide-view.component.scss
++++ b/frontend/src/app/shared/slide-view/slide-view.component.scss
+@@ -25,9 +25,13 @@
+       display: flex;
+       align-items: center;
+       color: #828282;
+-      position: relative;
++      position: var(--slide-view-controls-position, relative);
++      top: 0;
++      z-index: 1;
++      pointer-events: none;
+ 
+       app-icon {
++        pointer-events: auto;
+         position: absolute;
+         right: 0;
+         top: 0;
+diff --git a/frontend/src/app/shared/slide-view/slide-view.component.ts b/frontend/src/app/shared/slide-view/slide-view.component.ts
+--- a/frontend/src/app/shared/slide-view/slide-view.component.ts
++++ b/frontend/src/app/shared/slide-view/slide-view.component.ts
+@@ -50,6 +50,7 @@
+   @Output() openCCList = new EventEmitter<void>();
+   @ContentChildren(SlideViewTabComponent) tabs!: QueryList<SlideViewTabComponent>;
+   @Input() routeTabIdIsAvailable = false;
++  @Input() initialTabId: string | null = null;
+ 
+   constructor(
+   ) {}
+@@ -59,7 +60,12 @@
+       // Needs to be here because of the change detection lifecycle.
+       // It will wait to run until the next event loop.
+       setTimeout(() => {
+-        this.tabs.toArray()[DEFAULT_TAB].active = true; // FIXME revert to 0 when merging branch
++        const tab = this.tabs.find(candidate => candidate.id === this.initialTabId)
++          ?? this.tabs.toArray()[DEFAULT_TAB];
++        if (tab) {
++          tab.active = true;
++          this.navigate.emit(tab.id);
++        }
+       }, 0);
+     }
+   }
+diff --git a/frontend/src/tsconfig.ecotwin-core-spec.json b/frontend/src/tsconfig.ecotwin-core-spec.json
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/tsconfig.ecotwin-core-spec.json
+@@ -0,0 +1,6 @@
++{
++  "extends": "./tsconfig.spec.json",
++  "include": [
++    "../../plugins/ecotwin/frontend/core-suite.spec.ts"
++  ]
++}
+diff --git a/frontend/src/tsconfig.ecotwin-spec.json b/frontend/src/tsconfig.ecotwin-spec.json
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/tsconfig.ecotwin-spec.json
+@@ -0,0 +1,9 @@
++{
++  "extends": "./tsconfig.spec.json",
++  "include": [
++    "**/*.spec.ts",
++    "**/*.d.ts",
++    "../../plugins/ecotwin/frontend/**/*.spec.ts",
++    "../../distributions/symphony-ecotwin/frontend/*.spec.ts"
++  ]
++}
+diff --git a/frontend/src/tsconfig.spec.json b/frontend/src/tsconfig.spec.json
+--- a/frontend/src/tsconfig.spec.json
++++ b/frontend/src/tsconfig.spec.json
+@@ -2,6 +2,14 @@
+   "extends": "../tsconfig.json",
+   "compilerOptions": {
+     "outDir": "../out-tsc/spec",
+-    "types": ["jasmine", "node"]
+-  }
++    "types": [
++      "jasmine",
++      "node"
++    ]
++  },
++  "include": [
++    "**/*.spec.ts",
++    "**/*.d.ts",
++    "../attributions.ts"
++  ]
+ }
+diff --git a/frontend/tsconfig.ecotwin-lint.json b/frontend/tsconfig.ecotwin-lint.json
+new file mode 100644
+--- /dev/null
++++ b/frontend/tsconfig.ecotwin-lint.json
+@@ -0,0 +1,5 @@
++{
++  "extends": "./tsconfig.json",
++  "include": ["src/**/*.ts", "attributions.ts", "../plugins/ecotwin/frontend/**/*.ts", "../distributions/symphony-ecotwin/frontend/**/*.ts"],
++  "exclude": ["node_modules", "../plugins/ecotwin/frontend/node_modules", "../distributions/symphony-ecotwin/frontend/node_modules"]
++}
+diff --git a/frontend/tsconfig.json b/frontend/tsconfig.json
+--- a/frontend/tsconfig.json
++++ b/frontend/tsconfig.json
+@@ -1,43 +1,49 @@
+-{
+-    "compileOnSave": false,
+-    "compilerOptions": {
+-      "baseUrl": "./",
+-      "downlevelIteration": true,
+-      "outDir": "./dist/out-tsc",
+-      "sourceMap": true,
+-      "declaration": false,
+-      "module": "es2020",
+-      "moduleResolution": "bundler",
+-      "experimentalDecorators": true,
+-      "importHelpers": true,
+-      "allowSyntheticDefaultImports": true,
+-      "strict": true,
+-      "noImplicitReturns": true,
+-      "skipLibCheck": true,
+-      "target": "ES2022",
+-      "useDefineForClassFields": false,
+-      "typeRoots": [
+-        "node_modules/@types"
+-      ],
+-      "paths": {
+-        "@data/*": [
+-          "src/app/data/*"
+-        ],
+-        "@src/*": [
+-          "src/*"
+-        ],
+-        "@shared/*": [
+-          "src/app/shared/*"
+-        ],
+-        "@assets/*": [
+-          "src/assets/*"
+-        ]
+-      }
+-    },
+-    "angularCompilerOptions": {
+-        "strictTemplates": false, // We want this to true in the future
+-        "strictInjectionParameters": true,
+-        "strictInputTypes": true
+-        // enable more?
+-    }
+-}
++{
++  "compileOnSave": false,
++  "compilerOptions": {
++    "baseUrl": "./",
++    "downlevelIteration": true,
++    "outDir": "./dist/out-tsc",
++    "sourceMap": true,
++    "declaration": false,
++    "module": "es2020",
++    "moduleResolution": "bundler",
++    "resolveJsonModule": true,
++    "experimentalDecorators": true,
++    "importHelpers": true,
++    "allowSyntheticDefaultImports": true,
++    "strict": true,
++    "noImplicitReturns": true,
++    "skipLibCheck": true,
++    "target": "ES2022",
++    "useDefineForClassFields": false,
++    "typeRoots": [
++      "node_modules/@types"
++    ],
++    "paths": {
++      "@data/*": [
++        "src/app/data/*"
++      ],
++      "@src/*": [
++        "src/*"
++      ],
++      "@shared/*": [
++        "src/app/shared/*"
++      ],
++      "@assets/*": [
++        "src/assets/*"
++      ],
++      "@ecotwin/*": [
++        "../plugins/ecotwin/frontend/*"
++      ],
++      "@ecotwin-distribution/*": [
++        "../distributions/symphony-ecotwin/frontend/*"
++      ]
++    }
++  },
++  "angularCompilerOptions": {
++    "strictTemplates": false,
++    "strictInjectionParameters": true,
++    "strictInputTypes": true
++  }
++}
+diff --git a/symphony-ws/pom.xml b/symphony-ws/pom.xml
+--- a/symphony-ws/pom.xml
++++ b/symphony-ws/pom.xml
+@@ -274,6 +274,33 @@
+ 	</dependencies>
+ 
+     <profiles>
++        <!-- Optional distribution composition. The native build has no EcoTwin classes or dependency. -->
++        <profile>
++            <id>ecotwin</id>
++            <dependencies>
++                <dependency><groupId>org.ecotwin</groupId><artifactId>ecotwin-core</artifactId><version>1.0.0-SNAPSHOT</version></dependency>
++            </dependencies>
++            <build>
++                <directory>${project.basedir}/target/ecotwin</directory>
++                <plugins>
++                    <plugin>
++                        <groupId>org.codehaus.mojo</groupId><artifactId>build-helper-maven-plugin</artifactId><version>3.6.1</version>
++                        <executions>
++                            <execution><id>ecotwin-adapters</id><phase>generate-sources</phase><goals><goal>add-source</goal></goals>
++                                <configuration><sources><source>${project.basedir}/../plugins/ecotwin/backend/adapter/src/main/java</source></sources></configuration>
++                            </execution>
++                            <execution><id>ecotwin-tests</id><phase>generate-test-sources</phase><goals><goal>add-test-source</goal></goals>
++                                <configuration><sources><source>${project.basedir}/../plugins/ecotwin/backend/adapter/src/test/java</source></sources></configuration>
++                            </execution>
++                        </executions>
++                    </plugin>
++                    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-war-plugin</artifactId>
++                        <configuration><webResources><resource><directory>${project.basedir}/../plugins/ecotwin/backend/adapter/src/main/webapp</directory></resource></webResources></configuration>
++                    </plugin>
++                </plugins>
++            </build>
++        </profile>
++
+         <profile>
+             <id>skip-apitests</id>
+             <activation>
+@@ -386,6 +413,7 @@
+     </profiles>
+ 
+     <build>
++        <directory>${project.basedir}/target/base</directory>
+         <pluginManagement>
+             <plugins>
+                 <plugin>
+@@ -481,8 +509,7 @@
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <version>3.14.0</version>
+                 <configuration>
+-                    <source>${java.version}</source>
+-                    <target>${java.version}</target>
++                    <release>${java.version}</release>
+                 </configuration>
+             </plugin>
+             <plugin>
+diff --git a/symphony-ws/src/main/java/se/havochvatten/symphony/calculation/CalculationDomain.java b/symphony-ws/src/main/java/se/havochvatten/symphony/calculation/CalculationDomain.java
+new file mode 100644
+--- /dev/null
++++ b/symphony-ws/src/main/java/se/havochvatten/symphony/calculation/CalculationDomain.java
+@@ -0,0 +1,22 @@
++package se.havochvatten.symphony.calculation;
++
++import it.geosolutions.jaiext.utilities.ImageLayout2;
++import org.geotools.coverage.grid.GridEnvelope2D;
++import org.geotools.coverage.grid.GridGeometry2D;
++import org.geotools.geometry.jts.ReferencedEnvelope;
++import org.locationtech.jts.geom.Envelope;
++import javax.media.jai.ImageLayout;
++
++/** Native calculation pixel bounds, including the existing integer truncation.
++ * Shared with read-only exports; changing rounding here changes native results. */
++public final class CalculationDomain {
++    public static GridGeometry2D geometry(Envelope envelope, ReferencedEnvelope target) {
++        return new GridGeometry2D(new GridEnvelope2D((int) envelope.getMinX(), (int) envelope.getMinY(),
++            (int) envelope.getWidth(), (int) envelope.getHeight()), target);
++    }
++    public static ImageLayout layout(Envelope envelope) {
++        return new ImageLayout2((int) envelope.getMinX(), (int) envelope.getMinY(),
++            (int) envelope.getWidth(), (int) envelope.getHeight());
++    }
++    private CalculationDomain() {}
++}
+diff --git a/symphony-ws/src/main/java/se/havochvatten/symphony/entity/ScenarioSnapshot.java b/symphony-ws/src/main/java/se/havochvatten/symphony/entity/ScenarioSnapshot.java
+--- a/symphony-ws/src/main/java/se/havochvatten/symphony/entity/ScenarioSnapshot.java
++++ b/symphony-ws/src/main/java/se/havochvatten/symphony/entity/ScenarioSnapshot.java
+@@ -257,6 +257,29 @@
+ 
+     public ScenarioSnapshot() {}
+ 
++    /** Independent snapshot matching the implicit baseline: preserve the domain,
++     * selected bands and matrices, but apply no global or area layer changes. */
++    public ScenarioSnapshot withoutLayerChanges(String owner, String name) {
++        var copy = new ScenarioSnapshot();
++        copy.owner = owner;
++        copy.name = name;
++        copy.timestamp = new Date();
++        copy.baselineId = baselineId;
++        copy.polygon = polygon.deepCopy();
++        copy.areas = areas.deepCopy();
++        copy.ecosystemsToInclude = ecosystemsToInclude.clone();
++        copy.pressuresToInclude = pressuresToInclude.clone();
++        copy.normalization = mapper.convertValue(mapper.valueToTree(normalization), NormalizationOptions.class);
++        copy.normalizationValue = normalizationValue == null ? null : normalizationValue.clone();
++        copy.setAreaMatrixMap(getAreaMatrixMap());
++        var changes = mapper.createObjectNode();
++        changes.putObject("baseChanges");
++        var areaChanges = changes.putObject("areaChanges");
++        getAreas().keySet().forEach(id -> areaChanges.putObject(id.toString()));
++        copy.changes = changes;
++        return copy;
++    }
++
+     public static ScenarioSnapshot makeSnapshot(Scenario s,
+                                                 Geometry polygon,
+                                                 Map<Integer, Integer> matrixMap,
+diff --git a/symphony-ws/src/main/java/se/havochvatten/symphony/service/CalcService.java b/symphony-ws/src/main/java/se/havochvatten/symphony/service/CalcService.java
+--- a/symphony-ws/src/main/java/se/havochvatten/symphony/service/CalcService.java
++++ b/symphony-ws/src/main/java/se/havochvatten/symphony/service/CalcService.java
+@@ -141,6 +141,11 @@
+                 getResultList();
+     }
+ 
++    /** Generic history scope retained for existing all-baselines HTTP callers. */
++    public List<CalculationResultSlice> findAllBaselinesByUser(Principal user) {
++        return findAllByUsername(user.getName());
++    }
++
+     private List<CalculationResultSlice> findAllByUsername(String username) {
+         return em.createNamedQuery("CalculationResultSlice.findAllByOwner", CalculationResultSlice.class).
+                 setParameter("owner", username).
+@@ -239,6 +244,13 @@
+     public synchronized void delete(Object entity) {
+         try {
+             transaction.begin();
++            if (entity instanceof CalculationResult calculation) {
++                // A scenario's convenience pointer must not prevent history deletion.
++                em.createQuery("SELECT s FROM Scenario s WHERE s.latestCalculation.id = :id", Scenario.class)
++                    .setParameter("id", calculation.getId()).getResultList()
++                    .forEach(scenario -> scenario.setLatestCalculation(null));
++                em.flush();
++            }
+             em.remove(em.merge(entity));
+             transaction.commit();
+         } catch (Exception e) {
+@@ -426,15 +438,7 @@
+     }
+ 
+     private GridGeometry2D getTargetGridGeometry(Envelope targetGridEnvelope, ReferencedEnvelope targetEnv) {
+-        return new GridGeometry2D( // FIXME reuse roiGridEnvelope?
+-                new GridEnvelope2D(/*roiGridEnvelope, PixelInCell.CELL_CENTER */
+-                        (int) targetGridEnvelope.getMinX(),
+-                        (int) targetGridEnvelope.getMinY(),
+-                        (int) targetGridEnvelope.getWidth(),
+-                        (int) targetGridEnvelope.getHeight()
+-                ),
+-                targetEnv
+-        );
++        return se.havochvatten.symphony.calculation.CalculationDomain.geometry(targetGridEnvelope, targetEnv);
+     }
+ 
+     @SuppressWarnings({ "java:S1854", "java:S1481", "java:S1659"})
+@@ -724,11 +728,7 @@
+     }
+ 
+     private ImageLayout getImageLayout(Envelope envelope) {
+-        return new ImageLayout2(         // TODO be more precise with rounding stemming from integer cast?
+-                (int) envelope.getMinX(),
+-                (int) envelope.getMinY(),
+-                (int) envelope.getWidth(),
+-                (int) envelope.getHeight());
++        return se.havochvatten.symphony.calculation.CalculationDomain.layout(envelope);
+     }
+ 
+     public CalculationResult persistCalculation(GridCoverage2D result,
+diff --git a/symphony-ws/src/main/java/se/havochvatten/symphony/service/DataLayerService.java b/symphony-ws/src/main/java/se/havochvatten/symphony/service/DataLayerService.java
+--- a/symphony-ws/src/main/java/se/havochvatten/symphony/service/DataLayerService.java
++++ b/symphony-ws/src/main/java/se/havochvatten/symphony/service/DataLayerService.java
+@@ -619,7 +619,7 @@
+      * @param baselineVersionId baseline version identifier
+      * @return absolute/relative file path to coverage source
+      */
+-    String getComponentFilePath(LayerType type, int baselineVersionId) {
++    public String getComponentFilePath(LayerType type, int baselineVersionId) {
+         String localDevFilePath = localDevFilePath(type);
+         if (localDevFilePath != null) return localDevFilePath;
+         BaselineVersion baselineVersion = baselineVersionService.getBaselineVersionById(baselineVersionId);
+diff --git a/symphony-ws/src/main/java/se/havochvatten/symphony/web/CalculationREST.java b/symphony-ws/src/main/java/se/havochvatten/symphony/web/CalculationREST.java
+--- a/symphony-ws/src/main/java/se/havochvatten/symphony/web/CalculationREST.java
++++ b/symphony-ws/src/main/java/se/havochvatten/symphony/web/CalculationREST.java
+@@ -219,12 +219,15 @@
+     @Produces(MediaType.APPLICATION_JSON)
+     @Operation(summary = "Gets all previous computations for the user")
+     @RolesAllowed("GRP_SYMPHONY")
+-    public List<CalculationResultSlice> getAllCalculations(@Context HttpServletRequest req)
++    // Legacy all-baselines query remains a generic history capability; optional modules use their own discovery route.
++    public List<CalculationResultSlice> getAllCalculations(@Context HttpServletRequest req,
++                                                          @DefaultValue("false") @QueryParam("all-baselines") boolean allBaselines)
+             throws SymphonyStandardAppException, IOException {
+         if (req.getUserPrincipal() == null)
+             throw new NotAuthorizedException(noPrincipalStr);
+         else
+-            return calcService.findAllByUser(req.getUserPrincipal());
++            return allBaselines ? calcService.findAllBaselinesByUser(req.getUserPrincipal()) :
++                calcService.findAllByUser(req.getUserPrincipal());
+     }
+ 
+     @GET
+diff --git a/symphony-ws/src/test/java/se/havochvatten/symphony/entity/ScenarioSnapshotCopyTest.java b/symphony-ws/src/test/java/se/havochvatten/symphony/entity/ScenarioSnapshotCopyTest.java
+new file mode 100644
+--- /dev/null
++++ b/symphony-ws/src/test/java/se/havochvatten/symphony/entity/ScenarioSnapshotCopyTest.java
+@@ -0,0 +1,39 @@
++package se.havochvatten.symphony.entity;
++
++import com.fasterxml.jackson.databind.ObjectMapper;
++import org.junit.Test;
++import se.havochvatten.symphony.dto.NormalizationOptions;
++import java.util.Map;
++import static org.junit.Assert.*;
++
++public class ScenarioSnapshotCopyTest {
++    @Test public void removesAllLayerChangesWithoutMutatingTheSavedScenario() throws Exception {
++        var json = new ObjectMapper();
++        var source = new ScenarioSnapshot();
++        source.id = 7; source.name = "Scenario"; source.owner = "owner"; source.baselineId = 4;
++        source.polygon = json.readTree("{\"type\":\"Polygon\",\"coordinates\":[]}");
++        source.areas = json.readTree("{\"3\":{\"areaName\":\"Coastal exclusion\",\"featureJson\":{},\"excludedCoastal\":12}}");
++        source.ecosystemsToInclude = new int[]{1, 2}; source.pressuresToInclude = new int[]{3, 13};
++        source.normalization = new NormalizationOptions(45.0);
++        source.setNormalizationValue(new double[]{45}); source.setAreaMatrixMap(Map.of(3, 8));
++        source.changes = json.readTree("{\"baseChanges\":{\"PRESSURE\":{\"3\":{\"multiplier\":0.5}}},\"areaChanges\":{\"3\":{\"ECOSYSTEM\":{\"1\":{\"multiplier\":0.1}}}}}");
++        var original = source.changes.deepCopy();
++        var baseline = source.withoutLayerChanges("owner", "Baseline");
++        assertNull(baseline.id);
++        assertEquals(source.polygon, baseline.polygon);
++        assertEquals(source.areas, baseline.areas);
++        assertEquals(Map.of(3, 12), baseline.getAreasExcludingCoastal());
++        assertEquals(Map.of(3, 8), baseline.getAreaMatrixMap());
++        assertEquals(45, baseline.normalization.getUserDefinedValue(), 0);
++        assertNotSame(source.normalization, baseline.normalization);
++        assertTrue(baseline.getChangeMap().isEmpty());
++        assertTrue(baseline.getTmpAreas().get(0).getChangeMap().isEmpty());
++        assertEquals(original, source.changes);
++        baseline.ecosystemsToInclude[0] = 99;
++        baseline.pressuresToInclude[0] = 99;
++        baseline.getNormalizationValue()[0] = 99;
++        assertArrayEquals(new int[]{1, 2}, source.ecosystemsToInclude);
++        assertArrayEquals(new int[]{3, 13}, source.pressuresToInclude);
++        assertArrayEquals(new double[]{45}, source.getNormalizationValue(), 0);
++    }
++}
+diff --git a/symphony-ws/src/test/java/se/havochvatten/symphony/service/CalculationHistoryDeletionTest.java b/symphony-ws/src/test/java/se/havochvatten/symphony/service/CalculationHistoryDeletionTest.java
+new file mode 100644
+--- /dev/null
++++ b/symphony-ws/src/test/java/se/havochvatten/symphony/service/CalculationHistoryDeletionTest.java
+@@ -0,0 +1,30 @@
++package se.havochvatten.symphony.service;
++
++import jakarta.persistence.EntityManager;
++import jakarta.persistence.TypedQuery;
++import jakarta.transaction.UserTransaction;
++import org.junit.Test;
++import se.havochvatten.symphony.entity.CalculationResult;
++import se.havochvatten.symphony.entity.Scenario;
++import java.util.List;
++import static org.mockito.Mockito.*;
++
++/** Native history deletion must not leave a dangling convenience pointer. */
++public class CalculationHistoryDeletionTest {
++    @Test @SuppressWarnings("unchecked")
++    public void clearsScenarioPointersBeforeDeletingCalculationInTheSameTransaction() throws Exception {
++        var service = new CalcService(); service.em = mock(EntityManager.class);
++        var transaction = mock(UserTransaction.class);
++        var field = CalcService.class.getDeclaredField("transaction"); field.setAccessible(true); field.set(service, transaction);
++        var calculation = mock(CalculationResult.class); when(calculation.getId()).thenReturn(7);
++        var scenario = mock(Scenario.class);
++        TypedQuery<Scenario> query = mock(TypedQuery.class);
++        when(service.em.createQuery(anyString(), eq(Scenario.class))).thenReturn(query);
++        when(query.setParameter("id", 7)).thenReturn(query); when(query.getResultList()).thenReturn(List.of(scenario));
++        when(service.em.merge(calculation)).thenReturn(calculation);
++        service.delete(calculation);
++        var order = inOrder(transaction, scenario, service.em);
++        order.verify(transaction).begin(); order.verify(scenario).setLatestCalculation(null);
++        order.verify(service.em).flush(); order.verify(service.em).remove(calculation); order.verify(transaction).commit();
++    }
++}

@@ -1,0 +1,247 @@
+{
+  "frontend/angular.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/package.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/proxy.conf.js": {
+    "category": "native-development-config",
+    "owner": "Symphony",
+    "reason": "Allow explicit native backend URL; no model proxy or plugin import."
+  },
+  "frontend/src/app/app.module.ts": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/src/app/extensions/application-providers.ts": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/src/app/extensions/comparison-outlet.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Neutral workspace/map/comparison/report interfaces with empty-provider behavior and document-identity readiness tests."
+  },
+  "frontend/src/app/extensions/extensions.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Neutral workspace/map/comparison/report interfaces with empty-provider behavior and document-identity readiness tests."
+  },
+  "frontend/src/app/extensions/extensions.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Neutral workspace/map/comparison/report interfaces with empty-provider behavior and document-identity readiness tests."
+  },
+  "frontend/src/app/extensions/report-outlet.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Neutral workspace/map/comparison/report interfaces with empty-provider behavior and document-identity readiness tests."
+  },
+  "frontend/src/app/login/authentication.guard.spec.ts": {
+    "category": "native-fix",
+    "owner": "Symphony",
+    "reason": "Wait for restored authentication state before activating restricted routes."
+  },
+  "frontend/src/app/login/authentication.guard.ts": {
+    "category": "native-fix",
+    "owner": "Symphony",
+    "reason": "Wait for restored authentication state before activating restricted routes."
+  },
+  "frontend/src/app/map-view/comparison/comparison.component.html": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/comparison/comparison.component.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/comparison/comparison.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/main-view.component.html": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/main-view.component.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/main-view.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/map-view.module.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Mount neutral workspace/comparison contributions and pass native context; preserve native behavior with an empty registry."
+  },
+  "frontend/src/app/map-view/map/map.component.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Regression coverage that public routes, including query parameters, never attach optional workspace/map contributions."
+  },
+  "frontend/src/app/map-view/map/map.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Offer optional owned overlay leases and lifecycle disposal without concrete plugin imports."
+  },
+  "frontend/src/app/report/calculation-report.component.html": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/report/calculation-report.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/report/calculation-report.module.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/report/comparison-report.component.html": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/report/comparison-report.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/report/report.component.scss": {
+    "category": "native-layout-fix",
+    "owner": "Symphony",
+    "reason": "Allow multipage report content without clipping."
+  },
+  "frontend/src/app/report/scenario-changes/scenario-changes.component.spec.ts": {
+    "category": "native-fix",
+    "owner": "Symphony",
+    "reason": "Derive missing change type from authoritative category for historical/API-created records."
+  },
+  "frontend/src/app/report/scenario-changes/scenario-changes.component.ts": {
+    "category": "native-fix",
+    "owner": "Symphony",
+    "reason": "Derive missing change type from authoritative category for historical/API-created records."
+  },
+  "frontend/src/app/shared/report-modal/calculation-report-modal.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/report-modal/comparison-report-modal.component.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/report-modal/comparison-report-modal.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/report-modal/report-modal.component.html": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/report-modal/report-modal.component.spec.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/report-modal/report-modal.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic report contribution aggregation and secure print readiness; native exports retain native-only query state."
+  },
+  "frontend/src/app/shared/slide-view/slide-view.component.scss": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic tab selection and layout support for host-rendered contribution descriptors."
+  },
+  "frontend/src/app/shared/slide-view/slide-view.component.ts": {
+    "category": "neutral-host-hook",
+    "owner": "EcoTwin distribution",
+    "reason": "Generic tab selection and layout support for host-rendered contribution descriptors."
+  },
+  "frontend/src/tsconfig.ecotwin-core-spec.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/src/tsconfig.ecotwin-spec.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/src/tsconfig.spec.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/tsconfig.ecotwin-lint.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "frontend/tsconfig.json": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "symphony-ws/pom.xml": {
+    "category": "optional-composition",
+    "owner": "EcoTwin distribution",
+    "reason": "Optional registration/build/test configuration; default source and artifact builds omit the plugin."
+  },
+  "symphony-ws/src/main/java/se/havochvatten/symphony/calculation/CalculationDomain.java": {
+    "category": "neutral-host-hook",
+    "owner": "Symphony",
+    "reason": "One native geometry/rounding implementation shared with the adapter; preserves host semantics."
+  },
+  "symphony-ws/src/main/java/se/havochvatten/symphony/entity/ScenarioSnapshot.java": {
+    "category": "neutral-host-hook",
+    "owner": "Symphony",
+    "reason": "Explicit complete snapshot copy without layer changes, accessed through the plugin adapter and covered by native field-preservation tests."
+  },
+  "symphony-ws/src/main/java/se/havochvatten/symphony/service/CalcService.java": {
+    "category": "mixed-native-helper-and-fix",
+    "owner": "Symphony",
+    "reason": "Native history deletion cleanup, shared native grid geometry and backward-compatible all-baseline history capability."
+  },
+  "symphony-ws/src/main/java/se/havochvatten/symphony/service/DataLayerService.java": {
+    "category": "neutral-host-hook",
+    "owner": "Symphony",
+    "reason": "Narrow source-path access for the integration adapter; no model policy exposed."
+  },
+  "symphony-ws/src/main/java/se/havochvatten/symphony/web/CalculationREST.java": {
+    "category": "neutral-host-hook",
+    "owner": "Symphony",
+    "reason": "Retain the generic all-baselines query as a legacy compatibility alias; plugin clients use their own discovery endpoint."
+  },
+  "symphony-ws/src/test/java/se/havochvatten/symphony/entity/ScenarioSnapshotCopyTest.java": {
+    "category": "neutral-host-hook",
+    "owner": "Symphony",
+    "reason": "Explicit complete snapshot copy without layer changes, accessed through the plugin adapter and covered by native field-preservation tests."
+  },
+  "symphony-ws/src/test/java/se/havochvatten/symphony/service/CalculationHistoryDeletionTest.java": {
+    "category": "native-fix",
+    "owner": "Symphony",
+    "reason": "Protect native history deletion from dangling latestCalculation references."
+  }
+}

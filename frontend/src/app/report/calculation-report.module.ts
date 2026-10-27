@@ -1,3 +1,4 @@
+import { ReportOutletComponent } from '../extensions/report-outlet.component';
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe, NgOptimizedImage} from '@angular/common';
 
@@ -15,8 +16,6 @@ import { ComparisonReportComponent } from "@src/app/report/comparison-report.com
 import { OrdinalPipe } from "@shared/ordinal.pipe";
 import { HistogramComponent } from './histogram/histogram.component';
 import { HistogramChartComponent } from './histogram/histogram-chart/histogram-chart.component';
-import { SimulationReportAppendixComponent } from '../features/simulation-reports/simulation-report-appendix.component';
-import { SimulationComparisonReportComponent } from '../features/simulation-comparison/simulation-comparison-report.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +31,7 @@ import { SimulationComparisonReportComponent } from '../features/simulation-comp
     HistogramChartComponent,
   ],
   imports: [
-    SimulationComparisonReportComponent,
-    SimulationReportAppendixComponent,
+    ReportOutletComponent,
     CommonModule,
     SharedModule,
     CalculationReportRoutingModule,

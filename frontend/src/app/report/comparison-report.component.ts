@@ -12,7 +12,7 @@ import { CalculationService } from "@data/calculation/calculation.service";
 import { relativeDifference } from "@src/app/report/report.util";
 import { AbstractReport } from "@src/app/report/abstract-report.component";
 import { BrandingService } from '@src/app/core/branding/branding.service';
-import { SimulationComparisonSelection } from '../features/simulation-comparison/simulation-comparison';
+import { ReportContext } from '../extensions/extensions';
 
 @Component({
   selector: 'app-calculation-report',
@@ -32,9 +32,7 @@ export class ComparisonReportComponent extends AbstractReport<ComparisonReport> 
 
   maxValue: number;
   reverse: boolean;
-  simulationSelection: SimulationComparisonSelection | null = null;
-  implicitBaseline = false;
-  expectedBaselineId: number | null = null;
+  extensionContext!: ReportContext;
 
   chartWeightThresholdPercentage = '1%';
 
@@ -58,17 +56,8 @@ export class ComparisonReportComponent extends AbstractReport<ComparisonReport> 
     this.reverse =
       Object.keys(route.snapshot.queryParams).includes('reverse') &&
       route.snapshot.queryParams.reverse !== 'false';
-    this.implicitBaseline = !bId;
-    this.expectedBaselineId = bId ? Number(aId) : null;
-    const query = route.snapshot.queryParamMap;
-    if (['simBase', 'simBaselineRun', 'simScenarioRun'].some((key) => query.has(key))) {
-      this.simulationSelection = {
-        baselineCalculationId: Number(query.get('simBase')),
-        scenarioCalculationId: Number(bId ?? aId),
-        baselineRunId: query.get('simBaselineRun') ?? '',
-        scenarioRunId: query.get('simScenarioRun') ?? ''
-      };
-    }
+    this.extensionContext = { kind: 'comparison', query: route.snapshot.queryParams,
+      comparison: { baselineCalculationId: bId ? Number(aId) : null, scenarioCalculationId: Number(bId ?? aId), implicit: !bId, reverse: !bId && this.reverse } };
 
     this.legend = calcService.getComparisonLegend(this.maxValue / 100);
 

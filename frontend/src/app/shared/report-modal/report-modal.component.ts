@@ -1,4 +1,4 @@
-import { ElementRef, ViewChild, Directive, OnDestroy, inject } from '@angular/core';
+import { ElementRef, ViewChild, Directive, OnDestroy, inject, HostListener, signal } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DialogRef } from '../dialog/dialog-ref';
 import { environment as env } from "@src/environments/environment";
@@ -15,6 +15,23 @@ export abstract class ReportModalComponent implements OnDestroy {
   private readonly dialog = inject(DialogRef);
   private readonly dom = inject(DomSanitizer);
   private readonly url: string;
+  readonly documentId = crypto.randomUUID();
+  private readonly rendered = signal(false);
+  @HostListener('window:message', ['$event'])
+  onReportState(event: MessageEvent): void {
+    if (event.origin === window.origin && event.source === this.iframe?.nativeElement.contentWindow &&
+        event.data?.type === 'reportState' && event.data.documentId === this.documentId)
+      this.rendered.set(event.data.state === 'ready');
+  }
+  private reportUrl(): string {
+    const target = new URL(this.url + this.param_annex);
+    target.searchParams.set('reportDocument', this.documentId);
+    return target.toString();
+  }
+  private exportQuery(): string {
+    const query = new URLSearchParams(this.param_annex);
+    return query.has('reverse') ? `?reverse=${encodeURIComponent(query.get('reverse')!)}` : '';
+  }
 
   protected constructor(url: string,
                         pfx: string,
@@ -22,7 +39,7 @@ export abstract class ReportModalComponent implements OnDestroy {
                         annex?: string) {
     this.url = url;
     this.param_annex = annex || '';
-    this.safeUrl = this.dom.bypassSecurityTrustResourceUrl(url + this.param_annex);
+    this.safeUrl = this.dom.bypassSecurityTrustResourceUrl(this.reportUrl());
     this.apiUrl = env.apiBaseUrl + pfx;
     this.titleKey = titleKey;
   }
@@ -48,17 +65,17 @@ export abstract class ReportModalComponent implements OnDestroy {
     if (this.printReady) frame.print();
   }
 
-  get printReady(): boolean { return true; }
+  get printReady(): boolean { return this.rendered(); }
 
   open() {
-    window.open(this.url + this.param_annex, '_blank');
+    window.open(this.reportUrl(), '_blank');
   }
 
   downloadGeotiff() {
-    document.location.href = `${this.apiUrl}/geotiff${this.param_annex}`;
+    document.location.href = `${this.apiUrl}/geotiff${this.exportQuery()}`;
   }
 
   downloadCSV() {
-    document.location.href = `${this.apiUrl}/csv${this.param_annex}`;
+    document.location.href = `${this.apiUrl}/csv${this.exportQuery()}`;
   }
 }

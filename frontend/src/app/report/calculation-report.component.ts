@@ -1,3 +1,4 @@
+import { ReportContext } from '../extensions/extensions';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { of } from 'rxjs';
@@ -30,6 +31,8 @@ export class CalculationReportComponent extends AbstractReport<Report> {
 
   area?: number;
   calculationId?: number;
+  private readonly extensionRoute = inject(ActivatedRoute);
+  extensionContext!: ReportContext;
   areaDict: Map<number, string> = new Map<number, string>();
   isDomainNormalization = false;
 
@@ -44,6 +47,7 @@ export class CalculationReportComponent extends AbstractReport<Report> {
         filter((calcId) => calcId !== null),
         tap((calcId) => {
           this.calculationId = +calcId!;
+          this.extensionContext = { kind: 'calculation', calculationId: this.calculationId, query: this.extensionRoute.snapshot.queryParams };
           this.imageUrl = `${env.apiBaseUrl}/calculation/${calcId}/image`;
           reportService.getReport(calcId as string).subscribe({
             next: (report) => {

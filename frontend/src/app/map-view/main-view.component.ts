@@ -1,3 +1,4 @@
+import { HostExtensions } from '../extensions/extensions';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -58,8 +59,9 @@ export class MainViewComponent implements OnInit, AfterViewInit {
     CalculationSelectors.selectCompoundComparisonSuccessCount
   );
   center = environment.map.center;
-  mareldActive = false;
-  readonly mareldPocEnabled = environment.mareldPoc.enabled;
+  readonly extensionWorkspaces = inject(HostExtensions).workspaces;
+  activeWorkspace = '';
+  get activeWorkspaceContribution() { return this.extensionWorkspaces.find(item => item.id === this.activeWorkspace); }
   visibleImpact = false;
   visibleComparison = false;
   singleSelection = false;
@@ -137,7 +139,7 @@ export class MainViewComponent implements OnInit, AfterViewInit {
   }
 
   onNavigate(tabId: string) {
-    this.mareldActive = tabId === 'mareld-poc';
+    this.activeWorkspace = tabId;
     this.scenarioAreaSelection = tabId === 'scenario' || tabId === 'areas';
   }
 

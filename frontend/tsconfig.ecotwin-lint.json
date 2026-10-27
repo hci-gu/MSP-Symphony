@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.ts", "attributions.ts", "../plugins/ecotwin/frontend/**/*.ts", "../distributions/symphony-ecotwin/frontend/**/*.ts"],
+  "exclude": ["node_modules", "../plugins/ecotwin/frontend/node_modules", "../distributions/symphony-ecotwin/frontend/node_modules"]
+}

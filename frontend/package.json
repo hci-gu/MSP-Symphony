@@ -18,7 +18,22 @@
     "prepush": "npm run lint:ts",
     "generate-cert": "openssl req -newkey rsa:2048 -x509 -nodes -keyout ssl/server.key -new -out ssl/server.crt -config ssl/openssl-custom.cnf -sha256 -days 365",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "build:base": "ng build --configuration production",
+    "build:ecotwin": "ng build --configuration ecotwin-production",
+    "start:ecotwin": "ng serve --configuration ecotwin",
+    "test:base": "ng test --watch=false --browsers=ChromeHeadless",
+    "test:ecotwin": "ng test --configuration ecotwin --watch=false --browsers=ChromeHeadless",
+    "prepare:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "prebuild:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "pretest:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "prestart:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "prebuild:ecotwin-absent": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs --without-plugin",
+    "build:ecotwin-absent": "ng build --configuration ecotwin-absent",
+    "pretest:ecotwin-core": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "test:ecotwin-core": "ng test --configuration ecotwin-core --watch=false --browsers=ChromeHeadless",
+    "prelint:ecotwin": "node ../distributions/symphony-ecotwin/frontend/prepare.mjs",
+    "lint:ecotwin": "ESLINT_USE_FLAT_CONFIG=false eslint --config .eslintrc.json --parser-options '{\"project\":[\"tsconfig.ecotwin-lint.json\"]}' \"src/app/extensions/**/*.ts\" \"../plugins/ecotwin/frontend/**/*.ts\" \"../distributions/symphony-ecotwin/frontend/*.ts\""
   },
   "private": true,
   "dependencies": {
